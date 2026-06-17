@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "kind": "design",
+  "mode": "greenfield",
+  "deliverableId": "fa76aeee-813c-48d3-958c-0dbba7dfed21",
+  "sessionId": "fa76aeee-813c-48d3-958c-0dbba7dfed21",
+  "parentDesignSha": "26d4506792876bdb405970862328e3c6e1ad6968a14e7cdd032b255be424f6bd",
+  "parentArtifactId": "brief.json",
+  "targetFramework": null,
+  "primaryArtifact": "current/index.html"
+}

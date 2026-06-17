@@ -1,0 +1,32 @@
+{
+  "handoffId": "design-a-greenfield-web-app-called-foxglove-book-fa76aeee",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "fa76aeee-813c-48d3-958c-0dbba7dfed21",
+  "sessionId": "fa76aeee-813c-48d3-958c-0dbba7dfed21",
+  "slug": "design-a-greenfield-web-app-called-foxglove-book",
+  "title": "Design a greenfield web app called Foxglove Books — a small independent neighbo…",
+  "approvedAt": "2026-06-16T17:03:52.626Z",
+  "summary": "Foxglove Books storefront approved as-is; the approved design + design system fold into this deliverable for the factory to build, and future screens will inherit this brand",
+  "carriedContext": "Foxglove Books storefront approved as-is; the approved design + design system fold into this deliverable for the factory to build, and future screens will inherit this brand",
+  "checksum": "26d4506792876bdb405970862328e3c6e1ad6968a14e7cdd032b255be424f6bd",
+  "files": [
+    "current/index.html",
+    "current/viewports/index.html/1024.png",
+    "current/viewports/index.html/1280.png",
+    "current/viewports/index.html/1440.png",
+    "current/viewports/index.html/1920.png",
+    "current/viewports/index.html/320.png",
+    "current/viewports/index.html/375.png",
+    "current/viewports/index.html/390.png",
+    "current/viewports/index.html/768.png",
+    "design-system.md",
+    "approved.md",
+    "quality.json",
+    "DESIGN-MANIFEST.json",
+    "DESIGN-HANDOFF.md",
+    "lineage.json",
+    "artifact.json"
+  ]
+}
