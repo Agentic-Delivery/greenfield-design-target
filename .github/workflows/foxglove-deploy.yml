@@ -93,7 +93,7 @@ jobs:
         run: |
           URL="https://agentic-delivery.github.io/greenfield-design-target/foxglove/"
           echo "Probing $URL ..."
-          STATUS=$(curl -sSo /dev/null -w '%{http_code}' --retry 3 --retry-delay 5 --max-time 30 "$URL")
+          STATUS=$(curl -sSLo /dev/null -w '%{http_code}' --retry 3 --retry-delay 5 --max-time 30 "$URL")
           echo "HTTP status: $STATUS"
           if [ "$STATUS" != "200" ]; then
             echo "FAIL: expected 200, got $STATUS"
