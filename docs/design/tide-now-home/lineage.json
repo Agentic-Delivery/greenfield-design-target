@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "artifactId": "design:tide-now-home:3147f000-7021-4813-b89a-b89c47a1e123",
+  "parentArtifactId": "generation:3147f000-7021-4813-b89a-b89c47a1e123",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "--accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--ink",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--paper",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--safe",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--danger",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "tide-height-hero",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "next-safe-crossing",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "saved-walks",
+      "kind": "component",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "brief-captured:3147f000-7021-4813-b89a-b89c47a1e123",
+      "kind": "brief-captured",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "generation:3147f000-7021-4813-b89a-b89c47a1e123",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief-captured:3147f000-7021-4813-b89a-b89c47a1e123",
+      "orphan": false
+    },
+    {
+      "id": "approval:3147f000-7021-4813-b89a-b89c47a1e123",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:3147f000-7021-4813-b89a-b89c47a1e123",
+      "orphan": false
+    }
+  ]
+}
