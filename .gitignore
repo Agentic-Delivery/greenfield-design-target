@@ -5,3 +5,14 @@
 
 # Plugin auto-update rule overlay (managed by plugin)
 .claude/rules/factory.md
+
+# Node.js dependencies and build output
+node_modules/
+web/node_modules/
+web/dist/
+
+# Environment secrets
+.env
+
+# Logs
+*.log
