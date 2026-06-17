@@ -1,0 +1,33 @@
+{
+  "handoffId": "design-the-tide-now-home-screen-one-big-current-3147f000",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "3147f000-7021-4813-b89a-b89c47a1e123",
+  "sessionId": "3147f000-7021-4813-b89a-b89c47a1e123",
+  "slug": "design-the-tide-now-home-screen-one-big-current",
+  "title": "Design the tide-now home screen — one big current-tide-height reading, a trend …",
+  "approvedAt": "2026-06-17T07:39:12.515Z",
+  "summary": "tide-now home screen approved as rendered; the factory now promotes it to a durable handoff to become the work a builder builds against",
+  "carriedContext": "tide-now home screen approved as rendered; the factory now promotes it to a durable handoff to become the work a builder builds against",
+  "checksum": "ddff104c8cde8b05923ac2d995b2b89af4d70c8b8984ddfec1c5e0a90b98d5ac",
+  "files": [
+    "current/index.html",
+    "current/viewports/index.html/1024.png",
+    "current/viewports/index.html/1280.png",
+    "current/viewports/index.html/1440.png",
+    "current/viewports/index.html/1920.png",
+    "current/viewports/index.html/320.png",
+    "current/viewports/index.html/375.png",
+    "current/viewports/index.html/390.png",
+    "current/viewports/index.html/768.png",
+    "design-system.md",
+    "approved.md",
+    "snapshot.png",
+    "quality.json",
+    "DESIGN-MANIFEST.json",
+    "DESIGN-HANDOFF.md",
+    "lineage.json",
+    "artifact.json"
+  ]
+}
