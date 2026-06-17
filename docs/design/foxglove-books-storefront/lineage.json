@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "artifactId": "design:foxglove-books-storefront",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "--paper",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--ink",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--accent-ink",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--sage",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--scale",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--density",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--motion-mult",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "Masthead",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "Cover",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "FeaturedShelf",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "StaffPick",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "BookDetail",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "AddToBasket",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "BasketFlyout",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "Newsletter",
+      "kind": "component",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "generation:fa76aeee-813c-48d3-958c-0dbba7dfed21",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:fa76aeee-813c-48d3-958c-0dbba7dfed21",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:fa76aeee-813c-48d3-958c-0dbba7dfed21",
+      "orphan": false
+    }
+  ]
+}

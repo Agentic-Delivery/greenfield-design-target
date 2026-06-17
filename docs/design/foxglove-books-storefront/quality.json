@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores": { "clarity": 4, "hierarchy": 5, "a11y": 4, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": false, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [
+    { "id": "MOTION-2", "what": "No visible keyboard-focus indicator is defined on buttons, nav links, or the email input (its outline is removed on focus), and the smallest tap targets — the basket close button and nav links — fall below the 44px mobile size.", "fix": "Add a clear focus ring (at least 2px and 3:1 contrast) to every interactive element, keep the email input's focus visible, and pad the close button and nav links to a 44px touch area on phones." },
+    { "id": "MOTION-3", "what": "The add-to-basket success label and toast use a literal check glyph as the confirmation icon rather than the inline check SVG used elsewhere.", "fix": "Render the confirmation check as the same inline SVG used in the stock indicator, for consistency." }
+  ],
+  "recommendation": "Distinctive, warm, on-brief work that clears the AI-slop test and is safe to approve. Before or with the live build, add a visible keyboard-focus indicator across all controls (the one accessibility gap on the main path), complete the async-failure states the static mockup skipped — newsletter success/invalid-email feedback and a basket/add error path — and nudge the smallest mobile tap targets (basket close, nav links) up to 44px. None of this blocks approval; it is the punch list for the worker.",
+  "assessed": "current/index.html (storefront mockup) + design-system.md; no rendered screenshot present, judged from fully-specified source (OKLCH tokens, clamp type, explicit 700px/1040px media queries, live state markup)"
+}
