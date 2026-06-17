@@ -1,0 +1,127 @@
+name: Foxglove Books — test & deploy
+
+# Triggers only when storefront source or this workflow changes.
+# Docs-only commits (docs/, requirements, ADRs) never trigger this pipeline — docs-only bypass.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/foxglove/**'
+      - '.github/workflows/foxglove-deploy.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'web/foxglove/**'
+      - '.github/workflows/foxglove-deploy.yml'
+
+# One concurrent deploy per branch; cancel in-progress runs on new push.
+concurrency:
+  group: foxglove-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── 1. Unit tests (runs on PR AND push to main) ────────────────────────────
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web/foxglove
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web/foxglove/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  # ── 2. Deploy to GitHub Pages (push to main only, after tests pass) ────────
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}foxglove/
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage pages directory
+        run: |
+          mkdir -p _pages/foxglove/js
+          cp web/foxglove/index.html _pages/foxglove/
+          cp -r web/foxglove/js/main.js _pages/foxglove/js/
+          # Root index: redirect to /foxglove/ (leaves /tide-now/ slot free)
+          cat > _pages/index.html << 'REDIRECT'
+          <!DOCTYPE html>
+          <html lang="en"><head><meta charset="utf-8">
+          <meta http-equiv="refresh" content="0;url=foxglove/">
+          <title>Redirecting…</title></head>
+          <body><a href="foxglove/">Foxglove Books</a></body></html>
+          REDIRECT
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _pages
+          retention-days: 1
+
+      - name: Deploy to GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v4
+
+  # ── 3. Smoke test (runs after deploy, main only) ───────────────────────────
+  verify:
+    name: Smoke test deployed URL
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify storefront returns HTTP 200
+        run: |
+          URL="https://agentic-delivery.github.io/greenfield-design-target/foxglove/"
+          echo "Probing $URL ..."
+          STATUS=$(curl -sSo /dev/null -w '%{http_code}' --retry 3 --retry-delay 5 --max-time 30 "$URL")
+          echo "HTTP status: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "FAIL: expected 200, got $STATUS"
+            exit 1
+          fi
+          echo "PASS: $URL is live"
+
+  # ── 4. Aggregate gate (required status check for branch protection) ────────
+  ci-status:
+    name: CI status
+    needs: [test, deploy, verify]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all jobs passed or were skipped
+        run: |
+          TEST="${{ needs.test.result }}"
+          DEPLOY="${{ needs.deploy.result }}"
+          VERIFY="${{ needs.verify.result }}"
+          echo "test=$TEST  deploy=$DEPLOY  verify=$VERIFY"
+          FAILED=0
+          for RESULT in "$TEST" "$DEPLOY" "$VERIFY"; do
+            if [ "$RESULT" = "failure" ] || [ "$RESULT" = "cancelled" ]; then
+              FAILED=1
+            fi
+          done
+          if [ "$FAILED" = "1" ]; then
+            echo "FAIL: one or more CI jobs did not pass"
+            exit 1
+          fi
+          echo "PASS: all CI jobs passed (deploy/verify skipped on PRs is expected)"

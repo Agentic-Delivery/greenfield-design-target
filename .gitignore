@@ -1,0 +1,7 @@
+# Factory worker process-scratch (never committed)
+.factory/local-verify/
+.worktree/
+.factory-session/
+
+# Plugin auto-update rule overlay (managed by plugin)
+.claude/rules/factory.md
