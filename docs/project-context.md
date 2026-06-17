@@ -23,3 +23,58 @@ here once that first delivery lands.
 - **What the customer will see there**: the approved tide-now home screen — the
   big current tide-height reading, the trend badge, the next-safe-crossing card,
   and the saved-walks list — rendering live.
+
+## Project Type
+
+[unknown — set manually: greenfield or brownfield]
+
+
+## CI/CD Profile
+
+> Baseline metrics for CI/CD pipeline monitoring. Set by measurement or default.
+> Used by ADR-079 Phase 2 monitor to detect deviations from expected durations.
+
+| Metric | Value | Set by | Date |
+|--------|-------|--------|------|
+| ci_duration_budget_seconds | (not set) | — | — |
+| deploy_verification_budget_seconds | 120 | default | YYYY-MM-DD |
+
+### CI Steps
+
+| Step | Typical duration | Notes |
+|------|-----------------|-------|
+| [Step name] | [duration] | [notes] |
+
+## Known Gotchas (cross-factory)
+
+> Lessons learned across all Delivery Factory deployments. These apply to every project.
+
+### GitHub Actions: Always set artifact retention
+
+GitHub Actions has a storage quota for artifacts (500 MB free, 2 GB Pro). Without explicit `retention-days`, artifacts are kept for 90 days. The quota fills up silently and **all** Actions runs start failing — which breaks the factory's CI feedback loop. Workers stall or escalate because they can't read CI results.
+
+**Fix**: Always set `retention-days` in every workflow that uploads artifacts:
+
+```yaml
+- uses: actions/upload-artifact@v4
+  with:
+    name: test-results
+    path: results/
+    retention-days: 14
+```
+
+**Detection**: If CI suddenly fails on all PRs with storage-related errors, check artifact usage at `https://github.com/<org>/<repo>/settings/actions` → Artifact and log retention.
+
+*Source: LESSON-016 (SmartPill Organizer) — 3-day outage masked by full artifact quota.*
+
+
+### GitHub: Disable "Auto-close issues with merged linked pull requests"
+
+GitHub has a repo setting that automatically closes issues when a PR with `Fixes #N` or `Closes #N` is merged. This bypasses **all** post-deploy verification gates — Quality Guardian Step 7, real-system verification, and AC sign-off never run. The issue is marked "done" the moment the PR merges, with no human or automated check that it actually works.
+
+**Fix**: Disable this setting in repo **Settings → General → Issues → uncheck "Auto-close issues with merged linked pull requests"**. The factory's `/next` process closes issues explicitly in Step 7 after Quality Guardian returns `ALL_PASS`.
+
+**Detection**: The factory detects auto-closed issues indirectly — if an issue's close timestamp matches a PR merge timestamp and no Step 7 marker exists, the issue was likely auto-closed. The intake process warns at session start when this pattern is detected. The `factory-upgrade.sh` script also checks and emits `auto_close_detected` events.
+
+**Why it matters**: An auto-closed issue that has a regression will never be caught by the factory's quality gates. The customer believes the feature is shipped and verified — but no verification happened.
+
