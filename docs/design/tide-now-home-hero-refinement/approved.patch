@@ -1,0 +1,72 @@
+diff --git a/web/src/styles/app.css b/web/src/styles/app.css
+index 0ec8484..e9ced75 100644
+--- a/web/src/styles/app.css
++++ b/web/src/styles/app.css
+@@ -64,23 +64,27 @@ body {
+ .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--safe); border: 1.5px solid var(--ink); }
+ .dot--stale { background: var(--danger); }
+ 
+-/* ── Location ── */
++/* ── Location ── (orientation tier: "where", clearly below the reading) */
+ .location {
+-  display: flex; align-items: center; gap: 10px;
+-  font-family: "Saira", sans-serif; font-weight: 700;
+-  font-size: calc(19px * var(--scale));
++  display: flex; align-items: center; gap: 9px;
++  font-family: "Saira", sans-serif; font-weight: 600;
++  font-size: calc(17px * var(--scale));
++  letter-spacing: 0.01em;
++  color: var(--ink-soft);
+ }
+-.location svg { flex: 0 0 auto; }
++.location svg { flex: 0 0 auto; color: var(--accent-ink); }
+ 
+ /* ── Tide Hero ── */
+ .hero {
+   background: var(--surface);
+   border: 3px solid var(--line);
+   border-radius: var(--radius);
+-  padding: calc(22px * var(--density)) var(--pad);
++  padding: calc(30px * var(--density)) var(--pad) calc(26px * var(--density));
+ }
++/* Eyebrow label sits clearly above the reading */
++.hero > .label { margin-bottom: calc(10px * var(--density)); }
+ .reading {
+-  display: flex; align-items: baseline; gap: 10px; margin: 4px 0 2px;
++  display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px;
+ }
+ .reading .value {
+   font-family: "Saira", sans-serif; font-weight: 800;
+@@ -102,13 +106,13 @@ body {
+   font-family: "Saira", sans-serif; font-weight: 800;
+   text-transform: uppercase; letter-spacing: 0.06em;
+   font-size: calc(16px * var(--scale));
+-  margin-top: 8px;
++  margin-top: calc(16px * var(--density));
+ }
+ .trend svg { display: block; }
+ .hero-sub {
+   display: flex; justify-content: space-between; gap: 12px;
+-  margin-top: calc(16px * var(--density));
+-  padding-top: calc(14px * var(--density));
++  margin-top: calc(24px * var(--density));
++  padding-top: calc(18px * var(--density));
+   border-top: 2px solid var(--line-soft);
+ }
+ .hero-sub div .num { font-family: "Saira"; font-weight: 700; font-size: calc(20px * var(--scale)); display: block; }
+diff --git a/web/src/styles/tokens.css b/web/src/styles/tokens.css
+index 709da6b..60c0721 100644
+--- a/web/src/styles/tokens.css
++++ b/web/src/styles/tokens.css
+@@ -1,8 +1,8 @@
+ /* Design tokens from docs/design/tide-now-home/design-system.md */
+ :root {
+-  --hue: 50;
+-  --accent: oklch(0.70 0.18 50);          /* hi-vis safety orange */
+-  --accent-ink: oklch(0.45 0.16 48);       /* accent text on paper, AA */
++  --hue: 62;
++  --accent: oklch(0.71 0.135 62);          /* calmer, warmer amber — one accent, ~56% sat */
++  --accent-ink: oklch(0.47 0.13 58);       /* accent text on paper, AA */
+   --ink: oklch(0.20 0.012 55);
+   --ink-soft: oklch(0.42 0.012 55);
+   --paper: oklch(0.965 0.008 80);

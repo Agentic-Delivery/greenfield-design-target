@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "artifactId": "tide-now-home",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "token:--accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "token:--accent-ink",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "token:--hue",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "component:TideHero",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "rule:.location",
+      "kind": "style",
+      "until": "live"
+    },
+    {
+      "id": "rule:.hero",
+      "kind": "style",
+      "until": "live"
+    },
+    {
+      "id": "rule:.trend",
+      "kind": "style",
+      "until": "live"
+    },
+    {
+      "id": "rule:.hero-sub",
+      "kind": "style",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "brief-captured:d04c2fb5-1771-486b-a319-0c6fb449f437",
+      "kind": "brief-captured",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:d04c2fb5-1771-486b-a319-0c6fb449f437",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief-captured:d04c2fb5-1771-486b-a319-0c6fb449f437",
+      "orphan": false
+    }
+  ]
+}
