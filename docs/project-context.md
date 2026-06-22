@@ -12,17 +12,37 @@ yet — this is a greenfield design target.
 > worker decides at build time whether any of it is reused.
 
 ## Customer-Viewable URL
-_Not yet established._ This is a green-field factory: there is no CI/CD pipeline,
-no staging environment, and no public URL yet. The factory's first feature
-(building the approved tide-now home screen) also stands up the path to running
-software — a deploy pipeline + staging — so the approved design becomes a
-running app the customer can open in a browser. The public URL will be recorded
-here once that first delivery lands.
 
-- **URL**: _to be established by the first delivery (bootstrap)_
-- **What the customer will see there**: the approved tide-now home screen — the
-  big current tide-height reading, the trend badge, the next-safe-crossing card,
-  and the saved-walks list — rendering live.
+The approved tide-now home screen is published to GitHub Pages.
+
+- **URL**: https://agentic-delivery.github.io/greenfield-design-target/tide-now/
+- **What the customer will see there**: the approved tide-now home screen with the
+  **#13 hero refinement** live — the calmer amber accent (`oklch(0.71 0.135 62)`),
+  the more generous hero rhythm, and the location stepped a tier below the big tide
+  reading. The trend badge, next-safe-crossing card, and saved-walks list render in
+  the refined design language.
+- **Live tidal data**: GitHub Pages is static hosting — it serves the built frontend
+  only, with no `/api/tide` backend. Without that backend the tide reading shows the
+  app's designed error state ("Tide data unavailable — check your connection") in the
+  refined styling; the refined design itself is fully live and viewable. Standing up a
+  data source for the public deployment (a hosted backend, or a public tidal API
+  called client-side) is a separate product decision — see the intake-request filed
+  from issue #16.
+
+The Foxglove Books storefront is published at
+https://agentic-delivery.github.io/greenfield-design-target/foxglove/ from the same
+single Pages deploy (see `docs/operations/foxglove-storefront-manual.md`).
+
+## Test Environment
+
+- **Platform**: GitHub Pages (static hosting), deployed via GitHub Actions (OIDC — no
+  stored credential) by `.github/workflows/pages-deploy.yml`.
+- **Deploy trigger**: merge to `main` (Topology B — trunk-based deploy-on-merge).
+- **Verification targets (the ONLY valid post-deploy targets — anything else is PROD)**:
+  - tide-now: `https://agentic-delivery.github.io/greenfield-design-target/tide-now/`
+  - Foxglove: `https://agentic-delivery.github.io/greenfield-design-target/foxglove/`
+- **Safety zone**: the GitHub Pages site above is the only valid verification target.
+  `localhost:<port>` and container-internal addresses are NOT valid post-deploy targets.
 
 ## Project Type
 
