@@ -1,8 +1,8 @@
 /* Design tokens from docs/design/tide-now-home/design-system.md */
 :root {
-  --hue: 50;
-  --accent: oklch(0.70 0.18 50);          /* hi-vis safety orange */
-  --accent-ink: oklch(0.45 0.16 48);       /* accent text on paper, AA */
+  --hue: 62;
+  --accent: oklch(0.71 0.135 62);          /* calmer, warmer amber — one accent, ~56% sat */
+  --accent-ink: oklch(0.47 0.13 58);       /* accent text on paper, AA */
   --ink: oklch(0.20 0.012 55);
   --ink-soft: oklch(0.42 0.012 55);
   --paper: oklch(0.965 0.008 80);
