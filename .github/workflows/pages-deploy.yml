@@ -1,0 +1,250 @@
+name: Pages — test, build & deploy (tide-now + Foxglove)
+
+# Single pipeline that publishes BOTH apps in ONE GitHub Pages deploy:
+#   /tide-now/  — the web/ Vite app (built with the subpath base)
+#   /foxglove/  — the static Foxglove storefront
+# GitHub Pages keeps only the most recent deployment, so two Pages-deploy
+# workflows would clobber each other — they MUST share one deploy job.
+#
+# Topology B (trunk-based): PR = CI only; merge to main = CI + CD to Pages +
+# post-deploy content-verify. (Topology undocumented in a SAD — see issue #17.)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# One concurrent deploy per branch; cancel in-progress runs on new push.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ── 0. Docs-only bypass — skip substantive jobs when only docs/** + root *.md change.
+  detect-changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: check
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          else
+            CHANGED=$(git diff --name-only HEAD~1 HEAD)
+          fi
+          SKIP=true
+          while IFS= read -r file; do
+            [[ -z "$file" ]] && continue
+            case "$file" in
+              docs/*) ;;                # requirement artifacts live under docs/**
+              */*) SKIP=false; break ;; # nested path outside docs/ = code change
+              *.md) ;;                  # root-level *.md (CLAUDE.md, README.md)
+              *) SKIP=false; break ;;   # root-level non-md
+            esac
+          done <<< "$CHANGED"
+          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
+          echo "docs-only skip=$SKIP"
+
+  # ── 1. tide-now tests + build (branch-protection required check: "Test & Build").
+  test-build:
+    name: Test & Build
+    needs: detect-changes
+    if: needs.detect-changes.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Run tests
+        run: npm test
+        working-directory: web
+
+      # Build ONCE with the Pages subpath base so deployed assets resolve under
+      # /greenfield-design-target/tide-now/. The artifact built here is the one
+      # promoted to the deploy job (build-once-promote).
+      - name: Build (Pages base)
+        run: npm run build -- --base=/greenfield-design-target/tide-now/
+        working-directory: web
+
+      - name: Verify build output exists
+        run: test -f web/dist/index.html
+
+      - name: Regression guard (build base + refined accent + topology invariants)
+        run: bash scripts/verify-pages-deploy.sh
+
+      - name: Upload tide-now build
+        uses: actions/upload-artifact@v4
+        with:
+          name: tidenow-dist
+          path: web/dist
+          retention-days: 1
+
+  # ── 2. Foxglove storefront tests (static app — no build step).
+  test-foxglove:
+    name: Foxglove unit tests
+    needs: detect-changes
+    if: needs.detect-changes.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web/foxglove
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web/foxglove/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+
+  # ── 3. Single Pages deploy — stage BOTH apps, publish once (push to main only).
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: [detect-changes, test-build, test-foxglove]
+    if: needs.detect-changes.outputs.skip != 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download tide-now build
+        uses: actions/download-artifact@v4
+        with:
+          name: tidenow-dist
+          path: web/dist
+
+      - name: Stage both apps
+        run: |
+          mkdir -p _pages/foxglove/js _pages/tide-now
+          # Foxglove storefront (static)
+          cp web/foxglove/index.html _pages/foxglove/
+          cp web/foxglove/js/main.js _pages/foxglove/js/
+          # tide-now (built Vite app, already based at /greenfield-design-target/tide-now/)
+          cp -r web/dist/. _pages/tide-now/
+          # Root index: redirect to /foxglove/ (the /tide-now/ slot stays reachable directly)
+          cat > _pages/index.html << 'REDIRECT'
+          <!DOCTYPE html>
+          <html lang="en"><head><meta charset="utf-8">
+          <meta http-equiv="refresh" content="0;url=foxglove/">
+          <title>Redirecting…</title></head>
+          <body><a href="foxglove/">Foxglove Books</a></body></html>
+          REDIRECT
+          echo "Staged:"; find _pages -type f | sort
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _pages
+          retention-days: 1
+
+      - name: Deploy to GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v4
+
+  # ── 4. Post-deploy content verification — assert deployed CONTENT, not a bare 2xx.
+  verify:
+    name: Verify deployed content
+    needs: [detect-changes, deploy]
+    if: needs.detect-changes.outputs.skip != 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PAGES_ORIGIN: https://agentic-delivery.github.io
+      TIDE_PATH: /greenfield-design-target/tide-now/
+      FOX_PATH: /greenfield-design-target/foxglove/
+    steps:
+      - name: Foxglove still live (content)
+        run: |
+          URL="${PAGES_ORIGIN}${FOX_PATH}"
+          echo "Probing $URL ..."
+          BODY=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "$URL")
+          if ! grep -qF 'Foxglove Books' <<< "$BODY"; then
+            echo "FAIL: Foxglove storefront content not found at $URL"
+            exit 1
+          fi
+          echo "PASS: Foxglove storefront is live"
+
+      - name: tide-now live with refined app (shell + base + accent)
+        run: |
+          URL="${PAGES_ORIGIN}${TIDE_PATH}"
+          echo "Probing $URL ..."
+          SHELL_HTML=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "$URL")
+
+          # 1) Correct app shell (not a redirect, not Foxglove, not a 404 page).
+          if ! grep -qF 'tide·now' <<< "$SHELL_HTML"; then
+            echo "FAIL: tide-now shell title not found — got a redirect/wrong app/404?"
+            exit 1
+          fi
+
+          # 2) Assets resolve under the Pages subpath base — extract the hashed CSS ref.
+          CSS_PATH=$(grep -oE '/greenfield-design-target/tide-now/assets/index-[A-Za-z0-9_-]+\.css' <<< "$SHELL_HTML" | head -1)
+          if [ -z "$CSS_PATH" ]; then
+            echo "FAIL: no based CSS asset reference in shell — Vite base is wrong"
+            exit 1
+          fi
+          echo "CSS asset: $CSS_PATH"
+
+          # 3) The refined #13 accent is live in the deployed CSS (minified form tolerated).
+          CSS=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "${PAGES_ORIGIN}${CSS_PATH}")
+          if ! grep -qE 'oklch\(0?\.71 0?\.135 62\)' <<< "$CSS"; then
+            echo "FAIL: refined accent oklch(.71 .135 62) not in deployed CSS — refinement not live"
+            exit 1
+          fi
+          echo "PASS: tide-now refined app is live at $URL with assets resolving under the correct base"
+
+  # ── 5. Aggregate observability gate.
+  ci-status:
+    name: CI status
+    needs: [detect-changes, test-build, test-foxglove, deploy, verify]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check no job failed or was cancelled
+        run: |
+          RESULTS=( \
+            "detect-changes=${{ needs.detect-changes.result }}" \
+            "test-build=${{ needs.test-build.result }}" \
+            "test-foxglove=${{ needs.test-foxglove.result }}" \
+            "deploy=${{ needs.deploy.result }}" \
+            "verify=${{ needs.verify.result }}" )
+          echo "${RESULTS[@]}"
+          for R in "${RESULTS[@]}"; do
+            CONCLUSION="${R#*=}"
+            if [ "$CONCLUSION" = "failure" ] || [ "$CONCLUSION" = "cancelled" ]; then
+              echo "FAIL: ${R%%=*} did not pass (skipped on docs-only / PR is expected)"
+              exit 1
+            fi
+          done
+          echo "PASS: all jobs passed or were skipped"

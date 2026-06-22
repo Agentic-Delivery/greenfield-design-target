@@ -2,7 +2,7 @@
 
 **Source:** `web/foxglove/`
 **Deployed at:** `https://agentic-delivery.github.io/greenfield-design-target/foxglove/`
-**Deploy trigger:** Merge to `main` with changes under `web/foxglove/**`
+**Deploy trigger:** Merge to `main` (shared pipeline — docs-only changes are bypassed)
 
 ---
 
@@ -12,11 +12,13 @@
 |---|---|---|
 | Static storefront | HTML + CSS + Vanilla JS (ES module) | `web/foxglove/` in source tree |
 | Hosting | GitHub Pages (OIDC — no stored credential) | `github-pages` environment |
-| CI/CD pipeline | `.github/workflows/foxglove-deploy.yml` | test → deploy → smoke-verify |
+| CI/CD pipeline | `.github/workflows/pages-deploy.yml` (shared with tide-now) | test → single deploy (both apps) → content-verify |
 
 **Deploy path:** `web/foxglove/index.html` + `web/foxglove/js/main.js` are staged to `_pages/foxglove/` during the `deploy` job, then published via `actions/deploy-pages@v4` using a workflow-scoped OIDC token. No long-lived credential is written to persistent storage.
 
-**Subdirectory layout:** The Pages root (`/`) hosts a redirect to `/foxglove/`. The `/tide-now/` slot is reserved for the Tide Now project.
+**Single shared Pages deploy:** As of issue #16, Foxglove and tide-now are published by ONE `deploy` job in `pages-deploy.yml` — Foxglove staged to `_pages/foxglove/` and tide-now (the built Vite app) to `_pages/tide-now/`. GitHub Pages keeps only the most recent deployment, so a single deploy job is required; two Pages-deploy workflows would clobber each other. See `docs/operations/operational-manual.md` (tide-now).
+
+**Subdirectory layout:** The Pages root (`/`) hosts a redirect to `/foxglove/`. The `/tide-now/` slot is now occupied by the tide-now app.
 
 ---
 
@@ -86,11 +88,11 @@ Expected: `200`
 
 | Symptom | Likely cause | Diagnosis command | Recovery |
 |---|---|---|---|
-| `curl` returns `404` | GitHub Pages not enabled, or deploy not yet propagated | Check `gh run list --workflow foxglove-deploy.yml` | Enable GitHub Pages (see `needs-manual-steps` section) or wait for CDN propagation (~2 min) |
+| `curl` returns `404` | GitHub Pages not enabled, or deploy not yet propagated | Check `gh run list --workflow pages-deploy.yml` | Enable GitHub Pages (see `needs-manual-steps` section) or wait for CDN propagation (~2 min) |
 | `curl` returns `200` but page is blank | JS module `./js/main.js` failed to load | Open DevTools console in factory-browse; check for 404 on `main.js` | Re-run deploy job; verify `_pages/foxglove/js/main.js` was staged |
 | Basket add button does nothing | JS parse error in `main.js` | DevTools console | Fix syntax error, re-merge |
-| CI pipeline not triggering | `push` event did not match `paths:` filter | Check commit diff vs `paths:` in workflow | Ensure `web/foxglove/**` changed, or touch `.github/workflows/foxglove-deploy.yml` |
-| Smoke test returns `404` after successful deploy | CDN propagation delay | Wait 2 min and retry | Pipeline auto-retries 3× via `--retry 3` in curl |
+| CI pipeline not triggering | Change was docs-only (deploy bypassed) | Check the `detect-changes` job output (`skip=true`) | Expected for docs-only commits; any `web/**` or workflow change deploys |
+| Content-verify returns `404`/missing content after deploy | CDN propagation delay | Wait and retry | Pipeline auto-retries via `--retry 6 --retry-delay 10` in curl |
 
 ---
 
