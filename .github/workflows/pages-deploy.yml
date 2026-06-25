@@ -1,8 +1,9 @@
-name: Pages — test, build & deploy (tide-now + Foxglove)
+name: Pages — test, build & deploy (tide-now + Foxglove + Saltmarsh)
 
-# Single pipeline that publishes BOTH apps in ONE GitHub Pages deploy:
-#   /tide-now/  — the web/ Vite app (built with the subpath base)
-#   /foxglove/  — the static Foxglove storefront
+# Single pipeline that publishes all apps in ONE GitHub Pages deploy:
+#   /tide-now/   — the web/ Vite app (built with the subpath base)
+#   /foxglove/   — the static Foxglove storefront
+#   /saltmarsh/  — the Saltmarsh hero (its own Vite build + subpath base)
 # GitHub Pages keeps only the most recent deployment, so two Pages-deploy
 # workflows would clobber each other — they MUST share one deploy job.
 #
@@ -82,12 +83,21 @@ jobs:
       # Build ONCE with the Pages subpath base so deployed assets resolve under
       # /greenfield-design-target/tide-now/. The artifact built here is the one
       # promoted to the deploy job (build-once-promote).
-      - name: Build (Pages base)
+      - name: Build tide-now (Pages base)
         run: npm run build -- --base=/greenfield-design-target/tide-now/
         working-directory: web
 
-      - name: Verify build output exists
-        run: test -f web/dist/index.html
+      # Saltmarsh is a separate product with its own Pages subpath, so it needs
+      # its own base — a distinct Vite build (Vite's base is per-build). Same
+      # build-once-promote contract as tide-now.
+      - name: Build Saltmarsh (Pages base)
+        run: npx vite build --config vite.saltmarsh.config.js --base=/greenfield-design-target/saltmarsh/
+        working-directory: web
+
+      - name: Verify build outputs exist
+        run: |
+          test -f web/dist/index.html
+          test -f web/dist-saltmarsh/saltmarsh.html
 
       - name: Regression guard (build base + refined accent + topology invariants)
         run: bash scripts/verify-pages-deploy.sh
@@ -97,6 +107,13 @@ jobs:
         with:
           name: tidenow-dist
           path: web/dist
+          retention-days: 1
+
+      - name: Upload Saltmarsh build
+        uses: actions/upload-artifact@v4
+        with:
+          name: saltmarsh-dist
+          path: web/dist-saltmarsh
           retention-days: 1
 
   # ── 2. Foxglove storefront tests (static app — no build step).
@@ -121,7 +138,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-  # ── 3. Single Pages deploy — stage BOTH apps, publish once (push to main only).
+  # ── 3. Single Pages deploy — stage ALL apps, publish once (push to main only).
   deploy:
     name: Deploy to GitHub Pages
     needs: [detect-changes, test-build, test-foxglove]
@@ -144,14 +161,25 @@ jobs:
           name: tidenow-dist
           path: web/dist
 
-      - name: Stage both apps
+      - name: Download Saltmarsh build
+        uses: actions/download-artifact@v4
+        with:
+          name: saltmarsh-dist
+          path: web/dist-saltmarsh
+
+      - name: Stage all apps
         run: |
-          mkdir -p _pages/foxglove/js _pages/tide-now
+          mkdir -p _pages/foxglove/js _pages/tide-now _pages/saltmarsh
           # Foxglove storefront (static)
           cp web/foxglove/index.html _pages/foxglove/
           cp web/foxglove/js/main.js _pages/foxglove/js/
           # tide-now (built Vite app, already based at /greenfield-design-target/tide-now/)
           cp -r web/dist/. _pages/tide-now/
+          # Saltmarsh (built Vite app, based at /greenfield-design-target/saltmarsh/).
+          # Its entry built as saltmarsh.html; the subpath serves index.html. Asset
+          # refs are absolute (base-prefixed), so the rename does not break them.
+          cp -r web/dist-saltmarsh/. _pages/saltmarsh/
+          mv _pages/saltmarsh/saltmarsh.html _pages/saltmarsh/index.html
           # Root index: redirect to /foxglove/ (the /tide-now/ slot stays reachable directly)
           cat > _pages/index.html << 'REDIRECT'
           <!DOCTYPE html>
@@ -183,6 +211,7 @@ jobs:
       PAGES_ORIGIN: https://agentic-delivery.github.io
       TIDE_PATH: /greenfield-design-target/tide-now/
       FOX_PATH: /greenfield-design-target/foxglove/
+      SALT_PATH: /greenfield-design-target/saltmarsh/
     steps:
       - name: Foxglove still live (content)
         run: |
@@ -222,6 +251,34 @@ jobs:
             exit 1
           fi
           echo "PASS: tide-now refined app is live at $URL with assets resolving under the correct base"
+
+      - name: Saltmarsh hero live (shell + base + approved copy)
+        run: |
+          URL="${PAGES_ORIGIN}${SALT_PATH}"
+          echo "Probing $URL ..."
+          SHELL_HTML=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "$URL")
+
+          # 1) Correct app shell (the Saltmarsh entry, not a redirect/tide-now/404).
+          if ! grep -qF 'Saltmarsh — small-batch coffee roasters' <<< "$SHELL_HTML"; then
+            echo "FAIL: Saltmarsh shell title not found — got a redirect/wrong app/404?"
+            exit 1
+          fi
+
+          # 2) Assets resolve under the Saltmarsh subpath base.
+          JS_PATH=$(grep -oE '/greenfield-design-target/saltmarsh/assets/saltmarsh-[A-Za-z0-9_-]+\.js' <<< "$SHELL_HTML" | head -1)
+          if [ -z "$JS_PATH" ]; then
+            echo "FAIL: no based JS asset reference in Saltmarsh shell — Vite base is wrong"
+            exit 1
+          fi
+          echo "JS asset: $JS_PATH"
+
+          # 3) The approved hero copy is present in the deployed bundle (it ships in JS).
+          JS=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "${PAGES_ORIGIN}${JS_PATH}")
+          if ! grep -qF 'Coffee roasted slowly' <<< "$JS"; then
+            echo "FAIL: approved headline not in deployed Saltmarsh bundle — hero not live"
+            exit 1
+          fi
+          echo "PASS: Saltmarsh hero is live at $URL with assets resolving under the correct base"
 
   # ── 5. Aggregate observability gate.
   ci-status:

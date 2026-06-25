@@ -33,6 +33,12 @@ The Foxglove Books storefront is published at
 https://agentic-delivery.github.io/greenfield-design-target/foxglove/ from the same
 single Pages deploy (see `docs/operations/foxglove-storefront-manual.md`).
 
+The Saltmarsh coffee-roaster hero is published at
+https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/ from the same
+single Pages deploy (built to the approved design in `docs/design/saltmarsh-hero/`;
+its "Buy now" CTA ships a documented `#shop` placeholder until the customer supplies
+a real order URL).
+
 ## Test Environment
 
 - **Platform**: GitHub Pages (static hosting), deployed via GitHub Actions (OIDC — no
@@ -41,6 +47,7 @@ single Pages deploy (see `docs/operations/foxglove-storefront-manual.md`).
 - **Verification targets (the ONLY valid post-deploy targets — anything else is PROD)**:
   - tide-now: `https://agentic-delivery.github.io/greenfield-design-target/tide-now/`
   - Foxglove: `https://agentic-delivery.github.io/greenfield-design-target/foxglove/`
+  - Saltmarsh: `https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/`
 - **Safety zone**: the GitHub Pages site above is the only valid verification target.
   `localhost:<port>` and container-internal addresses are NOT valid post-deploy targets.
 
