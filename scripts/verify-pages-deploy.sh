@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 #
-# Regression guard for the unified GitHub Pages deploy (issue #16).
+# Regression guard for the unified GitHub Pages deploy (issue #16, extended #23).
 #
-# Protects the DoD contract that lets a single Pages deploy publish BOTH the
-# tide-now app (at /tide-now/) and the Foxglove storefront (at /foxglove/)
-# without clobbering each other, with the refined #13 hero accent live.
+# Protects the DoD contract that lets a single Pages deploy publish the
+# tide-now app (at /tide-now/), the Foxglove storefront (at /foxglove/), and the
+# Saltmarsh hero (at /saltmarsh/) without clobbering each other, with the refined
+# #13 hero accent live.
 #
 # Two layers:
-#   A. Build-output contract — the tide-now Vite build, built with the Pages
-#      base, produces a shell + assets that resolve under the subpath AND
-#      carries the approved refined accent. Requires web/dist to be pre-built:
+#   A. Build-output contract — each Vite build, built with its Pages base,
+#      produces a shell + assets that resolve under its subpath; tide-now also
+#      carries the approved refined accent. Requires the builds pre-built:
 #        ( cd web && npm ci && npm run build -- --base=/greenfield-design-target/tide-now/ )
+#        ( cd web && npx vite build --config vite.saltmarsh.config.js --base=/greenfield-design-target/saltmarsh/ )
 #   B. Workflow-topology invariants — exactly one Pages deploy (no clobber),
-#      no obsolete Render deploy, both apps staged in that one deploy, and the
-#      branch-protection-required "Test & Build" check preserved.
+#      no obsolete Render deploy, all three apps staged in that one deploy, and
+#      the branch-protection-required "Test & Build" check preserved.
 #
 # Exit non-zero on any violation (fail-loud).
 
@@ -21,11 +23,13 @@ set -uo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 BASE_PATH="/greenfield-design-target/tide-now"
+SALT_BASE_PATH="/greenfield-design-target/saltmarsh"
 # The approved refined accent (#13). Tolerant of CSS minification, which strips
 # the leading zeros: source `oklch(0.71 0.135 62)` -> deployed `oklch(.71 .135 62)`.
 ACCENT_RE='oklch\(0?\.71 0?\.135 62\)'
 WF_DIR="$ROOT/.github/workflows"
 DIST="$ROOT/web/dist"
+SALT_DIST="$ROOT/web/dist-saltmarsh"
 
 fail=0
 check() { # $1 = exit code from the caller's test (0=pass, non-zero=fail); $2 = description
@@ -55,6 +59,24 @@ else
   check 1 "refined accent present in built CSS (matches $ACCENT_RE)"
 fi
 
+echo "== A2. Build-output contract (web/dist-saltmarsh) =="
+if [ ! -f "$SALT_DIST/saltmarsh.html" ]; then
+  echo "FAIL: web/dist-saltmarsh/saltmarsh.html missing — build first with:"
+  echo "      ( cd web && npx vite build --config vite.saltmarsh.config.js --base=$SALT_BASE_PATH/ )"
+  exit 1
+fi
+
+grep -qF "$SALT_BASE_PATH/assets/" "$SALT_DIST/saltmarsh.html"; check $? "Saltmarsh shell references assets under the Pages base ($SALT_BASE_PATH/assets/)"
+
+grep -qF 'Saltmarsh — small-batch coffee roasters' "$SALT_DIST/saltmarsh.html"; check $? "Saltmarsh shell carries its title marker"
+
+# The tide-now base must NOT leak into the Saltmarsh build (separate-base contract).
+if grep -qF "$BASE_PATH/assets/" "$SALT_DIST/saltmarsh.html"; then
+  check 1 "Saltmarsh shell does NOT reference the tide-now base (separate per-product base)"
+else
+  check 0 "Saltmarsh shell does NOT reference the tide-now base (separate per-product base)"
+fi
+
 echo "== B. Workflow-topology invariants (.github/workflows) =="
 
 # Exactly one Pages deploy across all workflows — two would clobber each other.
@@ -68,11 +90,12 @@ else
   check 0 "obsolete Render deploy removed (none of RENDER_DEPLOY_HOOK_URL / 'Deploy to Render')"
 fi
 
-# The single deploy stages BOTH apps.
+# The single deploy stages ALL three apps.
 DEPLOY_WF=$(grep -rlE 'actions/deploy-pages' "$WF_DIR" 2>/dev/null | head -1)
 if [ -n "$DEPLOY_WF" ]; then
   grep -qF '_pages/foxglove' "$DEPLOY_WF"; check $? "the Pages deploy stages Foxglove (_pages/foxglove) — $(basename "$DEPLOY_WF")"
   grep -qF '_pages/tide-now' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now (_pages/tide-now) — $(basename "$DEPLOY_WF")"
+  grep -qF '_pages/saltmarsh' "$DEPLOY_WF"; check $? "the Pages deploy stages Saltmarsh (_pages/saltmarsh) — $(basename "$DEPLOY_WF")"
 else
   check 1 "a Pages deploy workflow exists"
 fi
