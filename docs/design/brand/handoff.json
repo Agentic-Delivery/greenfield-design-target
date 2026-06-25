@@ -1,0 +1,31 @@
+{
+  "handoffId": "current",
+  "kind": "brand-library",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "1f55872e-1475-494e-ac65-f8d0deaf5741",
+  "sessionId": "1f55872e-1475-494e-ac65-f8d0deaf5741",
+  "slug": "brand-system-create-a-brand-library-for-tessera",
+  "title": "[BRAND-SYSTEM] Create a brand library for Tessera, a B2B knowledge-graph platfo…",
+  "approvedAt": "2026-06-24T22:45:17.059Z",
+  "summary": "Tessera brand library approved (all 11 components + full brand); factory promotes it as the durable brand singleton, and your next screen inherits it automatically",
+  "carriedContext": "Tessera brand library approved (all 11 components + full brand); factory promotes it as the durable brand singleton, and your next screen inherits it automatically",
+  "checksum": "68310e0555d3d2bae5e8a7713951c52baa1a5280b06e4d6d347c60e585a0313a",
+  "files": [
+    "current/index.html",
+    "current/viewports/index.html/1024.png",
+    "current/viewports/index.html/320.png",
+    "current/viewports/index.html/375.png",
+    "current/viewports/index.html/390.png",
+    "current/viewports/index.html/768.png",
+    "versions/1/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "brand-state.json",
+    "snapshot.png",
+    "tokens.json",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}

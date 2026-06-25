@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "artifactId": "brand-library:tessera",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "brand-library",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "color-system",
+      "until": "live"
+    },
+    {
+      "id": "typography",
+      "until": "live"
+    },
+    {
+      "id": "button",
+      "until": "live"
+    },
+    {
+      "id": "text-input",
+      "until": "live"
+    },
+    {
+      "id": "select",
+      "until": "live"
+    },
+    {
+      "id": "choice-controls",
+      "until": "live"
+    },
+    {
+      "id": "badge",
+      "until": "live"
+    },
+    {
+      "id": "card",
+      "until": "live"
+    },
+    {
+      "id": "data-table",
+      "until": "live"
+    },
+    {
+      "id": "navigation",
+      "until": "live"
+    },
+    {
+      "id": "modal",
+      "until": "live"
+    },
+    {
+      "id": "--color-accent",
+      "until": "live"
+    },
+    {
+      "id": "--color-page",
+      "until": "live"
+    },
+    {
+      "id": "--text-body",
+      "until": "live"
+    },
+    {
+      "id": "--font-display",
+      "until": "live"
+    },
+    {
+      "id": "--font-body",
+      "until": "live"
+    },
+    {
+      "id": "--font-mono",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "brief-captured:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "kind": "brief-captured",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "generation:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief-captured:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "orphan": false
+    },
+    {
+      "id": "approval:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "orphan": false
+    }
+  ]
+}

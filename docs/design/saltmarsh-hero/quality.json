@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 4, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [
+    { "id": "TARGET-CONTRAST", "what": "The small reassurance line (free-shipping text) is muted espresso on the cream copy-card, a darker-on-darker pairing that sat near the minimum readable-contrast line and could not be pixel-verified without a render.", "fix": "Addressed at sign-off: the muted-text token was darkened from oklch(0.41 …) to oklch(0.38 …) for comfortable AA margin on the cream card." }
+  ],
+  "recommendation": "Strong, distinctive small-roaster hero that clears the bar. Before sign-off the two raised items were addressed: the muted text was darkened a step for safe contrast on the cream card, and the design record was aligned to the 'Buy now' label (placeholder href #shop, wired by the build team to the real order destination). Capture a real snapshot on the next render to replace the 1x1 placeholder so contrast and spacing can be confirmed visually rather than inferred.",
+  "assessed": "Read SaltmarshHero.jsx, saltmarsh.css, and .preview/design-system.md. No usable render: .preview/snapshot.png is a 1x1 placeholder, so scored from source with rendered intent reconstructed from complete inline styles; rendered contrast at the AA margin and final spacing were not pixel-verified.",
+  "renderedOk": false
+}

@@ -1,0 +1,29 @@
+{
+  "handoffId": "design-a-landing-page-hero-for-a-small-batch-cof-53966823",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "53966823-8fc2-409d-9eab-54e82655816e",
+  "sessionId": "53966823-8fc2-409d-9eab-54e82655816e",
+  "slug": "design-a-landing-page-hero-for-a-small-batch-cof",
+  "title": "Design a landing-page hero for a small-batch coffee roaster called Saltmarsh. W…",
+  "approvedAt": "2026-06-25T09:58:13.114Z",
+  "summary": "Saltmarsh hero approved on the live canvas; handed off as an edited-frontend diff (.preview/approved.patch) for a worker to wire behind routing and ship",
+  "carriedContext": "Saltmarsh hero approved on the live canvas; handed off as an edited-frontend diff (.preview/approved.patch) for a worker to wire behind routing and ship",
+  "checksum": "df7868f182cdb5686e3f45bdaa7c5d4c228990855713b243fa7af667df85132f",
+  "files": [
+    "versions/1/index.html",
+    "versions/2/index.html",
+    "versions/3/index.html",
+    "versions/4/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "approved.md",
+    "approved.patch",
+    "snapshot.png",
+    "annotations.json",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}

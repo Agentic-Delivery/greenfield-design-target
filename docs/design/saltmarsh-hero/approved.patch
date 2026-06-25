@@ -1,0 +1,432 @@
+diff --git a/web/src/main.jsx b/web/src/main.jsx
+index 473f9c5..33c2937 100644
+--- a/web/src/main.jsx
++++ b/web/src/main.jsx
+@@ -1,10 +1,15 @@
+ import React from 'react'
+ import { createRoot } from 'react-dom/client'
+-import { App } from './App.jsx'
+-import './styles/app.css'
++// Design preview: this entry is pointed at the Saltmarsh hero for the design
++// session. The tide-now app (./App.jsx + ./styles/app.css) is untouched on disk;
++// at handoff the worker wires Saltmarsh behind proper routing instead of swapping
++// the mount.
++// import { App } from './App.jsx'
++// import './styles/app.css'
++import { SaltmarshHero } from './saltmarsh/SaltmarshHero.jsx'
+ 
+ createRoot(document.getElementById('root')).render(
+   <React.StrictMode>
+-    <App />
++    <SaltmarshHero />
+   </React.StrictMode>
+ )
+diff --git a/web/src/saltmarsh/saltmarsh.css b/web/src/saltmarsh/saltmarsh.css
+new file mode 100644
+index 0000000..37fd3f9
+--- /dev/null
++++ b/web/src/saltmarsh/saltmarsh.css
+@@ -0,0 +1,270 @@
++@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
++
++/* ----------------------------------------------------------------------------
++   Saltmarsh — small-batch coffee roaster
++   Design foundation: warm · crafted · calm. Light theme, warm cream paper,
++   espresso ink, one clay accent carried at ~10% weight (60-30-10).
++   Tokens are OKLCH so the live tweaks panel (--accent/--scale/--density/
++   --motion-mult/data-mode) repaints legibly.
++---------------------------------------------------------------------------- */
++
++:root {
++  --sm-hue: 52;
++
++  --paper: oklch(0.955 0.022 74);       /* warm cream, cosier — the 60 */
++  --surface: oklch(0.982 0.013 78);     /* lifted warm white */
++  --ink: oklch(0.26 0.03 50);           /* deep espresso — the 30, never #000 */
++  --ink-soft: oklch(0.38 0.022 52);     /* muted espresso, AA body on cream (incl. the cream card) */
++  --accent: oklch(0.58 0.11 42);        /* clay — the 10, decorative use */
++  --accent-ink: oklch(0.43 0.12 44);    /* clay for text, AA on cream */
++  --accent-wash: oklch(0.93 0.035 60);  /* soft warm backdrop for the product panel */
++  --line-soft: oklch(0.87 0.012 70);    /* hairline, tinted warm */
++  --cream: oklch(0.975 0.012 82);       /* button text on espresso */
++  --copy-card: oklch(0.93 0.024 80);    /* warm cream card behind the copy (≈ #f0e9dd) */
++
++  /* tweaks-panel knobs */
++  --scale: 1;
++  --density: 1;
++  --motion-mult: 1;
++
++  --radius: 16px;
++  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
++}
++
++/* Calm warm dark variant so the light/dark tweak has somewhere honest to go */
++[data-mode='dark'] {
++  --paper: oklch(0.23 0.018 52);
++  --surface: oklch(0.27 0.02 54);
++  --ink: oklch(0.94 0.014 82);
++  --ink-soft: oklch(0.80 0.016 78);
++  --accent: oklch(0.70 0.11 50);
++  --accent-ink: oklch(0.80 0.10 58);
++  --accent-wash: oklch(0.32 0.04 55);
++  --line-soft: oklch(0.40 0.02 56);
++  --cream: oklch(0.20 0.02 52);
++  --copy-card: oklch(0.27 0.022 54);
++}
++
++* { box-sizing: border-box; }
++
++.sm-page {
++  margin: 0;
++  min-height: 100dvh;
++  background: var(--paper);
++  color: var(--ink);
++  font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
++  -webkit-font-smoothing: antialiased;
++  overflow-x: hidden;
++}
++
++/* slim masthead — identity only, keeps the hero in context */
++.sm-mast {
++  max-width: 1180px;
++  margin: 0 auto;
++  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 5vw, 3rem) 0;
++  display: flex;
++  align-items: center;
++  gap: 0.55rem;
++}
++.sm-mark {
++  font-family: 'Spectral', Georgia, serif;
++  font-weight: 500;
++  font-size: calc(1.35rem * var(--scale));
++  letter-spacing: -0.01em;
++  color: var(--ink);
++}
++.sm-mark-dot {
++  width: 9px; height: 9px; border-radius: 50%;
++  background: var(--accent); display: inline-block;
++  margin-left: 1px;
++}
++
++/* hero grid */
++.sm-hero {
++  max-width: 1180px;
++  margin: 0 auto;
++  padding: calc(clamp(2.25rem, 6vw, 4.5rem) * var(--density)) clamp(1.25rem, 5vw, 3rem)
++           calc(clamp(2.75rem, 7vw, 5.5rem) * var(--density));
++  display: grid;
++  grid-template-columns: 1fr;
++  gap: clamp(2.25rem, 5vw, 3.5rem);
++  align-items: center;
++}
++@media (min-width: 860px) {
++  .sm-hero {
++    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
++    gap: clamp(2.5rem, 5vw, 5rem);
++  }
++}
++
++/* ---- copy column ---- */
++.sm-copy {
++  background: var(--copy-card);
++  color: var(--ink);
++  text-align: start;
++  font-size: calc(1rem * var(--scale));
++  font-weight: 400;
++  border: 1px solid var(--line-soft);
++  border-radius: 20px;
++  padding:
++    calc(clamp(2.25rem, 4vw, 3.36rem) * var(--density))
++    clamp(1.5rem, 4vw, 2.8rem)
++    calc(clamp(2.5rem, 4.5vw, 3.92rem) * var(--density));
++}
++
++.sm-eyebrow {
++  display: inline-flex;
++  align-items: center;
++  gap: 0.7em;
++  margin: 0 0 1.3rem;
++  font-size: calc(0.78rem * var(--scale));
++  font-weight: 600;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--accent-ink);
++}
++.sm-eyebrow::before {
++  content: '';
++  width: 1.9rem; height: 2px;
++  background: var(--accent);
++  border-radius: 2px;
++}
++
++.sm-title {
++  margin: 0 0 1.4rem;
++  max-width: 15ch;
++  font-family: 'Spectral', Georgia, serif;
++  font-weight: 600;
++  font-size: calc(clamp(2.95rem, 6.6vw, 5rem) * var(--scale));
++  line-height: 1.01;
++  letter-spacing: -0.02em;
++  color: var(--ink);
++  overflow-wrap: break-word;
++}
++.sm-title em {
++  font-style: italic;
++  font-weight: 600;
++  color: var(--accent-ink);
++}
++
++.sm-sub {
++  margin: 0 0 2.1rem;
++  max-width: 46ch;
++  font-size: calc(clamp(1.02rem, 1.5vw, 1.2rem) * var(--scale));
++  line-height: 1.65;
++  color: var(--ink-soft);
++}
++
++.sm-actions {
++  display: flex;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: 1.25rem;
++}
++
++.sm-cta {
++  display: inline-flex;
++  align-items: center;
++  gap: 0.6em;
++  padding: 0.95em 1.7em;
++  font-family: inherit;
++  font-size: calc(1rem * var(--scale));
++  font-weight: 600;
++  color: var(--cream);
++  background: var(--ink);
++  border: none;
++  border-radius: 999px;
++  text-decoration: none;
++  cursor: pointer;
++  box-shadow: 0 1px 2px oklch(0.26 0.03 50 / 0.18);
++  transition:
++    transform calc(170ms * var(--motion-mult)) var(--ease-out),
++    background-color calc(170ms * var(--motion-mult)) var(--ease-out),
++    box-shadow calc(170ms * var(--motion-mult)) var(--ease-out);
++}
++.sm-cta:hover {
++  transform: translateY(-2px);
++  background: oklch(0.32 0.055 46);
++  box-shadow: 0 10px 24px -8px oklch(0.26 0.03 50 / 0.34);
++}
++.sm-cta:active { transform: translateY(0); }
++.sm-cta:focus-visible {
++  outline: 3px solid var(--accent);
++  outline-offset: 3px;
++}
++.sm-cta svg {
++  transition: transform calc(170ms * var(--motion-mult)) var(--ease-out);
++}
++.sm-cta:hover svg { transform: translateX(3px); }
++
++.sm-reassure {
++  font-size: calc(0.9rem * var(--scale));
++  color: var(--ink-soft);
++}
++.sm-reassure b { color: var(--ink); font-weight: 600; }
++
++/* ---- product figure ---- */
++.sm-figure {
++  position: relative;
++  width: 100%;
++  max-width: 460px;
++  margin-inline: auto;
++  aspect-ratio: 5 / 5.4;
++  border-radius: var(--radius);
++  background: radial-gradient(125% 120% at 72% 18%, var(--accent-wash), var(--surface) 70%);
++  box-shadow: 0 30px 70px -34px oklch(0.26 0.03 50 / 0.32);
++  display: grid;
++  place-items: center;
++  padding: clamp(1.25rem, 4vw, 2.5rem);
++  overflow: hidden;
++}
++.sm-figure svg { width: 100%; height: 100%; }
++
++.sm-tag {
++  position: absolute;
++  left: clamp(0.9rem, 3vw, 1.4rem);
++  bottom: clamp(0.9rem, 3vw, 1.4rem);
++  display: inline-flex;
++  align-items: center;
++  gap: 0.5em;
++  padding: 0.5em 0.85em;
++  background: var(--surface);
++  border: 1px solid var(--line-soft);
++  border-radius: 999px;
++  font-size: calc(0.8rem * var(--scale));
++  font-weight: 600;
++  color: var(--ink);
++  box-shadow: 0 6px 16px -8px oklch(0.26 0.03 50 / 0.25);
++}
++.sm-tag .sm-tag-dot {
++  width: 8px; height: 8px; border-radius: 50%;
++  background: var(--accent);
++}
++
++/* svg part fills (theme-aware) */
++.sm-bag-label { fill: var(--surface); }
++.sm-bag-ink { fill: var(--ink); }
++.sm-bag-soft { fill: var(--ink-soft); }
++.sm-bag-accent { fill: var(--accent); }
++.sm-bag-line { stroke: var(--line-soft); }
++
++/* ---- first-load reveal (transform/opacity only, ease-out) ---- */
++.sm-reveal {
++  opacity: 0;
++  transform: translateY(14px);
++  animation: sm-rise calc(440ms * var(--motion-mult)) var(--ease-out) both;
++}
++.sm-reveal-1 { animation-delay: 40ms; }
++.sm-reveal-2 { animation-delay: 110ms; }
++.sm-reveal-3 { animation-delay: 180ms; }
++.sm-reveal-4 { animation-delay: 250ms; }
++.sm-reveal-5 { animation-delay: 200ms; }
++
++@keyframes sm-rise {
++  to { opacity: 1; transform: none; }
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .sm-reveal { animation: none; opacity: 1; transform: none; }
++  .sm-cta, .sm-cta svg { transition: none; }
++}
+diff --git a/web/src/saltmarsh/SaltmarshHero.jsx b/web/src/saltmarsh/SaltmarshHero.jsx
+new file mode 100644
+index 0000000..6277979
+--- /dev/null
++++ b/web/src/saltmarsh/SaltmarshHero.jsx
+@@ -0,0 +1,127 @@
++import React from 'react'
++import './saltmarsh.css'
++
++/**
++ * Saltmarsh landing-page hero.
++ * Warm · crafted · calm. A copy column (eyebrow, headline, subhead, one primary
++ * CTA, reassurance line) beside a product-image panel (an illustrated bag of
++ * small-batch coffee). Single-column on phones, two-column from 860px up.
++ */
++export function SaltmarshHero() {
++  return (
++    <div className="sm-page">
++      <header className="sm-mast">
++        <span className="sm-mark">
++          Saltmarsh<span className="sm-mark-dot" aria-hidden="true" />
++        </span>
++      </header>
++
++      <main className="sm-hero">
++        <section className="sm-copy" aria-labelledby="sm-title">
++          <p className="sm-eyebrow sm-reveal sm-reveal-1">Small-batch coffee roasters</p>
++
++          <h1 id="sm-title" className="sm-title sm-reveal sm-reveal-2">
++            Coffee roasted slowly, <em>by the marsh</em>.
++          </h1>
++
++          <p className="sm-sub sm-reveal sm-reveal-3">
++            We roast in small batches the week you order — single-origin beans,
++            unhurried and full of character. No rush, no shortcuts, just coffee
++            worth waking up for.
++          </p>
++
++          <div className="sm-actions sm-reveal sm-reveal-4">
++            <a className="sm-cta" href="#shop">
++              Buy now
++              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
++                   stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"
++                   strokeLinejoin="round" aria-hidden="true">
++                <path d="M5 12h14" />
++                <path d="m13 6 6 6-6 6" />
++              </svg>
++            </a>
++            <span className="sm-reassure">
++              <b>Roasted to order</b> · free UK shipping over £30
++            </span>
++          </div>
++        </section>
++
++        <figure className="sm-figure sm-reveal sm-reveal-5">
++          <svg viewBox="0 0 360 480" role="img"
++               aria-label="A kraft-paper bag of Saltmarsh small-batch coffee">
++            {/* soft backdrop disc */}
++            <circle className="sm-bag-accent" cx="196" cy="150" r="96" opacity="0.18" />
++
++            {/* bag back fold */}
++            <rect x="92" y="96" width="176" height="34" rx="6"
++                  fill="oklch(0.46 0.05 56)" />
++            {/* bag body — kraft gradient */}
++            <defs>
++              <linearGradient id="sm-kraft" x1="0" y1="0" x2="1" y2="1">
++                <stop offset="0" stopColor="oklch(0.74 0.052 64)" />
++                <stop offset="1" stopColor="oklch(0.63 0.058 56)" />
++              </linearGradient>
++            </defs>
++            <rect x="80" y="120" width="200" height="300" rx="16" fill="url(#sm-kraft)" />
++            {/* side seam highlight */}
++            <rect x="80" y="120" width="14" height="300" rx="7"
++                  fill="oklch(0.79 0.045 66)" opacity="0.55" />
++
++            {/* label panel */}
++            <rect className="sm-bag-label" x="108" y="186" width="144" height="176" rx="10" />
++            <rect className="sm-bag-line" x="108.5" y="186.5" width="143" height="175"
++                  rx="9.5" fill="none" strokeWidth="1" />
++
++            {/* wordmark */}
++            <text className="sm-bag-ink" x="180" y="232" textAnchor="middle"
++                  fontFamily="Spectral, Georgia, serif" fontSize="25" fontWeight="500"
++                  letterSpacing="0.5">Saltmarsh</text>
++            <text className="sm-bag-soft" x="180" y="252" textAnchor="middle"
++                  fontFamily="'Hanken Grotesk', sans-serif" fontSize="8.5" fontWeight="600"
++                  letterSpacing="2.4">SMALL-BATCH COFFEE</text>
++
++            {/* divider */}
++            <line className="sm-bag-line" x1="128" y1="270" x2="232" y2="270" strokeWidth="1" />
++
++            {/* origin + roast */}
++            <text className="sm-bag-soft" x="180" y="296" textAnchor="middle"
++                  fontFamily="'Hanken Grotesk', sans-serif" fontSize="9" fontWeight="600"
++                  letterSpacing="1.6">ETHIOPIA · GUJI</text>
++            <text className="sm-bag-ink" x="180" y="316" textAnchor="middle"
++                  fontFamily="'Hanken Grotesk', sans-serif" fontSize="11" fontWeight="700"
++                  letterSpacing="1">MEDIUM ROAST</text>
++
++            {/* roast level dots */}
++            <g>
++              <circle className="sm-bag-accent" cx="156" cy="338" r="4" />
++              <circle className="sm-bag-accent" cx="172" cy="338" r="4" />
++              <circle className="sm-bag-accent" cx="188" cy="338" r="4" />
++              <circle className="sm-bag-line" cx="204" cy="338" r="3.5" fill="none" strokeWidth="1.5" />
++            </g>
++
++            {/* a few beans at the base */}
++            <g fill="oklch(0.40 0.045 50)">
++              <g transform="translate(150 446) rotate(-18)">
++                <ellipse cx="0" cy="0" rx="13" ry="8.5" />
++                <path d="M0 -8 Q3 0 0 8" stroke="oklch(0.30 0.04 48)" strokeWidth="1.4" fill="none" />
++              </g>
++              <g transform="translate(186 452) rotate(12)">
++                <ellipse cx="0" cy="0" rx="13" ry="8.5" />
++                <path d="M0 -8 Q3 0 0 8" stroke="oklch(0.30 0.04 48)" strokeWidth="1.4" fill="none" />
++              </g>
++              <g transform="translate(214 444) rotate(-8)">
++                <ellipse cx="0" cy="0" rx="12" ry="8" />
++                <path d="M0 -7.5 Q3 0 0 7.5" stroke="oklch(0.30 0.04 48)" strokeWidth="1.3" fill="none" />
++              </g>
++            </g>
++          </svg>
++
++          <figcaption className="sm-tag">
++            <span className="sm-tag-dot" aria-hidden="true" />
++            Roasted this week
++          </figcaption>
++        </figure>
++      </main>
++    </div>
++  )
++}

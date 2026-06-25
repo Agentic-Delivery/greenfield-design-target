@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "versions": [
+    {
+      "n": 1,
+      "view": "versions/1",
+      "timestamp": "2026-06-24T18:54:44.368Z",
+      "changeNote": "first Saltmarsh hero — warm cream + espresso, serif display",
+      "tokensSnapshot": {},
+      "status": "built",
+      "framework": "vite"
+    },
+    {
+      "n": 2,
+      "view": "versions/2",
+      "timestamp": "2026-06-24T19:23:04.341Z",
+      "changeNote": "design updated this iteration",
+      "tokensSnapshot": {},
+      "status": "built",
+      "framework": "vite"
+    },
+    {
+      "n": 3,
+      "view": "versions/3",
+      "timestamp": "2026-06-24T19:46:14.667Z",
+      "changeNote": "design updated this iteration",
+      "tokensSnapshot": {},
+      "status": "built",
+      "framework": "vite"
+    },
+    {
+      "n": 4,
+      "view": "versions/4",
+      "timestamp": "2026-06-24T19:52:38.955Z",
+      "changeNote": "design updated this iteration",
+      "tokensSnapshot": {},
+      "status": "built",
+      "framework": "vite"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "kind": "brand-library",
+  "mode": "greenfield",
+  "deliverableId": "1f55872e-1475-494e-ac65-f8d0deaf5741",
+  "sessionId": "1f55872e-1475-494e-ac65-f8d0deaf5741",
+  "parentDesignSha": "68310e0555d3d2bae5e8a7713951c52baa1a5280b06e4d6d347c60e585a0313a",
+  "parentArtifactId": "brief.json",
+  "targetFramework": "vite",
+  "primaryArtifact": "current/index.html"
+}
