@@ -2,7 +2,8 @@
 
 User stories for this repository's products. The `US-01-xx` block serves
 **tide-now** (REQ-web-tide-home); the `US-02-xx` block serves **Foxglove Books**
-(REQ-web-foxglove-storefront).
+(REQ-web-foxglove-storefront); the `US-03-xx` block serves **Saltmarsh**
+(REQ-web-saltmarsh-hero).
 
 ## tide-now
 
@@ -23,3 +24,12 @@ User stories for this repository's products. The `US-01-xx` block serves
 | US-02-03 | As a bookshop customer, when a title is out of print I see its add control clearly disabled, so I'm not misled into trying to buy something unavailable. | REQ-web-foxglove-storefront (O3) |
 | US-02-04 | As a bookshop customer, while content loads I see a loading state rather than a blank panel, and when something fails (an invalid newsletter email, a failed action) I get clear feedback rather than a silent failure. | REQ-web-foxglove-storefront (O4, O5) |
 | US-02-05 | As a bookshop customer, I can open the storefront at a public URL in my browser, so the shop is something I can actually visit. | REQ-web-foxglove-storefront (O6) |
+
+## Saltmarsh
+
+| ID | Story | Traces to |
+|---|---|---|
+| US-03-01 | As a visitor to the Saltmarsh coffee roaster, I land on the hero and at a glance see a warm, crafted small-roaster page — the wordmark, the serif "Coffee roasted slowly, by the marsh" headline, the calm subhead, and the illustrated coffee-bag figure — exactly as the approved design shows. | REQ-web-saltmarsh-hero (O1) |
+| US-03-02 | As a visitor, I see and can act on the one clear "Buy now" call-to-action — and if a real order destination isn't wired yet, it's an honestly-surfaced gap, not a silent dead link. | REQ-web-saltmarsh-hero (O3a, O3b) |
+| US-03-03 | As a visitor on a phone or keyboard, the hero holds up at my screen size and the "Buy now" control has a clear focus indicator, a big-enough tap target, and readable text — so the page is comfortable to use, not just to look at. | REQ-web-saltmarsh-hero (O1, R2, R4) |
+| US-03-04 | As the customer, I can open the Saltmarsh hero at its own public URL — and opening tide-now and Foxglove still shows their own screens, unchanged. | REQ-web-saltmarsh-hero (O2) |

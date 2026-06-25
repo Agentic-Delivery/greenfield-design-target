@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "artifactId": "saltmarsh-hero:53966823-8fc2-409d-9eab-54e82655816e",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "SaltmarshHero.jsx",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "saltmarsh.css",
+      "kind": "stylesheet",
+      "until": "live"
+    },
+    {
+      "id": "--accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--ink",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--ink-soft",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--paper",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--copy-card",
+      "kind": "token",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "brief-captured:53966823-8fc2-409d-9eab-54e82655816e",
+      "kind": "brief-captured",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:53966823-8fc2-409d-9eab-54e82655816e",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    }
+  ]
+}

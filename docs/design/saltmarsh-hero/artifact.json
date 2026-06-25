@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "kind": "design",
+  "mode": "brownfield",
+  "deliverableId": "53966823-8fc2-409d-9eab-54e82655816e",
+  "sessionId": "53966823-8fc2-409d-9eab-54e82655816e",
+  "parentDesignSha": "df7868f182cdb5686e3f45bdaa7c5d4c228990855713b243fa7af667df85132f",
+  "parentArtifactId": "brief.json",
+  "targetFramework": "vite",
+  "primaryArtifact": "approved.patch"
+}

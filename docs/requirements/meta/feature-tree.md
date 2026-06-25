@@ -1,8 +1,8 @@
 # Feature tree
 
-The product feature map for this repository. It currently holds two distinct
-products, each rooted at its own home screen; later screens and capabilities hang
-off each product's node.
+The product feature map for this repository. It currently holds three distinct
+products, each rooted at its own home/landing screen; later screens and
+capabilities hang off each product's node.
 
 - **tide-now** — mobile-first tide & safe-crossing app for outdoor coastal walkers
   - **Home screen** (first feature) → REQ-web-tide-home · design `docs/design/tide-now-home/`
@@ -24,3 +24,12 @@ off each product's node.
     - states: success (designed), loading, error/feedback, disabled (out-of-print), empty (basket)
     - delivery: CI/CD pipeline + staging → customer-viewable URL (shared/reconciled with the tide-now bootstrap, see REQ BLAST RADIUS)
   - _Future leaves (not yet requested): book detail pages, search/catalogue browse, checkout & payment, account._
+
+- **Saltmarsh** — warm, crafted landing page for a small-batch coffee roaster
+  - **Landing-page hero** (first feature) → REQ-web-saltmarsh-hero · design `docs/design/saltmarsh-hero/`
+    - slim masthead (Saltmarsh wordmark + clay dot)
+    - warm cream copy card: clay eyebrow, Spectral serif headline, calm subhead, single "Buy now" CTA, reassurance line
+    - product panel: illustrated kraft coffee-bag figure (inline SVG) + "Roasted this week" chip
+    - states: success only — static marketing hero, no runtime data fetch (loading/empty/error N/A); CTA focus/hover states
+    - delivery: own `/saltmarsh/` entry on the existing shared Pages deploy, alongside tide-now + Foxglove (both preserved live — see REQ R3)
+  - _Future leaves (not yet requested): real "Buy now" order destination, product/shop pages, a real bag photo._
