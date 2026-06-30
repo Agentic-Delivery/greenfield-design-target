@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "artifactId": "tessera-landing:ddd83846-1af2-45a2-9410-579238c171f3",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "tessera.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "TesseraLanding.jsx",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "tessera.css",
+      "kind": "stylesheet",
+      "until": "live"
+    },
+    {
+      "id": "--accent",
+      "kind": "token",
+      "inheritedFrom": "tessera-brand-library",
+      "until": "live"
+    },
+    {
+      "id": "--page",
+      "kind": "token",
+      "inheritedFrom": "tessera-brand-library",
+      "until": "live"
+    },
+    {
+      "id": "--ink",
+      "kind": "token",
+      "inheritedFrom": "tessera-brand-library",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "brief-captured:ddd83846-1af2-45a2-9410-579238c171f3",
+      "kind": "brief-captured",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:ddd83846-1af2-45a2-9410-579238c171f3",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief-captured:ddd83846-1af2-45a2-9410-579238c171f3",
+      "orphan": false
+    }
+  ]
+}

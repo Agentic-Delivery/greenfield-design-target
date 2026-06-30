@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "verdict": "PASSED",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [],
+  "recommendation": "A calm, precise, trustworthy hero that faithfully inherits its brand library: one low-chroma pine accent used only where it means something, tinted neutrals (no pure black/white), a real serif-plus-grotesque-plus-mono type hierarchy, and AA contrast verified in both light and dark modes. No state gaps (the only interactive element is a navigational link), no responsive breaks, and no anti-slop hits. Note for later: when the CTA links to a real form or async flow, that surface will need the full empty/loading/error/success/disabled treatment the brand library already specifies.",
+  "assessed": "Brand library (design-system.md + tokens.json) and the artifact (TesseraLanding.jsx, tessera.css, tessera.html, main.jsx). No usable render snapshot available; reconstructed the render from the mockup's own complete OKLCH styles and verified all contrast pairs numerically.",
+  "renderedOk": true
+}

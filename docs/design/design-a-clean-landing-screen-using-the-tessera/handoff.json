@@ -1,0 +1,25 @@
+{
+  "handoffId": "design-a-clean-landing-screen-using-the-tessera-ddd83846",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "ddd83846-1af2-45a2-9410-579238c171f3",
+  "sessionId": "ddd83846-1af2-45a2-9410-579238c171f3",
+  "slug": "design-a-clean-landing-screen-using-the-tessera",
+  "title": "Design a clean landing screen using the Tessera brand: a hero with a headline, …",
+  "approvedAt": "2026-06-30T20:24:15.674Z",
+  "summary": "Tessera landing hero approved as-is and handed to the factory; a worker will build it at /tessera/, and future screens inherit the Tessera brand automatically",
+  "carriedContext": "Tessera landing hero approved as-is and handed to the factory; a worker will build it at /tessera/, and future screens inherit the Tessera brand automatically",
+  "checksum": "2490248f30a51fc41f3965d6732ff68619dceb19df232120571fcd7d5d65496b",
+  "files": [
+    "versions/1/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "approved.md",
+    "approved.patch",
+    "snapshot.png",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}

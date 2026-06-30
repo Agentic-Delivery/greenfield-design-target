@@ -1,0 +1,397 @@
+diff --git a/.gitignore b/.gitignore
+index 49cc4f6..47a146e 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -11,6 +11,7 @@ node_modules/
+ web/node_modules/
+ web/dist/
+ web/dist-saltmarsh/
++web/dist-tessera/
+ 
+ # Environment secrets
+ .env
+diff --git a/web/tessera.html b/web/tessera.html
+new file mode 100644
+index 0000000..e94713f
+--- /dev/null
++++ b/web/tessera.html
+@@ -0,0 +1,12 @@
++<!DOCTYPE html>
++<html lang="en" data-mode="light">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
++    <title>Tessera — knowledge-graph platform</title>
++  </head>
++  <body>
++    <div id="root"></div>
++    <script type="module" src="/src/tessera/main.jsx"></script>
++  </body>
++</html>
+diff --git a/web/vite.tessera.config.js b/web/vite.tessera.config.js
+new file mode 100644
+index 0000000..9579149
+--- /dev/null
++++ b/web/vite.tessera.config.js
+@@ -0,0 +1,20 @@
++import { defineConfig } from 'vite'
++import react from '@vitejs/plugin-react'
++import { fileURLToPath } from 'node:url'
++
++// Dedicated build for the Tessera landing — a SEPARATE product from tide-now,
++// published at its own GitHub Pages subpath (/tessera/). It needs its own --base,
++// which differs from tide-now's, so it MUST be a separate Vite build (Vite's base
++// is per-build). Mirrors how tide-now, Foxglove, and Saltmarsh are each staged
++// into their own subpath on the one unified Pages deploy.
++// Entry: web/tessera.html -> web/src/tessera/main.jsx (mounts TesseraLanding).
++export default defineConfig({
++  plugins: [react()],
++  build: {
++    outDir: 'dist-tessera',
++    emptyOutDir: true,
++    rollupOptions: {
++      input: fileURLToPath(new URL('./tessera.html', import.meta.url)),
++    },
++  },
++})
+diff --git a/web/src/tessera/main.jsx b/web/src/tessera/main.jsx
+new file mode 100644
+index 0000000..a496964
+--- /dev/null
++++ b/web/src/tessera/main.jsx
+@@ -0,0 +1,12 @@
++import React from 'react'
++import { createRoot } from 'react-dom/client'
++import { TesseraLanding } from './TesseraLanding.jsx'
++
++// Tessera's OWN entry. A SEPARATE build from tide-now (web/src/main.jsx mounts
++// <App />) and from the Saltmarsh hero — each product owns its entry and its own
++// Pages subpath. Entry: web/tessera.html -> this file -> <TesseraLanding />.
++createRoot(document.getElementById('root')).render(
++  <React.StrictMode>
++    <TesseraLanding />
++  </React.StrictMode>
++)
+diff --git a/web/src/tessera/TesseraLanding.jsx b/web/src/tessera/TesseraLanding.jsx
+new file mode 100644
+index 0000000..846c137
+--- /dev/null
++++ b/web/src/tessera/TesseraLanding.jsx
+@@ -0,0 +1,56 @@
++import React from 'react'
++import './tessera.css'
++
++/**
++ * Tessera landing hero.
++ * Personality: calm · precise · trustworthy (the committed Tessera brand voice —
++ * precise · grounded · quietly confident). A single left-aligned copy column —
++ * eyebrow, headline, one-line subline, one primary CTA, and a quiet reassurance
++ * line — set in generous structure. No decoration competing with the message;
++ * the one pine accent appears only where it means something (the action, one
++ * emphasised phrase, a single mosaic tile).
++ */
++export function TesseraLanding() {
++  return (
++    <div className="ts-page">
++      <header className="ts-mast">
++        <span className="ts-mark">
++          <span className="ts-tiles" aria-hidden="true">
++            <span /><span /><span /><span />
++          </span>
++          Tessera
++        </span>
++      </header>
++
++      <main className="ts-hero">
++        <div className="ts-copy">
++          <p className="ts-eyebrow ts-reveal ts-reveal-1">Knowledge-graph platform</p>
++
++          <h1 className="ts-title ts-reveal ts-reveal-2">
++            Every connection, <em>exactly where it belongs.</em>
++          </h1>
++
++          <p className="ts-sub ts-reveal ts-reveal-3">
++            Tessera links your scattered records into one knowledge graph your
++            team can query with confidence.
++          </p>
++
++          <div className="ts-actions ts-reveal ts-reveal-4">
++            <a className="ts-cta" href="#start">
++              Request a walkthrough
++              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
++                   stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"
++                   strokeLinejoin="round" aria-hidden="true">
++                <path d="M5 12h14" />
++                <path d="m13 6 6 6-6 6" />
++              </svg>
++            </a>
++            <span className="ts-reassure">
++              <b>No setup required</b> · see it on your own data
++            </span>
++          </div>
++        </div>
++      </main>
++    </div>
++  )
++}
+diff --git a/web/src/tessera/tessera.css b/web/src/tessera/tessera.css
+new file mode 100644
+index 0000000..1666040
+--- /dev/null
++++ b/web/src/tessera/tessera.css
+@@ -0,0 +1,255 @@
++@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
++
++/* ----------------------------------------------------------------------------
++   Tessera — landing hero
++   Brand: precise · grounded · quietly confident. Light theme. One pine accent
++   (hue 168) carried at ~10% weight (60-30-10). Neutrals are the accent hue at
++   near-zero chroma, so the whole surface reads as one grounded family — nothing
++   is pure #000/#fff. Tokens are OKLCH and wired to the canvas tweaks panel
++   (--accent / --scale / --density / --motion-mult / data-mode) so they repaint
++   legibly. Values inherited from the committed Tessera brand library.
++---------------------------------------------------------------------------- */
++
++:root {
++  /* one accent family — pine, hue 168 */
++  --accent: oklch(0.45 0.066 168);          /* pine-700 — the action / emphasis colour */
++  --accent-hover: oklch(0.38 0.055 168);    /* pine-800 — pressed/hover */
++  --accent-strong: oklch(0.30 0.040 168);   /* pine-900 — deepest emphasis */
++  --accent-soft: oklch(0.95 0.020 168);     /* pine-100 — the 10% accent at low weight */
++  --on-accent: oklch(0.99 0.003 168);       /* near-white text on pine, tinted to family */
++
++  /* neutrals — the accent hue at near-zero chroma (never grey, never #000/#fff) */
++  --page: oklch(0.98 0.004 168);            /* warm-cool off-white paper — the 60 */
++  --surface: oklch(0.995 0.002 168);        /* lifted panel surface */
++  --ink: oklch(0.21 0.010 168);             /* near-black tinted pine — the 30, ~14:1 on paper */
++  --muted: oklch(0.46 0.008 168);           /* supporting text, AA (~4.7:1) on paper */
++  --border: oklch(0.88 0.005 168);          /* subtle dividers */
++  --border-strong: oklch(0.55 0.010 168);   /* control borders, 3:1 UI floor */
++  --focus: oklch(0.53 0.072 168);           /* 2px focus ring, >=3:1 */
++
++  /* type scale — Spectral display / Hanken body / JetBrains data */
++  --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
++  --font-body: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
++  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
++
++  /* tweaks-panel knobs */
++  --scale: 1;
++  --density: 1;
++  --motion-mult: 1;
++
++  --measure: 60ch;
++  --radius: 12px;
++  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
++}
++
++/* Complete dark slot-alias — surface AND text re-pointed together so contrast
++   holds on its own surfaces. Gives the light/dark tweak an honest place to go. */
++[data-mode='dark'] {
++  --accent: oklch(0.64 0.072 168);
++  --accent-hover: oklch(0.72 0.078 168);
++  --accent-strong: oklch(0.80 0.070 168);
++  --accent-soft: oklch(0.30 0.030 168);
++  --on-accent: oklch(0.18 0.012 168);
++
++  --page: oklch(0.20 0.012 168);
++  --surface: oklch(0.24 0.014 168);
++  --ink: oklch(0.95 0.006 168);
++  --muted: oklch(0.74 0.010 168);
++  --border: oklch(0.34 0.012 168);
++  --border-strong: oklch(0.52 0.014 168);
++  --focus: oklch(0.68 0.080 168);
++}
++
++* { box-sizing: border-box; }
++
++.ts-page {
++  margin: 0;
++  min-height: 100dvh;
++  display: flex;
++  flex-direction: column;
++  background: var(--page);
++  color: var(--ink);
++  font-family: var(--font-body);
++  -webkit-font-smoothing: antialiased;
++  text-rendering: optimizeLegibility;
++  overflow-x: hidden;
++}
++
++/* slim masthead — identity only, keeps the hero grounded in context */
++.ts-mast {
++  width: 100%;
++  max-width: 1080px;
++  margin: 0 auto;
++  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.4rem, 5vw, 3rem) 0;
++  display: flex;
++  align-items: center;
++  gap: 0.6rem;
++}
++.ts-mark {
++  display: inline-flex;
++  align-items: center;
++  gap: 0.55rem;
++  font-family: var(--font-display);
++  font-weight: 600;
++  font-size: calc(1.35rem * var(--scale));
++  letter-spacing: -0.01em;
++  color: var(--ink);
++}
++/* a small mosaic of tessera (tiles) — the brand's meaning, used once and quietly */
++.ts-tiles {
++  display: grid;
++  grid-template-columns: repeat(2, 9px);
++  grid-template-rows: repeat(2, 9px);
++  gap: 2px;
++}
++.ts-tiles span {
++  width: 9px;
++  height: 9px;
++  border-radius: 2px;
++  background: var(--accent-soft);
++}
++.ts-tiles span:nth-child(1) { background: var(--accent); }
++
++/* hero — left-aligned column, generous structure, vertically centred */
++.ts-hero {
++  flex: 1;
++  width: 100%;
++  max-width: 1080px;
++  margin: 0 auto;
++  padding: clamp(2.5rem, 8vh, 6rem) clamp(1.4rem, 5vw, 3rem) clamp(3rem, 9vh, 7rem);
++  display: flex;
++  flex-direction: column;
++  justify-content: center;
++}
++.ts-copy {
++  max-width: 36rem;
++  display: flex;
++  flex-direction: column;
++  gap: calc(1.4rem * var(--density));
++}
++
++.ts-eyebrow {
++  margin: 0;
++  font-family: var(--font-mono);
++  font-size: calc(0.75rem * var(--scale));
++  font-weight: 500;
++  letter-spacing: 0.12em;
++  text-transform: uppercase;
++  color: var(--muted);
++  display: inline-flex;
++  align-items: center;
++  gap: 0.6rem;
++}
++.ts-eyebrow::before {
++  content: '';
++  width: 1.75rem;
++  height: 1px;
++  background: var(--border-strong);
++}
++
++.ts-title {
++  margin: 0;
++  font-family: var(--font-display);
++  font-weight: 600;
++  font-size: clamp(2rem, 1.2rem + 3.4vw, 2.9rem);
++  line-height: 1.18;
++  letter-spacing: -0.012em;
++  color: var(--ink);
++  max-width: 18ch;
++}
++.ts-title em {
++  font-style: italic;
++  color: var(--accent);
++}
++
++.ts-sub {
++  margin: 0;
++  font-size: calc(1.125rem * var(--scale));
++  line-height: 1.6;
++  color: var(--muted);
++  max-width: var(--measure);
++}
++
++.ts-actions {
++  margin-top: calc(0.5rem * var(--density));
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 1rem 1.25rem;
++}
++
++.ts-cta {
++  --_h: 2.875rem;                 /* 46px — comfortably above the 44px target floor */
++  display: inline-flex;
++  align-items: center;
++  gap: 0.55rem;
++  min-height: var(--_h);
++  padding: 0 1.4rem;
++  border: 1px solid transparent;
++  border-radius: var(--radius);
++  background: var(--accent);
++  color: var(--on-accent);
++  font-family: var(--font-body);
++  font-size: calc(1rem * var(--scale));
++  font-weight: 600;
++  letter-spacing: 0.005em;
++  text-decoration: none;
++  cursor: pointer;
++  transition: background calc(0.18s * var(--motion-mult)) var(--ease-out),
++              transform calc(0.18s * var(--motion-mult)) var(--ease-out);
++}
++.ts-cta svg {
++  transition: transform calc(0.2s * var(--motion-mult)) var(--ease-out);
++}
++.ts-cta:hover {
++  background: var(--accent-hover);
++}
++.ts-cta:hover svg {
++  transform: translateX(3px);
++}
++.ts-cta:active {
++  transform: translateY(1px);
++}
++.ts-cta:focus-visible {
++  outline: 2px solid var(--focus);
++  outline-offset: 3px;
++}
++
++/* a single quiet line of reassurance — supports "trustworthy" without adding weight */
++.ts-reassure {
++  font-family: var(--font-mono);
++  font-size: calc(0.8125rem * var(--scale));
++  color: var(--muted);
++  letter-spacing: 0.01em;
++}
++.ts-reassure b {
++  color: var(--ink);
++  font-weight: 500;
++}
++
++/* calm reveal — opacity + transform only, gentle, staggered */
++.ts-reveal {
++  opacity: 0;
++  transform: translateY(12px);
++  animation: ts-rise calc(0.7s * var(--motion-mult)) var(--ease-out) forwards;
++}
++.ts-reveal-1 { animation-delay: calc(0.05s * var(--motion-mult)); }
++.ts-reveal-2 { animation-delay: calc(0.14s * var(--motion-mult)); }
++.ts-reveal-3 { animation-delay: calc(0.24s * var(--motion-mult)); }
++.ts-reveal-4 { animation-delay: calc(0.34s * var(--motion-mult)); }
++
++@keyframes ts-rise {
++  to { opacity: 1; transform: none; }
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .ts-reveal {
++    opacity: 1;
++    transform: none;
++    animation: none;
++  }
++  .ts-cta,
++  .ts-cta svg {
++    transition: none;
++  }
++}
