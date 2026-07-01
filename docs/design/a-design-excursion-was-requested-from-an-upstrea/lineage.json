@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "artifactId": "marginalia-landing-hero",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "currently-reading-panel",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "hero-copy",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "shelf-states-band",
+      "kind": "component",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "generation:fc4bb066-af44-41e2-a6ec-2a88bbfc3cbd",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:fc4bb066-af44-41e2-a6ec-2a88bbfc3cbd",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:fc4bb066-af44-41e2-a6ec-2a88bbfc3cbd",
+      "orphan": false
+    }
+  ]
+}

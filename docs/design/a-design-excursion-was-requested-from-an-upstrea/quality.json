@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores":  { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
+  "states":  { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [
+    { "id": "UX-2", "what": "On phones the top navigation hides both section links and leaves only the theme toggle, so mobile users lose wayfinding to 'How it works' and 'Your shelf'.", "fix": "Keep at least one in-flow navigation affordance on mobile — a compact menu or an inline link — instead of dropping both anchors." }
+  ],
+  "recommendation": "A strong, on-brand, calm reading-tracker hero that clears the bar on clarity, hierarchy, accessibility, and consistency, with all five states of the 'currently reading' list actually designed. Safe to ship at /marginalia/ as delivered. Optional polish: keep a navigation affordance on mobile (the top nav currently collapses to just the theme toggle), and give the muted text and error-on-tint pairings a little more contrast headroom above the AA floor when the palette is next tuned. Neither is a blocker.",
+  "assessed": "Read .preview/current/index.html, its design-system.md, the inherited Tessera brand library at docs/design/brand/, and a real full-page render (.preview/snapshot.png). Critical light- and dark-mode contrast pairs spot-checked numerically.",
+  "renderedOk": true
+}
