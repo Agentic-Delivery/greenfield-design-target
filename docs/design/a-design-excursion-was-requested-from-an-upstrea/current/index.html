@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marginalia — keep your place, not your streak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---- Tessera brand tokens (inherited from docs/design/brand/tokens.json) ---- */
+  :root {
+    /* identity — pine ramp (hue 168), ink ramp, state hues */
+    --brand-pine-900: oklch(0.30 0.040 168);
+    --brand-pine-800: oklch(0.38 0.055 168);
+    --brand-pine-700: oklch(0.45 0.066 168);
+    --brand-pine-600: oklch(0.53 0.072 168);
+    --brand-pine-500: oklch(0.63 0.072 168);
+    --brand-pine-200: oklch(0.90 0.030 168);
+    --brand-pine-100: oklch(0.95 0.020 168);
+    --brand-pine-050: oklch(0.975 0.012 168);
+    --brand-ink-950: oklch(0.21 0.010 168);
+    --brand-ink-800: oklch(0.33 0.009 168);
+    --brand-ink-600: oklch(0.46 0.008 168);
+    --brand-ink-500: oklch(0.55 0.010 168);
+    --brand-ink-400: oklch(0.66 0.006 168);
+    --brand-ink-200: oklch(0.88 0.005 168);
+    --brand-ink-100: oklch(0.955 0.004 168);
+    --brand-paper: oklch(0.98 0.004 168);
+    --brand-surface: oklch(0.995 0.002 168);
+    --brand-moss-700: oklch(0.44 0.085 150);
+    --brand-moss-100: oklch(0.95 0.025 150);
+    --brand-clay-700: oklch(0.44 0.120 28);
+    --brand-clay-100: oklch(0.95 0.030 28);
+    --brand-amber-700: oklch(0.46 0.095 70);
+    --brand-amber-100: oklch(0.95 0.035 70);
+
+    /* live-tweak knobs (accent / scale / density / motion) default to brand values */
+    --accent: var(--brand-pine-700);
+    --scale: 1;
+    --density: 1;
+    --motion-mult: 1;
+
+    /* structure — semantic roles reference identity */
+    --color-accent: var(--accent);
+    --color-accent-hover: var(--brand-pine-800);
+    --color-accent-strong: var(--brand-pine-900);
+    --color-accent-soft: var(--brand-pine-100);
+    --color-accent-border: var(--brand-pine-200);
+    --color-page: var(--brand-paper);
+    --color-surface: var(--brand-surface);
+    --color-surface-subtle: var(--brand-ink-100);
+    --text-body: var(--brand-ink-950);
+    --text-heading: var(--brand-ink-950);
+    --text-muted: var(--brand-ink-600);
+    --text-on-accent: var(--brand-surface);
+    --border: var(--brand-ink-200);
+    --border-strong: var(--brand-ink-500);
+    --focus-ring: var(--brand-pine-600);
+    --state-success: var(--brand-moss-700);
+    --state-success-bg: var(--brand-moss-100);
+    --state-error: var(--brand-clay-700);
+    --state-error-bg: var(--brand-clay-100);
+    --state-warning: var(--brand-amber-700);
+    --state-warning-bg: var(--brand-amber-100);
+
+    --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
+    --font-body: 'Hanken Grotesk', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+    --size-caption: 0.75rem;
+    --size-small: 0.875rem;
+    --size-body: 1rem;
+    --size-lg: 1.125rem;
+    --size-h3: 1.25rem;
+    --size-h2: 1.5625rem;
+    --size-h1: 1.953rem;
+    --size-display: 2.441rem;
+    --weight-body: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --leading-body: 1.6;
+    --leading-tight: 1.2;
+    --tracking-tight: -0.01em;
+    --measure: 60ch;
+
+    /* spacing scaled by density knob */
+    --space-1: calc(0.25rem * var(--density));
+    --space-2: calc(0.5rem * var(--density));
+    --space-3: calc(0.75rem * var(--density));
+    --space-4: calc(1rem * var(--density));
+    --space-5: calc(1.5rem * var(--density));
+    --space-6: calc(2rem * var(--density));
+    --space-7: calc(3rem * var(--density));
+    --space-8: calc(4rem * var(--density));
+
+    --radius-sm: 3px;
+    --radius-md: 6px;
+    --radius-lg: 10px;
+    --radius-full: 999px;
+    --shadow-sm: 0 1px 2px oklch(0.21 0.01 168 / 0.06);
+    --shadow-md: 0 4px 14px oklch(0.21 0.01 168 / 0.09);
+  }
+
+  [data-mode="dark"] {
+    --color-page: var(--brand-ink-950);
+    --color-surface: var(--brand-ink-800);
+    --color-surface-subtle: oklch(0.28 0.009 168);
+    --text-body: var(--brand-pine-050);
+    --text-heading: oklch(0.97 0.010 168);
+    --text-muted: oklch(0.74 0.008 168);
+    --border: oklch(0.40 0.009 168);
+    --border-strong: oklch(0.58 0.012 168);
+    --color-accent: oklch(from var(--accent) clamp(0.55, calc(l + 0.18), 0.72) c h);
+    --color-accent-hover: var(--brand-pine-600);
+    --color-accent-soft: oklch(0.33 0.040 168);
+    --text-on-accent: var(--brand-ink-950);
+    --state-success-bg: oklch(0.33 0.040 150);
+    --state-error-bg: oklch(0.32 0.050 28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { font-size: calc(100% * var(--scale)); }
+  body {
+    margin: 0;
+    background: var(--color-page);
+    color: var(--text-body);
+    font-family: var(--font-body);
+    font-size: var(--size-body);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .wrap { width: 100%; max-width: 1140px; margin-inline: auto; padding-inline: var(--space-5); }
+
+  /* ---- top bar ---- */
+  .topbar { border-bottom: 1px solid var(--border); background: var(--color-surface); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 60px; gap: var(--space-4); }
+  .brandmark { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-weight: 600; font-size: var(--size-h3); letter-spacing: var(--tracking-tight); color: var(--text-heading); text-decoration: none; }
+  .brandmark .glyph { width: 22px; height: 22px; flex: none; }
+  .topnav { display: flex; align-items: center; gap: var(--space-5); }
+  .topnav a { font-size: var(--size-small); color: var(--text-muted); text-decoration: none; padding: var(--space-2) 0; }
+  .topnav a:hover { color: var(--text-body); }
+  .mode-toggle {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    min-height: 44px; padding-inline: var(--space-3);
+    background: transparent; border: 1px solid var(--border-strong); border-radius: var(--radius-full);
+    color: var(--text-muted); font-family: var(--font-body); font-size: var(--size-small); cursor: pointer;
+  }
+  .mode-toggle:hover { color: var(--text-body); }
+  @media (max-width: 640px) { .topnav .nav-link { display: none; } }
+
+  /* ---- hero ---- */
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: var(--space-8); align-items: center; padding-block: var(--space-8); }
+  .eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font-mono); font-size: var(--size-caption); letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-accent-strong); background: var(--color-accent-soft); border: 1px solid var(--color-accent-border); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); }
+  .hero h1 { font-family: var(--font-display); font-weight: 600; font-size: var(--size-display); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--text-heading); margin: var(--space-5) 0 var(--space-4); max-width: 16ch; }
+  .hero .lede { font-size: var(--size-lg); color: var(--text-muted); max-width: 46ch; margin: 0 0 var(--space-6); }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    min-height: 48px; padding-inline: var(--space-5);
+    background: var(--color-accent); color: var(--text-on-accent);
+    font-family: var(--font-body); font-size: var(--size-body); font-weight: var(--weight-semibold);
+    border: 1px solid transparent; border-radius: var(--radius-md); text-decoration: none; cursor: pointer;
+    transition: background calc(140ms * var(--motion-mult)) ease;
+  }
+  .btn-primary:hover { background: var(--color-accent-hover); }
+  .link-quiet { font-size: var(--size-small); color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; }
+  .link-quiet u { text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+  .link-quiet:hover { color: var(--text-body); }
+
+  /* ---- currently-reading panel (right of hero) ---- */
+  .panel { background: var(--color-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border); }
+  .panel-head .label { font-family: var(--font-mono); font-size: var(--size-caption); letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-muted); }
+  .panel-head .count { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--text-muted); }
+
+  /* empty state — the honest first-run of "currently reading" */
+  .empty { padding: var(--space-7) var(--space-5); text-align: center; }
+  .empty .mark { width: 44px; height: 44px; margin: 0 auto var(--space-4); color: var(--color-accent); opacity: 0.9; }
+  .empty h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--size-h3); color: var(--text-heading); margin: 0 0 var(--space-2); }
+  .empty p { font-size: var(--size-small); color: var(--text-muted); margin: 0 auto var(--space-5); max-width: 34ch; }
+  .btn-soft {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    min-height: 44px; padding-inline: var(--space-4);
+    background: var(--color-accent-soft); color: var(--color-accent-strong);
+    border: 1px solid var(--color-accent-border); border-radius: var(--radius-md);
+    font-family: var(--font-body); font-size: var(--size-small); font-weight: var(--weight-semibold); cursor: pointer;
+    transition: background calc(140ms * var(--motion-mult)) ease;
+  }
+  .btn-soft:hover { background: var(--brand-pine-200); }
+
+  /* populated / loading / error rows (below the fold — "where your shelf goes") */
+  .shelf { border-top: 1px solid var(--border); }
+  .book { display: grid; grid-template-columns: 40px minmax(0,1fr) auto; gap: var(--space-4); align-items: center; padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border); }
+  .book:last-child { border-bottom: 0; }
+  .cover { width: 40px; height: 56px; border-radius: var(--radius-sm); background: var(--color-accent-soft); border: 1px solid var(--color-accent-border); display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; color: var(--color-accent-strong); font-size: var(--size-lg); }
+  .book .title { font-weight: var(--weight-medium); color: var(--text-heading); font-size: var(--size-small); }
+  .book .by { font-size: var(--size-caption); color: var(--text-muted); font-family: var(--font-mono); }
+  .progress { display: flex; align-items: center; gap: var(--space-3); }
+  .track { width: 96px; height: 6px; border-radius: var(--radius-full); background: var(--color-surface-subtle); overflow: hidden; }
+  .track > span { display: block; height: 100%; background: var(--color-accent); border-radius: inherit; }
+  .pct { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--text-muted); min-width: 4ch; text-align: right; }
+  .row-error { background: var(--state-error-bg); }
+  .status { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--size-caption); font-family: var(--font-mono); }
+  .status.err { color: var(--state-error); }
+  .btn-retry { min-height: 32px; padding-inline: var(--space-3); background: transparent; border: 1px solid var(--state-error); color: var(--state-error); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--size-caption); font-weight: 600; cursor: pointer; }
+  /* loading skeleton */
+  .sk { background: linear-gradient(90deg, var(--color-surface-subtle) 25%, var(--color-accent-soft) 50%, var(--color-surface-subtle) 75%); background-size: 200% 100%; border-radius: var(--radius-sm); animation: shimmer calc(1400ms * var(--motion-mult)) infinite linear; }
+  .sk.cover { width: 40px; height: 56px; }
+  .sk.line { height: 12px; }
+  .sk.w70 { width: 70%; } .sk.w40 { width: 40%; margin-top: 8px; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .sk { animation: none; } .btn-primary, .btn-soft { transition: none; } }
+
+  .band { border-top: 1px solid var(--border); background: var(--color-surface); }
+  .band .wrap { padding-block: var(--space-8); }
+  .band-head { max-width: 52ch; margin-bottom: var(--space-6); }
+  .band-head .kicker { font-family: var(--font-mono); font-size: var(--size-caption); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .band-head h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--size-h2); color: var(--text-heading); letter-spacing: var(--tracking-tight); margin: var(--space-2) 0 var(--space-3); }
+  .band-head p { color: var(--text-muted); margin: 0; max-width: 48ch; }
+  .example-note { font-size: var(--size-caption); color: var(--text-muted); font-family: var(--font-mono); margin-top: var(--space-4); }
+
+  footer { border-top: 1px solid var(--border); }
+  footer .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-block: var(--space-5); flex-wrap: wrap; }
+  footer small { color: var(--text-muted); font-size: var(--size-caption); font-family: var(--font-mono); }
+
+  /* ---- responsive ---- */
+  @media (max-width: 860px) {
+    .hero .wrap { grid-template-columns: 1fr; gap: var(--space-6); padding-block: var(--space-7); }
+    .hero h1 { max-width: 20ch; }
+  }
+  @media (max-width: 480px) {
+    .wrap { padding-inline: var(--space-4); }
+    .book { grid-template-columns: 34px minmax(0,1fr); grid-template-areas: "cover meta" "cover prog"; row-gap: var(--space-2); }
+    .book .cover, .book .sk.cover { grid-area: cover; width: 34px; height: 48px; }
+    .book .meta { grid-area: meta; } .book .progress { grid-area: prog; justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brandmark" href="#" aria-label="Marginalia home">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2.5" stroke="currentColor" stroke-width="1.6" style="color:var(--color-accent)"/>
+          <path d="M9 3v18" stroke="currentColor" stroke-width="1.6" style="color:var(--color-accent)"/>
+          <path d="M13 8.5h5M13 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="color:var(--brand-ink-500)"/>
+        </svg>
+        Marginalia
+      </a>
+      <nav class="topnav" aria-label="Primary">
+        <a class="nav-link" href="#how">How it works</a>
+        <a class="nav-link" href="#shelf">Your shelf</a>
+        <button class="mode-toggle" id="modeBtn" type="button" aria-pressed="false">
+          <span aria-hidden="true">◐</span> <span id="modeLabel">Dark</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-copy">
+          <span class="eyebrow" data-od-source-path="index.html:322">A quiet reading tracker</span>
+          <h1 data-od-source-path="index.html:323">Keep your place, not your streak.</h1>
+          <p class="lede" data-od-source-path="index.html:324">Marginalia holds the book you're in the middle of and how far you've come — no daily goals, no nudges, no guilt when you set it down for a week.</p>
+          <div class="cta-row">
+            <a class="btn-primary" href="#" data-od-source-path="index.html:327">Start your shelf</a>
+            <a class="link-quiet" href="#how">See how it works&nbsp;<span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+        <div class="panel" id="currently" aria-labelledby="cr-label">
+          <div class="panel-head">
+            <span class="label" id="cr-label">Currently reading</span>
+            <span class="count">0 books</span>
+          </div>
+          <div class="empty">
+            <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 1 4 17.5v-12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 0 1.5-1.5v-12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            <h2 data-od-source-path="index.html:342">Your shelf is empty for now</h2>
+            <p data-od-source-path="index.html:343">Add the book you're reading right now. Marginalia remembers the page — you don't have to.</p>
+            <button class="btn-soft" type="button">＋ Add a book</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="shelf">
+      <div class="wrap">
+        <div class="band-head">
+          <span class="kicker">A shelf, once it fills</span>
+          <h2>The same panel, a few books in.</h2>
+          <p>A book, an author, and where you left off. That's the whole picture — nothing counting the days.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <span class="label">Currently reading</span>
+            <span class="count">3 books</span>
+          </div>
+          <div class="shelf">
+            <!-- success / populated rows -->
+            <div class="book">
+              <div class="cover" aria-hidden="true">P</div>
+              <div class="meta">
+                <div class="title">Piranesi</div>
+                <div class="by">Susanna Clarke</div>
+              </div>
+              <div class="progress">
+                <span class="track"><span style="width:62%"></span></span>
+                <span class="pct">p.148</span>
+              </div>
+            </div>
+            <div class="book">
+              <div class="cover" aria-hidden="true">T</div>
+              <div class="meta">
+                <div class="title">The Overstory</div>
+                <div class="by">Richard Powers</div>
+              </div>
+              <div class="progress">
+                <span class="track"><span style="width:24%"></span></span>
+                <span class="pct">p.121</span>
+              </div>
+            </div>
+            <!-- error row: a book whose sync failed -->
+            <div class="book row-error">
+              <div class="cover" aria-hidden="true">A</div>
+              <div class="meta">
+                <div class="title">A Pale View of Hills</div>
+                <div class="status err"><span aria-hidden="true">⚠</span> Couldn't save your page</div>
+              </div>
+              <div class="progress">
+                <button class="btn-retry" type="button">Retry</button>
+              </div>
+            </div>
+            <!-- loading row: a book being added -->
+            <div class="book" aria-hidden="true">
+              <div class="sk cover"></div>
+              <div class="meta">
+                <div class="sk line w70"></div>
+                <div class="sk line w40"></div>
+              </div>
+              <div class="progress"><span class="sk line" style="width:96px;height:6px"></span></div>
+            </div>
+          </div>
+        </div>
+        <p class="example-note">Preview — empty, in-progress, sync error, and adding a book, all in the brand's own tokens.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer id="how">
+    <div class="wrap">
+      <small>Marginalia · built on the Tessera brand</small>
+      <small>Keep your place, not your streak.</small>
+    </div>
+  </footer>
+
+  <script>
+    // light/dark toggle — drives the same [data-mode] the brand slot-alias uses
+    var btn = document.getElementById('modeBtn'), label = document.getElementById('modeLabel'), root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var dark = root.getAttribute('data-mode') === 'dark';
+      root.setAttribute('data-mode', dark ? 'light' : 'dark');
+      btn.setAttribute('aria-pressed', String(!dark));
+      label.textContent = dark ? 'Dark' : 'Light';
+    });
+  </script>
+</body>
+</html>
