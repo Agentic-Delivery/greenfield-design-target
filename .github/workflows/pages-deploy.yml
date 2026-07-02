@@ -98,6 +98,9 @@ jobs:
         run: |
           test -f web/dist/index.html
           test -f web/dist-saltmarsh/saltmarsh.html
+          # tide-now-home is the approved base design published as a self-contained
+          # static page (no build step — the Foxglove static-page precedent).
+          test -f web/tide-now-home/index.html
 
       - name: Regression guard (build base + refined accent + topology invariants)
         run: bash scripts/verify-pages-deploy.sh
@@ -169,10 +172,14 @@ jobs:
 
       - name: Stage all apps
         run: |
-          mkdir -p _pages/foxglove/js _pages/tide-now _pages/saltmarsh
+          mkdir -p _pages/foxglove/js _pages/tide-now _pages/saltmarsh _pages/tide-now-home
           # Foxglove storefront (static)
           cp web/foxglove/index.html _pages/foxglove/
           cp web/foxglove/js/main.js _pages/foxglove/js/
+          # tide-now-home: the approved base design, a self-contained static page
+          # (inline CSS + Google Fonts, no build). Served at the /tide-now-home/
+          # subpath. Distinct from the productionised /tide-now/ Vite app.
+          cp web/tide-now-home/index.html _pages/tide-now-home/index.html
           # tide-now (built Vite app, already based at /greenfield-design-target/tide-now/)
           cp -r web/dist/. _pages/tide-now/
           # Saltmarsh (built Vite app, based at /greenfield-design-target/saltmarsh/).
@@ -212,6 +219,7 @@ jobs:
       TIDE_PATH: /greenfield-design-target/tide-now/
       FOX_PATH: /greenfield-design-target/foxglove/
       SALT_PATH: /greenfield-design-target/saltmarsh/
+      HOME_PATH: /greenfield-design-target/tide-now-home/
     steps:
       - name: Foxglove still live (content)
         run: |
@@ -279,6 +287,38 @@ jobs:
             exit 1
           fi
           echo "PASS: Saltmarsh hero is live at $URL with assets resolving under the correct base"
+
+      - name: tide-now-home approved base screen live (content + base accent token)
+        run: |
+          URL="${PAGES_ORIGIN}${HOME_PATH}"
+          echo "Probing $URL ..."
+          BODY=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "$URL")
+
+          # 1) The approved base screen content (not a redirect, not another app, not a 404).
+          #    Assert one marker from each of the four approved components.
+          for MARKER in \
+            'Current tide height' \
+            'Safe to cross now' \
+            'Holy Island Causeway' \
+            'Add a walk'; do
+            if ! grep -qF "$MARKER" <<< "$BODY"; then
+              echo "FAIL: approved marker '$MARKER' not found at $URL — wrong app / redirect / 404?"
+              exit 1
+            fi
+          done
+
+          # 2) Fidelity: the approved BASE bundle ships its hi-vis safety-orange accent
+          #    token inline. Its presence proves the base design shipped — and that this
+          #    is NOT the productionised /tide-now/ app (which carries the refined amber).
+          if ! grep -qF 'oklch(0.70 0.18 50)' <<< "$BODY"; then
+            echo "FAIL: base accent token oklch(0.70 0.18 50) not in served page — base design not live"
+            exit 1
+          fi
+          if grep -qF 'oklch(0.71 0.135 62)' <<< "$BODY"; then
+            echo "FAIL: refined /tide-now/ accent leaked into /tide-now-home/ — wrong screen published"
+            exit 1
+          fi
+          echo "PASS: tide-now-home approved base screen is live at $URL"
 
   # ── 5. Aggregate observability gate.
   ci-status:
