@@ -30,6 +30,12 @@ ACCENT_RE='oklch\(0?\.71 0?\.135 62\)'
 WF_DIR="$ROOT/.github/workflows"
 DIST="$ROOT/web/dist"
 SALT_DIST="$ROOT/web/dist-saltmarsh"
+# tide-now-home is the approved base design published as a self-contained static
+# page (no build step) — the served artifact lives directly in the source tree.
+HOME_PAGE="$ROOT/web/tide-now-home/index.html"
+# The base bundle's hi-vis safety-orange accent (source form; this page is NOT
+# minified, so no minified variant needs tolerating).
+HOME_ACCENT='oklch(0.70 0.18 50)'
 
 fail=0
 check() { # $1 = exit code from the caller's test (0=pass, non-zero=fail); $2 = description
@@ -77,6 +83,28 @@ else
   check 0 "Saltmarsh shell does NOT reference the tide-now base (separate per-product base)"
 fi
 
+echo "== A3. Published-page contract (web/tide-now-home/index.html) =="
+if [ ! -f "$HOME_PAGE" ]; then
+  echo "FAIL: web/tide-now-home/index.html missing — the approved base design page is not present"
+  exit 1
+fi
+
+# One marker from each of the four approved components — proves the approved base
+# screen (not a placeholder) is what will be served.
+grep -qF 'Current tide height' "$HOME_PAGE"; check $? "tide-now-home carries the tide-height hero (Current tide height)"
+grep -qF 'Safe to cross now' "$HOME_PAGE";   check $? "tide-now-home carries the next-safe-crossing card (Safe to cross now)"
+grep -qF 'Holy Island Causeway' "$HOME_PAGE"; check $? "tide-now-home carries the saved-walks list (Holy Island Causeway)"
+grep -qF 'Add a walk' "$HOME_PAGE";          check $? "tide-now-home carries the add-a-walk affordance"
+
+# Fidelity: the base bundle's accent token is present, and the refined /tide-now/
+# accent has NOT leaked in (base publish, not the productionised app).
+grep -qF "$HOME_ACCENT" "$HOME_PAGE"; check $? "tide-now-home ships the approved base accent token ($HOME_ACCENT)"
+if grep -qF 'oklch(0.71 0.135 62)' "$HOME_PAGE"; then
+  check 1 "tide-now-home does NOT carry the refined /tide-now/ accent (base publish, not the app)"
+else
+  check 0 "tide-now-home does NOT carry the refined /tide-now/ accent (base publish, not the app)"
+fi
+
 echo "== B. Workflow-topology invariants (.github/workflows) =="
 
 # Exactly one Pages deploy across all workflows — two would clobber each other.
@@ -90,12 +118,17 @@ else
   check 0 "obsolete Render deploy removed (none of RENDER_DEPLOY_HOOK_URL / 'Deploy to Render')"
 fi
 
-# The single deploy stages ALL three apps.
+# The single deploy stages ALL apps.
 DEPLOY_WF=$(grep -rlE 'actions/deploy-pages' "$WF_DIR" 2>/dev/null | head -1)
 if [ -n "$DEPLOY_WF" ]; then
   grep -qF '_pages/foxglove' "$DEPLOY_WF"; check $? "the Pages deploy stages Foxglove (_pages/foxglove) — $(basename "$DEPLOY_WF")"
-  grep -qF '_pages/tide-now' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now (_pages/tide-now) — $(basename "$DEPLOY_WF")"
+  # Boundary-anchored: `_pages/tide-now` is a substring of `_pages/tide-now-home`, so a
+  # bare fixed-string match would falsely pass if the real /tide-now/ staging were removed
+  # while tide-now-home remained. Require a trailing space or `/` (both the mkdir arg and
+  # the `cp … _pages/tide-now/` satisfy this; `_pages/tide-now-home` does not).
+  grep -qE '_pages/tide-now[[:space:]/]' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now (_pages/tide-now) — $(basename "$DEPLOY_WF")"
   grep -qF '_pages/saltmarsh' "$DEPLOY_WF"; check $? "the Pages deploy stages Saltmarsh (_pages/saltmarsh) — $(basename "$DEPLOY_WF")"
+  grep -qF '_pages/tide-now-home' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now-home (_pages/tide-now-home) — $(basename "$DEPLOY_WF")"
 else
   check 1 "a Pages deploy workflow exists"
 fi

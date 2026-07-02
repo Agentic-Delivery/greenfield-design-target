@@ -39,6 +39,15 @@ single Pages deploy (built to the approved design in `docs/design/saltmarsh-hero
 its "Buy now" CTA ships a documented `#shop` placeholder until the customer supplies
 a real order URL).
 
+The approved tide-now home **base design** is published at
+https://agentic-delivery.github.io/greenfield-design-target/tide-now-home/ from the same
+single Pages deploy (served verbatim from the approved greenfield bundle
+`docs/design/tide-now-home/current/index.html` as a self-contained static page). This is
+the approved "all-good" success view with the original hi-vis safety-orange accent — a
+design-publish, distinct from the productionised app at `/tide-now/` (refined amber, all
+states, live data). See `docs/operations/tide-now-home-manual.md`. The
+loading/error-stale/empty-saved-walks states are a separate design-first fast-follow.
+
 ## Test Environment
 
 - **Platform**: GitHub Pages (static hosting), deployed via GitHub Actions (OIDC — no
@@ -48,6 +57,7 @@ a real order URL).
   - tide-now: `https://agentic-delivery.github.io/greenfield-design-target/tide-now/`
   - Foxglove: `https://agentic-delivery.github.io/greenfield-design-target/foxglove/`
   - Saltmarsh: `https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/`
+  - tide-now-home: `https://agentic-delivery.github.io/greenfield-design-target/tide-now-home/`
 - **Safety zone**: the GitHub Pages site above is the only valid verification target.
   `localhost:<port>` and container-internal addresses are NOT valid post-deploy targets.
 

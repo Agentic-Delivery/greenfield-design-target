@@ -23,11 +23,13 @@ so its hashed assets resolve under the `/tide-now/` subpath. The build artifact 
 produced once in the `Test & Build` job and promoted to the `deploy` job.
 
 **Single shared Pages deploy:** GitHub Pages keeps only the most recent deployment, so
-tide-now, Foxglove, and Saltmarsh are staged together and published by ONE `deploy` job
-(`_pages/tide-now/` + `_pages/foxglove/` + `_pages/saltmarsh/`, root redirect →
-`/foxglove/`). Two separate Pages-deploy workflows would clobber each other. See
-`docs/operations/foxglove-storefront-manual.md` (Foxglove) and
-`docs/operations/saltmarsh-hero-manual.md` (Saltmarsh).
+tide-now, Foxglove, Saltmarsh, and tide-now-home are staged together and published by
+ONE `deploy` job (`_pages/tide-now/` + `_pages/foxglove/` + `_pages/saltmarsh/` +
+`_pages/tide-now-home/`, root redirect → `/foxglove/`). Two separate Pages-deploy
+workflows would clobber each other. See `docs/operations/foxglove-storefront-manual.md`
+(Foxglove), `docs/operations/saltmarsh-hero-manual.md` (Saltmarsh), and
+`docs/operations/tide-now-home-manual.md` (tide-now-home — the approved base design
+published at `/tide-now-home/`, distinct from the productionised app at `/tide-now/`).
 
 ## Test Deployment Source
 
