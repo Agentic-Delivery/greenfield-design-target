@@ -2,8 +2,8 @@
 id: REQ-web-tide-home
 title: tide-now home screen — built to the approved design, live at a customer-viewable URL
 status: approved
-version: 1.2
-baseline-ref: REQ-web-tide-home v1.1 (approved hero refinement — amber accent, refined hero spacing)
+version: 1.3
+baseline-ref: REQ-web-tide-home v1.2 (feed-integrity/empty states split + design-first)
 project-type: brownfield  # v1.1 refines the already-shipped v1.0 screen; v1.2 adds the feed-integrity + empty states as a design-first fast-follow onto the same live app
 link-design: docs/design/tide-now-home/ (base — structural reference for the whole screen) + docs/design/tide-now-home-hero-refinement/ (approved 2026-06-22 — authoritative for the hero spacing + accent token). The four v1.2 feed-integrity/empty states (O2/O3a/O3b/O4) are NOT yet designed — they are routed to the design station first (R8); link-design extends to the approved state bundle once it lands.
 link-brd: N/A — design-handoff value stream; the customer-approved design (jury PASSED) is the governing upstream spec
@@ -83,6 +83,19 @@ three changes to close the gap durably:
    safety UI R8 forbids). Once the design station produces the approved
    unreachable/stale states, that ad-hoc copy MUST be replaced by the approved
    design, not left as a parallel undocumented fallback.
+
+### v1.3 — temporal freshness (a live reading must not silently age into "safe") (2026-07-03)
+
+An intake quality review found that v1.2 specified the four states only at *initial
+render*. A reading that is fresh when the walker opens the app stays inside the
+"safe to cross now" success framing indefinitely as it ages past the freshness window
+while the walker watches — nothing re-evaluates it. On a crossing-safety screen that is
+the same "silently show an out-of-date reading" harm the fast-follow exists to remove,
+just over time instead of at load. v1.3 adds **R9** — the screen must re-evaluate
+freshness on a cadence and leave the success framing when a displayed reading crosses
+the window (O1 → O3b), and recover (O3a/O3b → O1) when the feed returns fresh — so
+"safe to cross now" is never shown for a reading that is no longer fresh, whether it was
+stale at load or aged into staleness in view.
 
 ## OUTCOME
 
@@ -185,6 +198,19 @@ to cross — exactly as the approved design shows it.
   until that bundle exists, the build is blocked (design-first). This rule exists
   because an un-designed feed-unavailable message already shipped to the live app
   once (see v1.2 note); it is the exact failure this rule prevents from recurring.
+- **R9 — A displayed reading must not silently age into "safe".** The screen MUST
+  re-evaluate feed freshness while it is open, not only at first load, on a cadence
+  bounded below `FRESHNESS_WINDOW_MINUTES` (re-fetching from the boundary, which owns
+  the `status` per ADR-001 — the UI stays a pure renderer and never runs its own
+  freshness math). When a reading currently shown in the "safe to cross now" success
+  framing (O1) ages past the window, the screen MUST leave the success framing and show
+  the stale state (O3b) with the reading's age; when the feed later returns fresh, the
+  screen MUST recover to O1 (and likewise recover O3a → O1 when a previously-unreachable
+  feed becomes reachable and fresh). So "safe to cross now" is never shown for a reading
+  that is no longer fresh — whether it was stale at load or aged into staleness while the
+  walker watched. The re-evaluation cadence and the recovery transitions are verifiable
+  on the running screen (the delivery-verifier can hold the screen open across the window
+  boundary and observe the O1 → O3b transition).
 - **R5 — Frontend stack chosen by the worker (LAW 5).** No framework is pinned.
   The worker selects the stack at build time; the design system and per-viewport
   references are the contract, not the source shape.
@@ -246,6 +272,11 @@ to cross — exactly as the approved design shows it.
   15-minute freshness window; the app shows that reading clearly marked stale with
   its age and does not show a green "safe to cross" as if it were current. The walker
   is not misled into an unsafe crossing.
+- **Ages into stale while watched (R9):** the walker opens the app on a fresh reading
+  showing "safe to cross now", then keeps the screen open at the water's edge; as the
+  reading ages past the freshness window the screen leaves the "safe to cross" framing
+  and marks the reading stale with its age, rather than silently holding "safe". When a
+  newer reading arrives it returns to the live success view.
 - **Empty walks:** a first-time walker has saved nothing; the saved-walks area
   invites them to "Add a walk" rather than showing an empty gap.
 - **Live URL:** after merge, the customer opens the public staging URL on their
