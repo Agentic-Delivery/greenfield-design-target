@@ -51,9 +51,14 @@ Pages propagation is typically under a minute.
 
 GitHub Pages is static hosting. The app fetches `/api/tide` (a same-origin relative
 path); on Pages there is no backend serving it, so the fetch fails and the app shows
-its **designed error state** — "Tide data unavailable — check your connection" —
-rendered in the refined design language (accent, typography, layout all live). This is
-one of the app's five intentional states (live / loading / stale / error), not a crash.
+an **interim feed-unavailable fallback** — "Tide data unavailable — check your
+connection" — styled with the design tokens (accent, typography, layout). It is not a
+crash, but it is NOT yet an approved, design-station-reviewed state: the tide-now
+design bundle records the error/stale/loading states as un-designed
+(`docs/design/tide-now-home/quality.json` → `states.error/loading/empty: false`). Per
+REQ-web-tide-home R8 (v1.2), the feed-unreachable (O3a) and stale (O3b) states are
+being shaped through the design station; once that approved bundle lands, this ad-hoc
+fallback is replaced by the approved design rather than left as a parallel contract.
 
 To serve live tide readings from the public deployment, a data source is required —
 either a hosted backend exposing `/api/tide`, or a public tidal API called directly
@@ -86,7 +91,7 @@ the deployed CSS.
 |---|---|---|---|---|---|
 | Tidal API key | `TIDAL_API_KEY` | _not readable — secret_ | Set in backend host environment | Remove the variable | REQ-web-tide-home R7 |
 | Tidal API endpoint | `TIDAL_API_ENDPOINT` | _not readable — secret_ | Set in backend host environment | Remove the variable | REQ-web-tide-home R7 |
-| Freshness window | `FRESHNESS_WINDOW_MINUTES` | `echo $FRESHNESS_WINDOW_MINUTES` (backend shell) | Set in backend host environment | Remove variable (reverts to 15-minute default) | REQ-web-tide-home R4 |
+| Freshness window | `FRESHNESS_WINDOW_MINUTES` | `echo $FRESHNESS_WINDOW_MINUTES` (backend shell) | Set in backend host environment | Remove variable (reverts to 15-minute default) | REQ-web-tide-home O3b / R7 |
 
 ## Component Operational Profile
 
@@ -95,7 +100,8 @@ the deployed CSS.
 - Built by Vite with `--base=/greenfield-design-target/tide-now/`. Published as static
   files on GitHub Pages.
 - No API keys or secrets in the bundle.
-- Without a `/api/tide` backend the app renders its designed error state (see Live data).
+- Without a `/api/tide` backend the app renders its interim feed-unavailable fallback,
+  pending the approved O3a design-station state (see Live data).
 
 ### Tidal-data backend (`api/server.js`) — NOT deployed on Pages
 
@@ -109,7 +115,7 @@ the deployed CSS.
 | `/tide-now/` returns 404 | Pages source not set to "GitHub Actions", or deploy job failed | Check repo Settings → Pages source; check the `deploy` job log in `pages-deploy.yml` |
 | tide-now assets 404 (blank page) | Vite `base` wrong — assets requested from the wrong path | Confirm build ran with `--base=/greenfield-design-target/tide-now/`; the regression guard `scripts/verify-pages-deploy.sh` asserts this |
 | Refined accent missing | Stale/wrong build deployed | Re-run `pages-deploy.yml` on `main`; verify job asserts `oklch(.71 .135 62)` in deployed CSS |
-| Tide reading shows "Tide data unavailable" | No `/api/tide` backend on static Pages (expected) | Not a defect — static deploy has no backend. See Live data to stand one up |
+| Tide reading shows "Tide data unavailable" | No `/api/tide` backend on static Pages (expected) | Not a crash — static deploy has no backend (see Live data). Note: this is an interim fallback, not yet the approved O3a design-station state (REQ-web-tide-home R8) |
 | Foxglove site broken after a tide-now change | Staging step clobbered Foxglove | Both apps stage in one `deploy` job — check the `Stage both apps` step staged `_pages/foxglove/` |
 
 ## Verification Backends
