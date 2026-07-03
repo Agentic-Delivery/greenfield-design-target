@@ -2,14 +2,14 @@
 id: REQ-web-tide-home
 title: tide-now home screen — built to the approved design, live at a customer-viewable URL
 status: approved
-version: 1.1
-baseline-ref: REQ-web-tide-home v1.0 (initial build — orange accent, original hero spacing)
-project-type: brownfield  # v1.1 refines the already-shipped v1.0 screen; refinement bundle records mode: brownfield
-link-design: docs/design/tide-now-home/ (base — structural reference for the whole screen) + docs/design/tide-now-home-hero-refinement/ (approved 2026-06-22 — authoritative for the hero spacing + accent token)
+version: 1.2
+baseline-ref: REQ-web-tide-home v1.1 (approved hero refinement — amber accent, refined hero spacing)
+project-type: brownfield  # v1.1 refines the already-shipped v1.0 screen; v1.2 adds the feed-integrity + empty states as a design-first fast-follow onto the same live app
+link-design: docs/design/tide-now-home/ (base — structural reference for the whole screen) + docs/design/tide-now-home-hero-refinement/ (approved 2026-06-22 — authoritative for the hero spacing + accent token). The four v1.2 feed-integrity/empty states (O2/O3a/O3b/O4) are NOT yet designed — they are routed to the design station first (R8); link-design extends to the approved state bundle once it lands.
 link-brd: N/A — design-handoff value stream; the customer-approved design (jury PASSED) is the governing upstream spec
 link-uc: N/A — single approved screen; the approved design + approved.md define the intended use
 link-flow: N/A — single-screen success view + its loading/error/empty states (enumerated below)
-link-adr: N/A — no new architectural decision introduced; the frontend stack was chosen at the v1.0 build (Vite + React, per the refinement's approved.patch) and is not revisited by this CSS-only refinement; design-system.md remains the binding visual contract; the two structural defaults (on-device persistence, server-side credential boundary) are recorded as R6/R7 below
+link-adr: ADR-001-tide-feed-freshness-contract (v1.2 — governs the boundary→UI feed-state contract that the O3a/O3b split requires). The frontend stack itself was chosen at the v1.0 build (Vite + React) and is not revisited; design-system.md remains the binding visual contract; on-device persistence + the server-side credential boundary are recorded as R6/R7.
 link-test: planned — per-viewport structural + token match of the built screen against current/viewports/index.html/<px>.png for each declared width, plus a reachability check of the public staging URL (O5). Verified post-deploy by the delivery verifier.
 ---
 
@@ -58,6 +58,32 @@ base bundle at `docs/design/tide-now-home/` remains the structural reference for
 everything else (layout, components, per-viewport references, and the
 loading/error/empty states).
 
+### v1.2 — feed-integrity + empty states, design-first fast-follow (2026-07-03)
+
+The screen shipped live as the approved **populated success view only**. Its
+design-quality jury explicitly recorded that the loading, feed-failure/stale, and
+empty-saved-walks states were **not designed** (`quality.json` →
+`states.loading/error/empty: false`) and gated live-app readiness on designing
+them. The screen was published on an explicit *"ship the approved look now, these
+states as a fast-follow"* decision. This v1.2 delta is that fast-follow. It makes
+three changes to close the gap durably:
+
+1. **Splits the former single O3 ("error / stale") into two distinct states** —
+   **O3a (feed unreachable)** and **O3b (feed reachable but stale)** — because they
+   are different runtime conditions the walker must be able to tell apart. On the
+   current static hosting there is **no live tidal-data backend** (the `api/`
+   service is not deployed), so "unreachable" is presently the *default* production
+   condition, not a rare edge case — the delivery verifier asserts these states
+   against the real deployed URL, not a hypothetical backend.
+2. **Requires the four states to go through the design station first** (R8) — no
+   un-reviewed safety-state UI invented at build time.
+3. **Flags an already-live, un-designed fallback for reconciliation.** A "Tide data
+   unavailable — check your connection" message is already rendered on the live
+   deployment but never passed the design station (it is exactly the un-reviewed
+   safety UI R8 forbids). Once the design station produces the approved
+   unreachable/stale states, that ad-hoc copy MUST be replaced by the approved
+   design, not left as a parallel undocumented fallback.
+
 ## OUTCOME
 
 A coastal walker opens the tide-now app in a phone browser at a public URL and, at
@@ -74,12 +100,20 @@ to cross — exactly as the approved design shows it.
   shows a loading state for the live data — never a blank panel and never a stale
   number presented as if it were live. (Not covered by the approved success view;
   design it consistent with `design-system.md`.)
-- **O3 — Error / stale-feed state.** When the tide feed is unreachable, or the data
-  is older than a configured freshness window (an operator-tunable threshold chosen
-  at build time — not a fabricated value here), the screen shows a clearly labelled
-  stale/error state with the data's age — so a failed fetch can never silently
-  present out-of-date safety information. (Not covered by the approved success
-  view; design it.)
+- **O3a — Feed-unreachable state.** When the tide feed cannot be fetched at all
+  (the request fails, there is no network, or — as on the current static hosting —
+  no live backend is deployed), the screen shows a clearly labelled "tide data
+  unavailable" state and MUST NOT present any previous reading as if it were current.
+  It offers a way to retry. (Not covered by the approved success view; design it via
+  the design station per R8.)
+- **O3b — Stale-feed state.** When the tide feed IS reachable but its data is older
+  than the configured freshness window (`FRESHNESS_WINDOW_MINUTES`, the existing
+  operational lever, 15-minute default — reuse it, do not fabricate a new value), the
+  screen shows the last reading **visibly marked stale with its age** and MUST NOT
+  render it with the "safe to cross now" success framing (no colour/copy overlap with
+  the fresh success state — ties to R3). So a slow-moving or out-of-date feed can
+  never silently present out-of-date safety information. (Not covered by the approved
+  success view; design it via the design station per R8.)
 - **O4 — Empty saved-walks state.** When the walker has zero saved walks, the
   saved-walks area shows a meaningful empty state leading with the "Add a walk"
   affordance — not a blank area. (Not covered by the approved success view.)
@@ -138,11 +172,19 @@ to cross — exactly as the approved design shows it.
   icon/shape + a text word with the colour (accessibility — colour-as-only-signal
   is forbidden, per the approved design and WCAG 2.2 AA).
 - **R4 — All interactive states present.** The approved design covers only the
-  success state (O1); the loading (O2), error/stale (O3), and empty (O4) states
-  MUST also be built before the app is considered done. The approved mockup
-  contains no disabled controls, so no disabled state is in scope; if the build
-  introduces one, it MUST be visibly and programmatically conveyed as disabled.
-  Success alone is not done.
+  success state (O1); the loading (O2), feed-unreachable (O3a), stale-feed (O3b),
+  and empty (O4) states MUST also be built before the app is considered done. The
+  approved mockup contains no disabled controls, so no disabled state is in scope;
+  if the build introduces one, it MUST be visibly and programmatically conveyed as
+  disabled. Success alone is not done.
+- **R8 — The O2/O3a/O3b/O4 states are design-first.** These four states are not in
+  the approved bundle (`quality.json` → `states.loading/error/empty: false`). They
+  MUST be shaped through the design station and pass a design-quality review BEFORE
+  they are built — no un-reviewed safety-state UI invented at build time. The build
+  work-item for these states carries `link-design` to the approved state bundle;
+  until that bundle exists, the build is blocked (design-first). This rule exists
+  because an un-designed feed-unavailable message already shipped to the live app
+  once (see v1.2 note); it is the exact failure this rule prevents from recurring.
 - **R5 — Frontend stack chosen by the worker (LAW 5).** No framework is pinned.
   The worker selects the stack at build time; the design system and per-viewport
   references are the contract, not the source shape.
@@ -155,7 +197,11 @@ to cross — exactly as the approved design shows it.
   secret for the external tidal source MUST be held server-side, not embedded in
   client code. The worker chooses the concrete fetch boundary at build time (e.g. a
   thin server-side proxy, which may reuse the existing `api/` service) under the
-  security-compliance gate, and enforces O3 stale-detection at that boundary.
+  security-compliance gate, and enforces O3b stale-detection (and O3a
+  unreachable-detection) at that boundary. The boundary→UI payload shape — an explicit
+  `status` (live/stale/unreachable) + the reading's age, with the UI as a pure renderer
+  holding no freshness threshold — is fixed by **ADR-001** (tide-feed freshness/integrity
+  contract); the build MUST honour that contract.
   (Recorded here to govern the fetch-layer choice the architecture review flagged.)
 
 ## BLAST RADIUS
@@ -163,22 +209,25 @@ to cross — exactly as the approved design shows it.
 - **Components:** the existing web frontend (the live home screen), the deploy
   pipeline, and the staging environment — all established at v1.0. This v1.1
   CSS-only refinement lands a hero diff onto the already-running app and
-  introduces no new component. The `api/` Express service is the live backend
-  (the tidal proxy serving `/api/tide`, holding the server-side credential per R7,
-  per `docs/operations/operational-manual.md`) and remains the fetch boundary the
-  worker may reuse.
+  introduces no new component. The `api/` Express service exists in the source tree
+  but is **not deployed** on the current static hosting (there is no `/api/tide`
+  endpoint live today, per `docs/operations/operational-manual.md` § Live data —
+  which is why O3a "feed unreachable" is presently the default production condition);
+  it remains the fetch boundary a future backend deploy may reuse (holding the
+  server-side credential per R7).
 - **Third-party dependency (LAW 9 — fallback required):** the screen depends on an
   external tidal-data source for height, trend, and safe-crossing prediction. If
-  that source is unreachable or returns stale data, the app MUST render the
-  error/stale state (O3) with the data's age — it MUST NOT crash, show a blank
-  screen, or present stale data as live. The specific data source is a worker /
+  that source is unreachable the app MUST render the feed-unreachable state (O3a);
+  if it returns data older than the freshness window the app MUST render the
+  stale-feed state (O3b) with the data's age — it MUST NOT crash, show a blank
+  screen, or present stale/absent data as live. The specific data source is a worker /
   operator decision at build time and is not fabricated here.
 - **Operator one-time setup (path to running software):** established at v1.0 —
   the pipeline + staging and the hosting/cloud target + credentials are already in
   place. This v1.1 refinement introduces no new operator setup; it ships through
   the existing pipeline.
 - **Operational levers:** the hosting target, the deploy credentials, the
-  tidal-data source endpoint + its credential, and the O3 freshness window are
+  tidal-data source endpoint + its credential, and the O3b freshness window are
   operational levers, recorded in the Operational Manual created at v1.0 under
   `docs/operations/operational-manual.md` (traced to `req-id: REQ-web-tide-home`).
   This v1.1 CSS-only refinement adds no new operational lever.
@@ -189,9 +238,14 @@ to cross — exactly as the approved design shows it.
   fresh; they see "2.4 m / Rising", "Safe to cross now" with a closing countdown,
   and their two saved walks each with a status chip. They decide to cross. (Matches
   the approved success view.)
-- **Stale feed:** the tidal source is down; the app shows the last reading clearly
-  marked stale with its age and does not show a green "safe to cross" as if it were
-  current. The walker is not misled into an unsafe crossing.
+- **Feed unreachable:** the tidal source (or the whole backend, as on static
+  hosting today) cannot be reached; the app shows a clear "tide data unavailable"
+  state with a way to retry, and shows no reading at all rather than a stale number —
+  the walker is never handed an out-of-date height dressed as current.
+- **Stale feed:** the source is reachable but its last reading is older than the
+  15-minute freshness window; the app shows that reading clearly marked stale with
+  its age and does not show a green "safe to cross" as if it were current. The walker
+  is not misled into an unsafe crossing.
 - **Empty walks:** a first-time walker has saved nothing; the saved-walks area
   invites them to "Add a walk" rather than showing an empty gap.
 - **Live URL:** after merge, the customer opens the public staging URL on their
