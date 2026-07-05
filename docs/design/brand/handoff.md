@@ -1,31 +1,27 @@
-# Brand library — Tessera (design singleton)
+# Marginalia — brand library (committed anchor)
 
-The customer approved a full **brand library for Tessera, a B2B knowledge-graph
-platform** (personality: *precise · grounded · quietly confident*), on the design
-canvas. The factory promotes it here as the durable **brand singleton** at
-`docs/design/brand/` — the reusable Layer-2 foundation that future UI work items
-anchor to via `link-brand: docs/design/brand/`.
+The customer approved the **Marginalia** brand system. It is now the canonical,
+reusable brand foundation for this factory: later UI work anchors to it via
+`link-brand: docs/design/brand/`, and the enforceable token contract lives at
+`docs/design/brand/tokens.json`.
 
-This is **not a build work-item.** There is nothing to ship from it directly; it
-is the reference library. A later UI requirement that opts in (`link-brand`) makes
-its enforceable token contract (`tokens.json`) a build constraint.
+This library is a singleton — this commit replaces any previously committed brand
+library in full.
 
-## What was approved
-All 11 components, approved: color-system, typography, button, text-input, select,
-choice-controls, badge, card, data-table, navigation, modal — plus the full brand
-(colour roles, type scale, spacing/radius tokens). One low-chroma pine accent
-(hue 168) at 60-30-10 weight, neutrals tinted to the brand hue, OKLCH throughout,
-no pure black/white. `tokens.json` carries the machine-readable token contract.
+## What is here
+
+- `current/index.html` — the approved brand mockup (the primary artifact; greenfield).
+- `design-system.md` — the brand spec: atmosphere, colour roles, type scale,
+  component inventory & states, token model, motion & accessibility.
+- `tokens.json` — the machine-readable token contract workers enforce via `link-brand`.
+- `snapshot.png`, `current/viewports/…` — reference renders.
+- `brand-state.json`, `lineage.json`, `quality.json`, `artifact.json`,
+  `handoff.json`, `versions/` — provenance and lineage carried from the design session.
 
 ## Provenance
-- Source design session: `1f55872e-1475-494e-ac65-f8d0deaf5741`
-- Approved at: 2026-06-24T22:45:17Z
-- Parent design SHA: `68310e0555d3d2bae5e8a7713951c52baa1a5280b06e4d6d347c60e585a0313a`
-- Components approved: 11 (see `brand-state.json`)
 
-## Note for the operator
-This Tessera brand is distinct from the products currently being built in this
-repo (tide-now, Foxglove Books, the Saltmarsh coffee hero) — each of those carries
-its own approved `link-design` with its own design system. The Tessera library is
-captured here as the brand singleton and is available for any **future** screen
-that chooses to inherit it; promoting it does not change any in-flight build.
+- Source design deliverable: `21042b48-0078-44da-b51e-0c986e0fd247`
+- Approved at: `2026-06-26T03:52:59.267Z`
+- Content checksum (parentDesignSha): `c87bb3a7d7e79f69522976b2774eace63d5507d292cb3898710f63f8300d880f`
+- Mode: greenfield (`primaryArtifact: current/index.html`)
+- Committed via: automated brand commit (label `brand-auto-commit`)

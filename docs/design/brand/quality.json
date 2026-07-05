@@ -1,12 +1,11 @@
 {
-  "schema": 1,
   "verdict": "PASSED",
   "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
   "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
   "viewports": { "mobile": true, "tablet": true, "desktop": true },
   "flags": [],
-  "recommendation": "Ship-ready brand contract. Two independent graders both returned PASSED with every dimension at the bar and the full BRAND-1..7 floor clean: a distinctive low-chroma pine + serif/grotesque/mono system that reads precise and grounded (not generic AI), all contrast pairs verified at or above WCAG AA, and a real four-layer token model where editing a token repaints the gallery. The single minor finding (40px control height) was fixed before handoff — interactive controls are raised to 44px at the mobile breakpoint.",
-  "assessed": "Tessera self-contained gallery (current/index.html) with complete inline styles, tokens.json four-layer contract, and design-system.md spec; graded by two independent design-quality-gate runs, contrast computed numerically from the OKLCH tokens.",
+  "recommendation": "Distinctive, on-brand, and accessible in both themes. The two contrast issues found during review (the light warning badge and the dark-mode status badges) and the loading-announcement advisory were all corrected; the brand floor passes all seven checks with no anti-slop hits.",
+  "assessed": "design jury re-run after each fix; WCAG contrast computed directly from the OKLCH tokens",
   "gradeInputs": {
     "graders": [
       {
@@ -16,7 +15,7 @@
         "renderedOk": true
       },
       {
-        "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
+        "scores": { "clarity": 5, "hierarchy": 5, "a11y": 4, "consistency": 5 },
         "brand": { "BRAND-1": true, "BRAND-2": true, "BRAND-3": true, "BRAND-4": true, "BRAND-5": true, "BRAND-6": true, "BRAND-7": true },
         "viewports": { "mobile": true, "tablet": true, "desktop": true },
         "renderedOk": true

@@ -2,10 +2,10 @@
   "schema": 1,
   "kind": "brand-library",
   "mode": "greenfield",
-  "deliverableId": "1f55872e-1475-494e-ac65-f8d0deaf5741",
-  "sessionId": "1f55872e-1475-494e-ac65-f8d0deaf5741",
-  "parentDesignSha": "68310e0555d3d2bae5e8a7713951c52baa1a5280b06e4d6d347c60e585a0313a",
+  "deliverableId": "21042b48-0078-44da-b51e-0c986e0fd247",
+  "sessionId": "21042b48-0078-44da-b51e-0c986e0fd247",
+  "parentDesignSha": "c87bb3a7d7e79f69522976b2774eace63d5507d292cb3898710f63f8300d880f",
   "parentArtifactId": "brief.json",
-  "targetFramework": "vite",
+  "targetFramework": null,
   "primaryArtifact": "current/index.html"
 }

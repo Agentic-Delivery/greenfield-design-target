@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "artifactId": "brand-library:tessera",
+  "artifactId": "brand:marginalia:21042b48-0078-44da-b51e-0c986e0fd247",
   "parentArtifactId": "brief.json",
   "orphan": false,
   "exportTargets": [
@@ -9,7 +9,7 @@
   ],
   "atoms": [
     {
-      "id": "color-system",
+      "id": "color-palette",
       "until": "live"
     },
     {
@@ -21,7 +21,7 @@
       "until": "live"
     },
     {
-      "id": "text-input",
+      "id": "input",
       "until": "live"
     },
     {
@@ -29,7 +29,11 @@
       "until": "live"
     },
     {
-      "id": "choice-controls",
+      "id": "card",
+      "until": "live"
+    },
+    {
+      "id": "navigation",
       "until": "live"
     },
     {
@@ -37,15 +41,7 @@
       "until": "live"
     },
     {
-      "id": "card",
-      "until": "live"
-    },
-    {
-      "id": "data-table",
-      "until": "live"
-    },
-    {
-      "id": "navigation",
+      "id": "table-row",
       "until": "live"
     },
     {
@@ -57,11 +53,23 @@
       "until": "live"
     },
     {
-      "id": "--color-page",
+      "id": "--color-accent-strong",
+      "until": "live"
+    },
+    {
+      "id": "--color-bg",
       "until": "live"
     },
     {
       "id": "--text-body",
+      "until": "live"
+    },
+    {
+      "id": "--text-heading",
+      "until": "live"
+    },
+    {
+      "id": "--signal-warning",
       "until": "live"
     },
     {
@@ -71,32 +79,28 @@
     {
       "id": "--font-body",
       "until": "live"
-    },
-    {
-      "id": "--font-mono",
-      "until": "live"
     }
   ],
   "journey": [
     {
-      "id": "brief-captured:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "id": "brief-captured:21042b48-0078-44da-b51e-0c986e0fd247",
       "kind": "brief-captured",
       "until": "live",
       "parentArtifactId": "brief.json",
       "orphan": false
     },
     {
-      "id": "generation:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "id": "generation:21042b48-0078-44da-b51e-0c986e0fd247",
       "kind": "generation",
       "until": "live",
-      "parentArtifactId": "brief-captured:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "parentArtifactId": "brief-captured:21042b48-0078-44da-b51e-0c986e0fd247",
       "orphan": false
     },
     {
-      "id": "approval:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "id": "approval:21042b48-0078-44da-b51e-0c986e0fd247",
       "kind": "approval",
       "until": "live",
-      "parentArtifactId": "generation:1f55872e-1475-494e-ac65-f8d0deaf5741",
+      "parentArtifactId": "generation:21042b48-0078-44da-b51e-0c986e0fd247",
       "orphan": false
     }
   ]

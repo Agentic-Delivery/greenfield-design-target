@@ -1,551 +1,498 @@
 <!DOCTYPE html>
 <html lang="en" data-mode="light">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tessera — Brand Library</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marginalia — brand system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    /* identity — pine accent (hue 168) */
-    --brand-pine-900: oklch(0.30 0.040 168);
-    --brand-pine-800: oklch(0.38 0.055 168);
-    --brand-pine-700: oklch(0.45 0.066 168);
-    --brand-pine-600: oklch(0.53 0.072 168);
-    --brand-pine-500: oklch(0.63 0.072 168);
-    --brand-pine-200: oklch(0.90 0.030 168);
-    --brand-pine-100: oklch(0.95 0.020 168);
-    --brand-pine-050: oklch(0.975 0.012 168);
-    /* identity — ink neutrals (hue 168, near-zero chroma) */
-    --brand-ink-950: oklch(0.21 0.010 168);
-    --brand-ink-800: oklch(0.33 0.009 168);
-    --brand-ink-600: oklch(0.46 0.008 168);
-    --brand-ink-500: oklch(0.55 0.010 168);
-    --brand-ink-400: oklch(0.66 0.006 168);
-    --brand-ink-200: oklch(0.88 0.005 168);
-    --brand-ink-100: oklch(0.955 0.004 168);
-    --brand-paper: oklch(0.98 0.004 168);
-    --brand-surface: oklch(0.995 0.002 168);
-    /* identity — functional state hues */
-    --brand-moss-700: oklch(0.44 0.085 150);
-    --brand-moss-600: oklch(0.52 0.090 150);
-    --brand-moss-100: oklch(0.95 0.025 150);
-    --brand-clay-700: oklch(0.44 0.120 28);
-    --brand-clay-600: oklch(0.52 0.130 28);
-    --brand-clay-100: oklch(0.95 0.030 28);
-    --brand-amber-700: oklch(0.46 0.095 70);
-    --brand-amber-600: oklch(0.62 0.105 70);
-    --brand-amber-100: oklch(0.95 0.035 70);
+/* ============================================================
+   MARGINALIA — design tokens
+   Layered model (identity → structure → with-fallback → slot-alias).
+   The flat custom properties below are the contract the gallery reads;
+   editing any one of them live-repaints every component that uses it.
+   Tweak-panel hooks: --accent, --scale, --density, --motion-mult, data-mode.
+   ============================================================ */
+:root {
+  /* ---- panel hooks (live-tunable) ---- */
+  --accent: oklch(0.55 0.106 41);   /* clay-600 — the single brand accent */
+  --scale: 1;                        /* type scale multiplier */
+  --density: 1;                      /* spacing multiplier */
+  --motion-mult: 1;                  /* transition-duration multiplier */
 
-    /* structure — semantic roles referencing identity */
-    --color-accent: var(--brand-pine-700);
-    --color-accent-hover: var(--brand-pine-800);
-    --color-accent-strong: var(--brand-pine-900);
-    --color-accent-soft: var(--brand-pine-100);
-    --color-accent-border: var(--brand-pine-200);
-    --color-page: var(--brand-paper);
-    --color-surface: var(--brand-surface);
-    --color-surface-subtle: var(--brand-ink-100);
-    --text-body: var(--brand-ink-950);
-    --text-heading: var(--brand-ink-950);
-    --text-muted: var(--brand-ink-600);
-    --text-on-accent: var(--brand-surface);
-    --border: var(--brand-ink-200);
-    --border-strong: var(--brand-ink-500);
-    --focus-ring: var(--brand-pine-600);
-    --state-success: var(--brand-moss-700);
-    --state-success-bg: var(--brand-moss-100);
-    --state-error: var(--brand-clay-700);
-    --state-error-bg: var(--brand-clay-100);
-    --state-warning: var(--brand-amber-700);
-    --state-warning-bg: var(--brand-amber-100);
+  /* ---- identity: raw clay (terracotta) ramp — OKLCH, accent well under 80% sat ---- */
+  --clay-50:  oklch(0.962 0.012 45);
+  --clay-100: oklch(0.922 0.024 45);
+  --clay-200: oklch(0.860 0.040 44);
+  --clay-300: oklch(0.782 0.060 43);
+  --clay-400: oklch(0.700 0.084 42);
+  --clay-500: oklch(0.620 0.102 42);
+  --clay-600: oklch(0.550 0.106 41);
+  --clay-700: oklch(0.470 0.094 40);
+  --clay-800: oklch(0.390 0.075 39);
+  --clay-900: oklch(0.310 0.055 38);
 
-    /* structure — type */
-    --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
-    --font-body: 'Hanken Grotesk', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
-    --size-caption: 0.75rem;
-    --size-small: 0.875rem;
-    --size-body: 1rem;
-    --size-lg: 1.125rem;
-    --size-h3: 1.25rem;
-    --size-h2: 1.5625rem;
-    --size-h1: 1.953rem;
-    --size-display: 2.441rem;
-    --weight-body: 400;
-    --weight-medium: 500;
-    --weight-semibold: 600;
-    --leading-body: 1.6;
-    --leading-tight: 1.2;
-    --tracking-tight: -0.01em;
-    --measure: 68ch;
+  /* ---- identity: paper-warm neutrals, tinted toward the clay hue (~42), near-zero chroma ---- */
+  --paper-50:  oklch(0.987 0.006 60);
+  --paper-100: oklch(0.968 0.008 58);
+  --paper-200: oklch(0.936 0.009 56);
+  --paper-300: oklch(0.884 0.010 54);
+  --paper-400: oklch(0.782 0.011 52);
+  --ink-500:   oklch(0.620 0.012 50);
+  --ink-600:   oklch(0.500 0.013 48);
+  --ink-700:   oklch(0.400 0.014 46);
+  --ink-800:   oklch(0.320 0.014 44);
+  --ink-900:   oklch(0.240 0.014 42);
 
-    /* structure — space + radius + shadow */
-    --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
-    --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: 4rem;
-    --radius-sm: 3px; --radius-md: 6px; --radius-lg: 10px; --radius-full: 999px;
-    --shadow-sm: 0 1px 2px oklch(0.21 0.01 168 / 0.06);
-    --shadow-md: 0 4px 14px oklch(0.21 0.01 168 / 0.09);
+  /* ---- identity: functional state hues (signal only — always paired with icon + label) ---- */
+  --signal-success: oklch(0.520 0.072 145);
+  --signal-success-soft: oklch(0.940 0.022 145);
+  --signal-error:   oklch(0.510 0.140 28);
+  --signal-error-soft: oklch(0.946 0.026 30);
+  --signal-warning: oklch(0.500 0.100 68);
+  --signal-warning-soft: oklch(0.948 0.030 78);
 
-    /* with-fallback — component/usage tokens */
-    --button-bg: var(--color-accent, oklch(0.45 0.066 168));
-    --button-bg-hover: var(--color-accent-hover, oklch(0.38 0.055 168));
-    --button-fg: var(--text-on-accent, oklch(0.995 0.002 168));
-    --button-radius: var(--radius-md, 6px);
-    --input-bg: var(--color-surface, oklch(0.995 0.002 168));
-    --input-border: var(--border-strong, oklch(0.55 0.010 168));
-    --input-radius: var(--radius-sm, 3px);
-    --card-bg: var(--color-surface, oklch(0.995 0.002 168));
-    --card-border: var(--border, oklch(0.88 0.005 168));
-    --card-radius: var(--radius-lg, 10px);
-    --badge-bg: var(--color-accent-soft, oklch(0.95 0.020 168));
-    --badge-fg: var(--color-accent-strong, oklch(0.30 0.040 168));
-    --nav-bg: var(--color-surface, oklch(0.995 0.002 168));
-    --table-stripe: var(--color-surface-subtle, oklch(0.955 0.004 168));
-    --modal-bg: var(--color-surface, oklch(0.995 0.002 168));
-    --modal-scrim: oklch(0.21 0.01 168 / 0.42);
-  }
+  /* ---- identity: raw type + space scale ---- */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Cabin", "Segoe UI", system-ui, sans-serif;
+  --step--1: calc(0.833rem * var(--scale));
+  --step-0:  calc(1.0rem   * var(--scale));
+  --step-1:  calc(1.25rem  * var(--scale));
+  --step-2:  calc(1.563rem * var(--scale));
+  --step-3:  calc(1.953rem * var(--scale));
+  --step-4:  calc(2.441rem * var(--scale));
+  --step-5:  calc(3.052rem * var(--scale));
+  --space-1: calc(0.375rem * var(--density));
+  --space-2: calc(0.625rem * var(--density));
+  --space-3: calc(1.0rem   * var(--density));
+  --space-4: calc(1.5rem   * var(--density));
+  --space-5: calc(2.25rem  * var(--density));
+  --space-6: calc(3.5rem   * var(--density));
+  --radius-sm: 5px;
+  --radius-md: 9px;
+  --radius-lg: 16px;
 
-  /* slot-alias — dark theme re-points structure (defined for later; page is light by default) */
-  [data-mode="dark"] {
-    --color-page: var(--brand-ink-950);
-    --color-surface: var(--brand-ink-800);
-    --color-surface-subtle: oklch(0.28 0.009 168);
-    --text-body: var(--brand-pine-050);
-    --text-heading: oklch(0.97 0.010 168);
-    --text-muted: oklch(0.74 0.008 168);
-    --border: oklch(0.40 0.009 168);
-    --border-strong: oklch(0.58 0.012 168);
-    --color-accent: var(--brand-pine-500);
-    --color-accent-hover: var(--brand-pine-600);
-    --color-accent-soft: oklch(0.33 0.040 168);
-    --text-on-accent: var(--brand-ink-950);
-  }
+  /* ---- structure: semantic roles (reference identity, never re-literal) ---- */
+  --color-bg:        var(--paper-50);
+  --color-surface:   var(--paper-100);
+  --color-surface-2: var(--paper-200);
+  --color-accent:        var(--accent);
+  --color-accent-strong: var(--clay-700);
+  --color-accent-soft:   var(--clay-100);
+  --text-heading: var(--ink-900);
+  --text-body:    var(--ink-700);
+  --text-muted:   var(--ink-600);
+  --text-on-accent: var(--paper-50);
+  --border:        var(--paper-300);
+  --border-strong: var(--ink-500);
+  --link: var(--clay-700);
+  --focus-ring: var(--clay-600);
+  --shadow: 0 1px 2px oklch(0.31 0.03 40 / 0.06), 0 6px 20px oklch(0.31 0.03 40 / 0.07);
+  --leading-body: 1.65;
+  --leading-tight: 1.18;
+  --measure: 66ch;
+  --t-fast: calc(140ms * var(--motion-mult));
+  --t-med:  calc(240ms * var(--motion-mult));
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: var(--size-body);
-    line-height: var(--leading-body);
-    color: var(--text-body);
-    background: var(--color-page);
-    font-weight: var(--weight-body);
-  }
-  h1, h2, h3 { color: var(--text-heading); margin: 0; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
-  p { margin: 0; max-width: var(--measure); }
-  a { color: var(--color-accent-hover); }
+  /* ---- with-fallback: component/usage tokens (safe fallback if a token is missing) ---- */
+  --btn-bg:        var(--color-accent-strong, oklch(0.47 0.094 40));
+  --btn-fg:        var(--text-on-accent, oklch(0.987 0.006 60));
+  --btn-bg-hover:  var(--clay-800, oklch(0.39 0.075 39));
+  --input-bg:      var(--color-bg, #fff);
+  --input-border:  var(--border-strong, oklch(0.50 0.013 48));
+  --card-bg:       var(--color-surface, #fff);
+  --card-border:   var(--border, oklch(0.88 0.010 54));
+}
 
-  :where(button, a, input, select, textarea, [tabindex]):focus-visible {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
+/* ---- slot-alias: dark mode re-points the structure layer (no parallel palette) ---- */
+[data-mode="dark"] {
+  --color-bg:        oklch(0.205 0.012 44);
+  --color-surface:   oklch(0.248 0.013 44);
+  --color-surface-2: oklch(0.300 0.014 44);
+  --accent:          oklch(0.700 0.098 44);
+  --color-accent-strong: oklch(0.760 0.092 46);
+  --color-accent-soft:   oklch(0.330 0.040 42);
+  --text-heading: oklch(0.948 0.010 60);
+  --text-body:    oklch(0.880 0.011 56);
+  --text-muted:   oklch(0.720 0.012 52);
+  --text-on-accent: oklch(0.210 0.014 44);
+  --border:        oklch(0.360 0.013 46);
+  --border-strong: oklch(0.560 0.014 48);
+  --link: oklch(0.770 0.090 46);
+  --focus-ring: oklch(0.740 0.098 44);
+  --shadow: 0 1px 2px oklch(0 0 0 / 0.4), 0 8px 24px oklch(0 0 0 / 0.45);
+  --signal-success: oklch(0.820 0.100 150);
+  --signal-success-soft: oklch(0.320 0.040 145);
+  --signal-error:   oklch(0.800 0.110 32);
+  --signal-error-soft:   oklch(0.330 0.055 30);
+  --signal-warning: oklch(0.830 0.100 80);
+  --signal-warning-soft: oklch(0.330 0.050 78);
+}
 
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--space-5); }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--t-med) var(--ease), color var(--t-med) var(--ease);
+}
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--text-heading); line-height: var(--leading-tight); font-weight: 500; margin: 0; }
+p { margin: 0; max-width: var(--measure); }
+a { color: var(--link); }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
-  /* masthead — page chrome, NOT a reviewable component */
-  .masthead { border-bottom: 1px solid var(--border); padding: var(--space-8) 0 var(--space-6); background: var(--color-surface); }
-  .masthead .eyebrow { font-family: var(--font-mono); font-size: var(--size-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-3); }
-  .masthead h1 { font-family: var(--font-display); font-size: var(--size-display); }
-  .masthead .lede { color: var(--text-muted); font-size: var(--size-lg); margin-top: var(--space-3); }
-  .masthead .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
-  .pill { font-family: var(--font-mono); font-size: var(--size-caption); padding: var(--space-1) var(--space-3); border: 1px solid var(--color-accent-border); border-radius: var(--radius-full); color: var(--color-accent-strong); background: var(--color-accent-soft); }
+/* ---- gallery scaffold (page chrome — NOT tagged as reviewable components) ---- */
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 var(--space-4); }
+.masthead { padding: var(--space-6) 0 var(--space-5); border-bottom: 1px solid var(--border); }
+.masthead .kicker { font-family: var(--font-body); letter-spacing: 0.16em; text-transform: uppercase; font-size: var(--step--1); color: var(--color-accent-strong); font-weight: 600; }
+.masthead h1 { font-size: var(--step-5); margin: var(--space-2) 0; letter-spacing: -0.01em; }
+.masthead h1 em { font-style: italic; color: var(--color-accent-strong); }
+.masthead .lede { font-size: var(--step-1); color: var(--text-muted); font-family: var(--font-display); font-weight: 400; }
+.masthead .meta { margin-top: var(--space-3); display: flex; flex-wrap: wrap; gap: var(--space-2); font-size: var(--step--1); color: var(--text-muted); }
+.masthead .meta span { background: var(--color-surface); border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; }
 
-  /* one component per full-width vertical section */
-  .component { padding: var(--space-7) 0; border-bottom: 1px solid var(--border); }
-  .component:last-child { border-bottom: none; }
-  .section-head { margin-bottom: var(--space-5); }
-  .section-head h2 { font-family: var(--font-display); font-size: var(--size-h2); }
-  .section-head p { color: var(--text-muted); font-size: var(--size-small); margin-top: var(--space-2); }
+.section { padding: var(--space-6) 0; border-bottom: 1px solid var(--border); }
+.section > .head { margin-bottom: var(--space-4); }
+.section .num { font-family: var(--font-body); font-size: var(--step--1); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+.section h2 { font-size: var(--step-3); margin-top: var(--space-1); }
+.section .desc { color: var(--text-muted); margin-top: var(--space-2); }
+.state-label { font-family: var(--font-body); font-size: var(--step--1); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: var(--space-2); }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-start; }
+.cell { display: flex; flex-direction: column; gap: var(--space-2); }
+.footer { padding: var(--space-6) 0; color: var(--text-muted); font-size: var(--step--1); }
 
-  .row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-start; }
-  .state-label { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--text-muted); margin-bottom: var(--space-2); display: block; }
-  .stack { display: flex; flex-direction: column; gap: var(--space-2); }
+/* ---- 1. colour palette ---- */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }
+.sw { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--card-bg); }
+.sw .chip { height: 64px; }
+.sw .info { padding: var(--space-2) var(--space-3); font-family: var(--font-body); }
+.sw .info b { display: block; color: var(--text-heading); font-size: var(--step--1); font-weight: 600; }
+.sw .info code { color: var(--text-muted); font-size: 11px; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+.palette-group { margin-top: var(--space-4); }
+.palette-group h3 { font-size: var(--step-1); margin-bottom: var(--space-2); }
 
-  /* colour system */
-  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-3); }
-  .swatch { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); }
-  .swatch .chip { height: 64px; }
-  .swatch .label { padding: var(--space-3); }
-  .swatch .name { font-weight: var(--weight-semibold); font-size: var(--size-small); }
-  .swatch .val { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--text-muted); margin-top: var(--space-1); }
+/* ---- 2. typography ---- */
+.type-spec > * + * { margin-top: var(--space-3); }
+.type-row { display: flex; gap: var(--space-4); align-items: baseline; flex-wrap: wrap; padding-bottom: var(--space-2); border-bottom: 1px dotted var(--border); }
+.type-row .tag { flex: 0 0 120px; font-family: var(--font-body); font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; }
+.type-row .sample { color: var(--text-heading); }
+.d5 { font-family: var(--font-display); font-size: var(--step-5); line-height: var(--leading-tight); font-weight: 500; }
+.d4 { font-family: var(--font-display); font-size: var(--step-4); line-height: var(--leading-tight); font-weight: 500; }
+.d3 { font-family: var(--font-display); font-size: var(--step-3); line-height: 1.25; font-weight: 500; }
+.d2 { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.3; font-weight: 500; }
+.d1 { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
+.bd { font-family: var(--font-body); font-size: var(--step-0); }
+.sm { font-family: var(--font-body); font-size: var(--step--1); }
+.specimen { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.5; font-weight: 400; max-width: var(--measure); }
+.specimen em { color: var(--color-accent-strong); }
 
-  /* typography */
-  .type-row { padding: var(--space-3) 0; border-bottom: 1px dashed var(--border); }
-  .type-row:last-child { border-bottom: none; }
-  .type-row .tag { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--text-muted); }
-  .specimen-display { font-family: var(--font-display); font-size: var(--size-display); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-tight); }
-  .specimen-h1 { font-family: var(--font-display); font-size: var(--size-h1); font-weight: var(--weight-semibold); }
-  .specimen-h2 { font-family: var(--font-display); font-size: var(--size-h2); font-weight: var(--weight-semibold); }
-  .specimen-h3 { font-family: var(--font-body); font-size: var(--size-h3); font-weight: var(--weight-semibold); }
-  .specimen-body { font-family: var(--font-body); font-size: var(--size-body); }
-  .specimen-mono { font-family: var(--font-mono); font-size: var(--size-small); }
+/* ---- buttons ---- */
+.btn { font-family: var(--font-body); font-weight: 600; font-size: var(--step-0); border-radius: var(--radius-md); padding: 11px 20px; border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 9px; transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease); line-height: 1.1; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--btn-bg); color: var(--btn-fg); }
+.btn-primary:hover { background: var(--btn-bg-hover); }
+.btn-secondary { background: var(--color-surface); color: var(--text-heading); border-color: var(--border-strong); }
+.btn-secondary:hover { background: var(--color-surface-2); }
+.btn-ghost { background: transparent; color: var(--color-accent-strong); }
+.btn-ghost:hover { background: var(--color-accent-soft); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn .spin { width: 15px; height: 15px; border-radius: 50%; border: 2px solid currentColor; border-top-color: transparent; animation: spin calc(720ms * var(--motion-mult)) linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .btn .spin { animation: none; } * { transition: none !important; } }
 
-  /* buttons */
-  .btn { font-family: var(--font-body); font-size: var(--size-small); font-weight: var(--weight-semibold); padding: var(--space-2) var(--space-4); border-radius: var(--button-radius); border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: 40px; transition: background 120ms ease, border-color 120ms ease; }
-  .btn-primary { background: var(--button-bg); color: var(--button-fg); }
-  .btn-primary:hover { background: var(--button-bg-hover); }
-  .btn-secondary { background: var(--color-surface); color: var(--color-accent-strong); border-color: var(--border-strong); }
-  .btn-secondary:hover { border-color: var(--color-accent); }
-  .btn-ghost { background: transparent; color: var(--color-accent-hover); }
-  .btn-ghost:hover { background: var(--color-accent-soft); }
-  .btn-danger { background: var(--state-error); color: var(--color-surface); }
-  .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
-  .spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 700ms linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+/* ---- inputs / select ---- */
+.field { display: flex; flex-direction: column; gap: 6px; max-width: 320px; }
+.field label { font-family: var(--font-body); font-weight: 600; font-size: var(--step--1); color: var(--text-heading); }
+.field .hint { font-size: 12px; color: var(--text-muted); font-family: var(--font-body); }
+.field .err { font-size: 12px; color: var(--signal-error); font-family: var(--font-body); font-weight: 600; display: flex; align-items: center; gap: 5px; }
+.control { font-family: var(--font-body); font-size: var(--step-0); padding: 10px 13px; border-radius: var(--radius-md); border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-body); transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease); width: 100%; }
+.control::placeholder { color: var(--text-muted); }
+.control:focus { outline: none; border-color: var(--focus-ring); box-shadow: 0 0 0 3px var(--color-accent-soft); }
+.control[aria-invalid="true"] { border-color: var(--signal-error); }
+.control:disabled { background: var(--color-surface-2); color: var(--text-muted); cursor: not-allowed; }
+select.control { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
 
-  /* inputs */
-  .field { display: flex; flex-direction: column; gap: var(--space-2); width: 280px; max-width: 100%; }
-  .field label { font-size: var(--size-small); font-weight: var(--weight-medium); }
-  .input { font-family: var(--font-body); font-size: var(--size-body); padding: var(--space-2) var(--space-3); min-height: 40px; background: var(--input-bg); color: var(--text-body); border: 1px solid var(--input-border); border-radius: var(--input-radius); }
-  .input::placeholder { color: var(--brand-ink-400); }
-  .input.is-error { border-color: var(--state-error); }
-  .input.is-success { border-color: var(--state-success); }
-  .input[disabled] { background: var(--color-surface-subtle); color: var(--brand-ink-400); cursor: not-allowed; }
-  .hint { font-size: var(--size-caption); color: var(--text-muted); display: flex; align-items: center; gap: var(--space-1); }
-  .hint.error { color: var(--state-error); }
-  .hint.success { color: var(--state-success); }
+/* ---- card (book card) ---- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--space-4); }
+.book { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease); }
+.book:hover { transform: translateY(-3px); box-shadow: 0 2px 4px oklch(0.31 0.03 40 / 0.08), 0 14px 34px oklch(0.31 0.03 40 / 0.12); }
+.book .cover { aspect-ratio: 3 / 4; display: flex; align-items: flex-end; padding: var(--space-3); background: var(--cover, var(--clay-200)); }
+.book .cover .ct { font-family: var(--font-display); font-size: var(--step-1); color: var(--ink-900); font-weight: 600; line-height: 1.15; }
+.book .body { padding: var(--space-3); display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.book .body h3 { font-size: var(--step-1); }
+.book .body .author { color: var(--text-muted); font-size: var(--step--1); font-family: var(--font-body); }
+.book .body .foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: var(--space-2); }
+.book .body .price { font-family: var(--font-display); font-size: var(--step-1); color: var(--text-heading); }
+.skeleton .cover, .skeleton .ln { background: linear-gradient(100deg, var(--color-surface-2) 30%, var(--color-surface) 50%, var(--color-surface-2) 70%); background-size: 200% 100%; animation: shimmer calc(1400ms * var(--motion-mult)) infinite linear; }
+.skeleton .ln { height: 12px; border-radius: 4px; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skeleton .cover, .skeleton .ln { animation: none; } }
+.empty-shelf { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; color: var(--text-muted); max-width: 420px; }
+.empty-shelf h3 { font-size: var(--step-2); color: var(--text-heading); margin-bottom: var(--space-2); }
 
-  .select { font-family: var(--font-body); font-size: var(--size-body); padding: var(--space-2) var(--space-3); min-height: 40px; background: var(--input-bg); color: var(--text-body); border: 1px solid var(--input-border); border-radius: var(--input-radius); width: 280px; max-width: 100%; }
-  .select[disabled] { background: var(--color-surface-subtle); color: var(--brand-ink-400); cursor: not-allowed; }
+/* ---- navigation ---- */
+.nav { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--color-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+.nav .brand { font-family: var(--font-display); font-weight: 600; font-size: var(--step-1); color: var(--text-heading); }
+.nav .brand span { color: var(--color-accent-strong); }
+.nav .links { display: flex; gap: var(--space-3); margin-left: var(--space-3); }
+.nav .links a { font-family: var(--font-body); font-weight: 500; text-decoration: none; color: var(--text-body); font-size: var(--step-0); padding-bottom: 3px; border-bottom: 2px solid transparent; }
+.nav .links a:hover { color: var(--text-heading); }
+.nav .links a[aria-current="page"] { color: var(--color-accent-strong); border-bottom-color: var(--color-accent-strong); }
+.nav .spacer { flex: 1; }
 
-  /* choice controls */
-  .choice { display: flex; align-items: center; gap: var(--space-2); font-size: var(--size-small); }
-  .choice input { width: 18px; height: 18px; accent-color: var(--color-accent); }
+/* ---- badges ---- */
+.badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-body); font-weight: 600; font-size: var(--step--1); padding: 3px 11px; border-radius: 100px; line-height: 1.4; }
+.badge-accent { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.badge-neutral { background: var(--color-surface-2); color: var(--text-body); }
+.badge-success { background: var(--signal-success-soft); color: var(--signal-success); }
+.badge-error { background: var(--signal-error-soft); color: var(--signal-error); }
+.badge-warning { background: var(--signal-warning-soft); color: var(--signal-warning); }
+.badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  /* badges */
-  .badge { display: inline-flex; align-items: center; gap: var(--space-1); font-family: var(--font-body); font-size: var(--size-caption); font-weight: var(--weight-semibold); padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); border: 1px solid transparent; }
-  .badge-accent { background: var(--badge-bg); color: var(--badge-fg); border-color: var(--color-accent-border); }
-  .badge-success { background: var(--state-success-bg); color: var(--state-success); }
-  .badge-warning { background: var(--state-warning-bg); color: var(--state-warning); }
-  .badge-error { background: var(--state-error-bg); color: var(--state-error); }
-  .badge-neutral { background: var(--color-surface-subtle); color: var(--text-muted); border-color: var(--border); }
-  .ico { width: 1em; height: 1em; flex: none; }
+/* ---- table rows ---- */
+.tbl { width: 100%; border-collapse: collapse; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); overflow: hidden; }
+.tbl th { font-family: var(--font-body); text-align: left; font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 600; padding: var(--space-3); background: var(--color-surface); border-bottom: 1px solid var(--border); }
+.tbl td { padding: var(--space-3); border-bottom: 1px solid var(--border); font-family: var(--font-body); }
+.tbl tbody tr { transition: background var(--t-fast) var(--ease); }
+.tbl tbody tr:hover { background: var(--color-surface); }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr[aria-selected="true"] { background: var(--color-accent-soft); }
+.tbl .title { font-weight: 600; color: var(--text-heading); }
+.tbl .muted { color: var(--text-muted); }
 
-  /* cards */
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-4); }
-  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--card-radius); padding: var(--space-5); box-shadow: var(--shadow-sm); }
-  .card.is-selected { border-color: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent); }
-  .card h3 { font-family: var(--font-body); font-size: var(--size-h3); font-weight: var(--weight-semibold); }
-  .card .kicker { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.06em; }
-  .card p { color: var(--text-muted); font-size: var(--size-small); margin-top: var(--space-2); }
-  .card .actions { margin-top: var(--space-4); display: flex; gap: var(--space-2); }
+/* ---- modal ---- */
+.modal-demo { position: relative; background: var(--color-surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); min-height: 320px; display: flex; align-items: center; justify-content: center; padding: var(--space-4); overflow: hidden; }
+.scrim { position: absolute; inset: 0; background: oklch(0.24 0.02 42 / 0.42); }
+.modal { position: relative; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); box-shadow: 0 10px 40px oklch(0.24 0.03 42 / 0.28); max-width: 420px; width: 100%; padding: var(--space-5); }
+.modal h3 { font-size: var(--step-2); margin-bottom: var(--space-2); }
+.modal p { color: var(--text-muted); font-size: var(--step-0); }
+.modal .actions { display: flex; gap: var(--space-2); justify-content: flex-end; margin-top: var(--space-4); }
 
-  /* data table */
-  .table-wrap { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); }
-  table { width: 100%; border-collapse: collapse; font-size: var(--size-small); }
-  thead th { text-align: left; font-family: var(--font-body); font-weight: var(--weight-semibold); font-size: var(--size-caption); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); }
-  tbody td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); }
-  tbody tr:nth-child(even) { background: var(--table-stripe); }
-  tbody tr:last-child td { border-bottom: none; }
-  td .mono { font-family: var(--font-mono); font-size: var(--size-caption); color: var(--text-muted); }
-  .table-empty, .table-loading { padding: var(--space-7) var(--space-5); text-align: center; color: var(--text-muted); }
-  .skeleton { height: 12px; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--color-surface-subtle), var(--border), var(--color-surface-subtle)); background-size: 200% 100%; animation: shimmer 1.4s ease infinite; }
-  @keyframes shimmer { to { background-position: -200% 0; } }
-  @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
-  .row-error td { background: var(--state-error-bg); }
-
-  /* navigation */
-  .topnav { display: flex; align-items: center; gap: var(--space-5); background: var(--nav-bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); }
-  .topnav .brand { font-family: var(--font-display); font-weight: var(--weight-semibold); font-size: var(--size-h3); }
-  .topnav .links { display: flex; gap: var(--space-1); margin-left: auto; flex-wrap: wrap; }
-  .navlink { font-size: var(--size-small); font-weight: var(--weight-medium); color: var(--text-muted); text-decoration: none; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); }
-  .navlink:hover { color: var(--text-body); background: var(--color-surface-subtle); }
-  .navlink[aria-current="page"] { color: var(--color-accent-strong); background: var(--color-accent-soft); }
-  .sidebar { width: 220px; max-width: 100%; background: var(--nav-bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-3); }
-  .sidebar a { display: block; font-size: var(--size-small); color: var(--text-muted); text-decoration: none; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); }
-  .sidebar a:hover { color: var(--text-body); background: var(--color-surface-subtle); }
-  .sidebar a[aria-current="page"] { color: var(--color-accent-strong); background: var(--color-accent-soft); font-weight: var(--weight-semibold); border-left: 2px solid var(--color-accent); }
-
-  /* modal */
-  .modal-demo { position: relative; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; min-height: 280px; background: var(--color-surface-subtle); }
-  .modal-scrim { position: absolute; inset: 0; background: var(--modal-scrim); display: flex; align-items: center; justify-content: center; padding: var(--space-5); }
-  .modal { background: var(--modal-bg); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); width: 420px; max-width: 100%; padding: var(--space-5); }
-  .modal h3 { font-family: var(--font-display); font-size: var(--size-h3); }
-  .modal p { color: var(--text-muted); font-size: var(--size-small); margin-top: var(--space-2); }
-  .modal .actions { margin-top: var(--space-5); display: flex; justify-content: flex-end; gap: var(--space-2); }
-
-  footer { padding: var(--space-6) 0 var(--space-8); color: var(--text-muted); font-size: var(--size-small); }
-
-  @media (max-width: 640px) {
-    .masthead { padding-top: var(--space-6); }
-    .topnav { flex-direction: column; align-items: flex-start; }
-    .topnav .links { margin-left: 0; }
-    /* comfortable mobile tap targets (>= 44px) */
-    .btn, .input, .select { min-height: 44px; }
-    .navlink, .sidebar a { padding-top: var(--space-3); padding-bottom: var(--space-3); }
-  }
+@media (max-width: 640px) {
+  .masthead h1 { font-size: var(--step-4); }
+  .type-row .tag { flex-basis: 100%; }
+  .nav { flex-wrap: wrap; }
+  .nav .links { margin-left: 0; }
+}
 </style>
 </head>
 <body>
+<div class="wrap">
+
+  <!-- page chrome: masthead (not a reviewable component) -->
   <header class="masthead">
-    <div class="wrap">
-      <div class="eyebrow">Brand library</div>
-      <h1>Tessera</h1>
-      <p class="lede">A B2B knowledge-graph platform for data &amp; platform engineers. Precise, grounded, quietly confident.</p>
-      <div class="meta">
-        <span class="pill">precise</span>
-        <span class="pill">grounded</span>
-        <span class="pill">quietly confident</span>
-        <span class="pill">theme · light</span>
-      </div>
+    <div class="kicker">Brand System</div>
+    <h1>Marginalia — a reading app for the <em>unhurried</em></h1>
+    <p class="lede">For an independent bookshop. Literary, warm, made for long evenings with a book.</p>
+    <div class="meta">
+      <span>Light theme</span><span>Web</span><span>Newsreader · Cabin</span><span>Clay accent · paper neutrals</span><span>OKLCH tokens</span>
     </div>
   </header>
 
-  <main class="wrap">
-
-    <!-- COLOUR SYSTEM -->
-    <section class="component" data-brand-component="color-system">
-      <div class="section-head">
-        <h2>Colour system</h2>
-        <p>One pine accent at 60-30-10 weight. Neutrals are the accent hue at near-zero chroma — one grounded family, no pure black or white. State colours are kept separate and always paired with an icon.</p>
-      </div>
+  <!-- 1. COLOUR PALETTE -->
+  <section class="section" data-brand-component="color-palette">
+    <div class="head"><div class="num">01 · Colour</div><h2>The colour system</h2>
+      <p class="desc">One clay accent under 80% saturation, carried at roughly one-tenth of the visual weight. Paper-warm neutrals tinted toward the same hue — never pure grey, never pure black or white. State colours are signal-only and always travel with an icon and a label.</p>
+    </div>
+    <div class="palette-group">
+      <h3>Clay — the single accent</h3>
       <div class="swatches">
-        <div class="swatch"><div class="chip" style="background:var(--color-accent)"></div><div class="label"><div class="name">Accent</div><div class="val">pine-700 · oklch(0.45 0.066 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--color-accent-strong)"></div><div class="label"><div class="name">Accent strong</div><div class="val">pine-900 · oklch(0.30 0.040 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--color-accent-soft)"></div><div class="label"><div class="name">Accent soft</div><div class="val">pine-100 · oklch(0.95 0.020 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--color-page)"></div><div class="label"><div class="name">Page</div><div class="val">paper · oklch(0.98 0.004 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--text-body)"></div><div class="label"><div class="name">Body text</div><div class="val">ink-950 · oklch(0.21 0.010 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--text-muted)"></div><div class="label"><div class="name">Muted text</div><div class="val">ink-600 · oklch(0.46 0.008 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--border-strong)"></div><div class="label"><div class="name">Control border</div><div class="val">ink-500 · oklch(0.55 0.010 168)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--state-success)"></div><div class="label"><div class="name">Success</div><div class="val">moss-700 · oklch(0.44 0.085 150)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--state-warning)"></div><div class="label"><div class="name">Warning</div><div class="val">amber-700 · oklch(0.46 0.095 70)</div></div></div>
-        <div class="swatch"><div class="chip" style="background:var(--state-error)"></div><div class="label"><div class="name">Error</div><div class="val">clay-700 · oklch(0.44 0.120 28)</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--clay-100)"></div><div class="info"><b>clay 100</b><code>0.922 0.024 45</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--clay-300)"></div><div class="info"><b>clay 300</b><code>0.782 0.060 43</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--clay-500)"></div><div class="info"><b>clay 500</b><code>0.620 0.102 42</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--clay-600)"></div><div class="info"><b>clay 600 · accent</b><code>0.550 0.106 41</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--clay-700)"></div><div class="info"><b>clay 700 · action</b><code>0.470 0.094 40</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--clay-900)"></div><div class="info"><b>clay 900</b><code>0.310 0.055 38</code></div></div>
       </div>
-    </section>
+    </div>
+    <div class="palette-group">
+      <h3>Paper &amp; ink — neutrals tinted toward clay</h3>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:var(--paper-50)"></div><div class="info"><b>paper 50 · bg</b><code>0.987 0.006 60</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--paper-100)"></div><div class="info"><b>paper 100 · surface</b><code>0.968 0.008 58</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--paper-300)"></div><div class="info"><b>paper 300 · border</b><code>0.884 0.010 54</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--ink-600)"></div><div class="info"><b>ink 600 · muted</b><code>0.500 0.013 48</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--ink-700)"></div><div class="info"><b>ink 700 · body</b><code>0.400 0.014 46</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--ink-900)"></div><div class="info"><b>ink 900 · heading</b><code>0.240 0.014 42</code></div></div>
+      </div>
+    </div>
+    <div class="palette-group">
+      <h3>State signals — used only with an icon &amp; label</h3>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:var(--signal-success)"></div><div class="info"><b>success</b><code>0.520 0.072 145</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--signal-warning)"></div><div class="info"><b>warning</b><code>0.500 0.100 68</code></div></div>
+        <div class="sw"><div class="chip" style="background:var(--signal-error)"></div><div class="info"><b>error</b><code>0.510 0.140 28</code></div></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- TYPOGRAPHY -->
-    <section class="component" data-brand-component="typography">
-      <div class="section-head">
-        <h2>Typography</h2>
-        <p>Spectral for headings (grounded, editorial), Hanken Grotesk for UI (precise, legible), JetBrains Mono for data and IDs. Modular scale, ratio ≈ 1.25.</p>
-      </div>
-      <div class="type-row"><span class="tag">Display · Spectral 600 · 39px</span><div class="specimen-display">Connect every entity</div></div>
-      <div class="type-row"><span class="tag">H1 · Spectral 600 · 31px</span><div class="specimen-h1">Graph schema overview</div></div>
-      <div class="type-row"><span class="tag">H2 · Spectral 600 · 25px</span><div class="specimen-h2">Pipelines &amp; sources</div></div>
-      <div class="type-row"><span class="tag">H3 · Hanken Grotesk 600 · 20px</span><div class="specimen-h3">Relationship details</div></div>
-      <div class="type-row"><span class="tag">Body · Hanken Grotesk 400 · 16px</span><p class="specimen-body">A knowledge graph is exact pieces that only mean something in relation. The type is built to stay legible across long sessions of dense, structured work.</p></div>
-      <div class="type-row"><span class="tag">Mono · JetBrains Mono 400 · 14px</span><div class="specimen-mono">entity_id: 7f3a·c21 → rel:OWNS → asset_4821</div></div>
-    </section>
+  <!-- 2. TYPOGRAPHY -->
+  <section class="section" data-brand-component="typography">
+    <div class="head"><div class="num">02 · Type</div><h2>The type system</h2>
+      <p class="desc">Newsreader — an editorial serif drawn for reading on screen — sets every heading and the reading specimen. Cabin, a humanist sans, carries the interface. A modular scale (1.25) keeps each level clearly distinct.</p>
+    </div>
+    <div class="type-spec">
+      <div class="type-row"><div class="tag">Display · Newsreader 48</div><div class="sample d5">A room of one's own</div></div>
+      <div class="type-row"><div class="tag">Heading 1 · Newsreader 39</div><div class="sample d4">Staff picks this week</div></div>
+      <div class="type-row"><div class="tag">Heading 2 · Newsreader 31</div><div class="sample d3">New &amp; noteworthy</div></div>
+      <div class="type-row"><div class="tag">Heading 3 · Newsreader 25</div><div class="sample d2">From the back shelf</div></div>
+      <div class="type-row"><div class="tag">Subhead · Newsreader 20</div><div class="sample d1">A quiet recommendation</div></div>
+      <div class="type-row"><div class="tag">Body · Cabin 16</div><div class="sample bd">Settle in. The shop is quiet, the lamp is on, and there is no hurry to finish.</div></div>
+      <div class="type-row"><div class="tag">Small · Cabin 13</div><div class="sample sm">Paperback · 318 pages · published 1929</div></div>
+    </div>
+    <div class="palette-group">
+      <h3>Reading specimen</h3>
+      <p class="specimen">She had the feeling, as she read, that the words were being spoken just for her — <em>slowly, and without any hurry at all.</em> The afternoon stretched on, and the bookshop kept its quiet, and that was exactly enough.</p>
+    </div>
+  </section>
 
-    <!-- BUTTON -->
-    <section class="component" data-brand-component="button">
-      <div class="section-head">
-        <h2>Button</h2>
-        <p>One primary action per view. Secondary and ghost recede; danger is reserved for destructive actions. Disabled and loading states included.</p>
-      </div>
-      <div class="row">
-        <div><span class="state-label">primary</span><button class="btn btn-primary">Run query</button></div>
-        <div><span class="state-label">secondary</span><button class="btn btn-secondary">Add source</button></div>
-        <div><span class="state-label">ghost</span><button class="btn btn-ghost">Cancel</button></div>
-        <div><span class="state-label">danger</span><button class="btn btn-danger">Delete node</button></div>
-        <div><span class="state-label">disabled</span><button class="btn btn-primary" disabled>Run query</button></div>
-        <div><span class="state-label">loading</span><button class="btn btn-primary" disabled><span class="spinner" aria-hidden="true"></span> Running…</button></div>
-      </div>
-    </section>
+  <!-- 3. BUTTON -->
+  <section class="section" data-brand-component="button">
+    <div class="head"><div class="num">03 · Button</div><h2>Buttons</h2>
+      <p class="desc">One primary action per view in clay. Secondary and ghost recede. Every interactive state is shown — including loading, success and disabled.</p>
+    </div>
+    <div class="row">
+      <div class="cell"><div class="state-label">Primary</div><button class="btn btn-primary">Add to shelf</button></div>
+      <div class="cell"><div class="state-label">Secondary</div><button class="btn btn-secondary">Preview</button></div>
+      <div class="cell"><div class="state-label">Ghost</div><button class="btn btn-ghost">More like this</button></div>
+      <div class="cell"><div class="state-label">Loading</div><button class="btn btn-primary" aria-busy="true"><span class="spin"></span>Adding…</button></div>
+      <div class="cell"><div class="state-label">Success</div><button class="btn btn-primary" style="background:var(--signal-success)">✓&nbsp; On your shelf</button></div>
+      <div class="cell"><div class="state-label">Disabled</div><button class="btn btn-primary" disabled>Out of stock</button></div>
+    </div>
+  </section>
 
-    <!-- TEXT INPUT -->
-    <section class="component" data-brand-component="text-input">
-      <div class="section-head">
-        <h2>Text input</h2>
-        <p>Label above the field, single column. Validation on blur with an inline message adjacent to the field. Focus, error, success and disabled states shown.</p>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label for="i1">Entity name</label>
-          <input id="i1" class="input" type="text" placeholder="e.g. Customer" />
-          <span class="hint">Used as the node label in the graph.</span>
-        </div>
-        <div class="field">
-          <label for="i2">Namespace</label>
-          <input id="i2" class="input" type="text" value="core.identity" />
-          <span class="hint success">
-            <svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Available.
-          </span>
-        </div>
-        <div class="field">
-          <label for="i3">Source URI</label>
-          <input id="i3" class="input is-error" type="text" value="postgres//db" aria-invalid="true" aria-describedby="i3e" />
-          <span class="hint error" id="i3e">
-            <svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v3.5M8 10.6v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            Missing scheme separator — expected <code>postgres://</code>.
-          </span>
-        </div>
-        <div class="field">
-          <label for="i4">Owner (read only)</label>
-          <input id="i4" class="input" type="text" value="platform-team" disabled />
-          <span class="hint">Set by the workspace admin.</span>
-        </div>
-      </div>
-    </section>
+  <!-- 4. INPUT -->
+  <section class="section" data-brand-component="input">
+    <div class="head"><div class="num">04 · Input</div><h2>Text fields</h2>
+      <p class="desc">Labels sit above the field. Validation appears inline, next to the field that needs it, after the reader leaves it — never mid-keystroke.</p>
+    </div>
+    <div class="row">
+      <div class="cell"><div class="state-label">Empty</div><div class="field"><label for="i1">Search the shop</label><input id="i1" class="control" placeholder="Title, author, or mood…"></div></div>
+      <div class="cell"><div class="state-label">Filled</div><div class="field"><label for="i2">Search the shop</label><input id="i2" class="control" value="Virginia Woolf"></div></div>
+      <div class="cell"><div class="state-label">Error</div><div class="field"><label for="i3">Email for your receipt</label><input id="i3" class="control" aria-invalid="true" value="reader@"><span class="err">⚠ Enter a complete email address</span></div></div>
+      <div class="cell"><div class="state-label">Disabled</div><div class="field"><label for="i4">Gift code</label><input id="i4" class="control" value="Applied — BOOKISH" disabled></div></div>
+    </div>
+  </section>
 
-    <!-- SELECT -->
-    <section class="component" data-brand-component="select">
-      <div class="section-head">
-        <h2>Select</h2>
-        <p>Native select for reliable keyboard and screen-reader behaviour, styled to the system. Default and disabled states.</p>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label for="s1">Relationship type</label>
-          <select id="s1" class="select">
-            <option>OWNS</option><option>DEPENDS_ON</option><option>DERIVED_FROM</option><option>MEMBER_OF</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="s2">Partition (locked)</label>
-          <select id="s2" class="select" disabled>
-            <option>default</option>
-          </select>
-        </div>
-      </div>
-    </section>
+  <!-- 5. SELECT -->
+  <section class="section" data-brand-component="select">
+    <div class="head"><div class="num">05 · Select</div><h2>Select</h2>
+      <p class="desc">The same field language as inputs, with a quiet custom chevron. Shown in its resting, focused and disabled states.</p>
+    </div>
+    <div class="row">
+      <div class="cell"><div class="state-label">Default</div><div class="field"><label for="s1">Sort by</label><select id="s1" class="control"><option>Staff picks</option><option>Newest first</option><option>Price, low to high</option></select></div></div>
+      <div class="cell"><div class="state-label">Focused</div><div class="field"><label for="s2">Genre</label><select id="s2" class="control" style="border-color:var(--focus-ring); box-shadow:0 0 0 3px var(--color-accent-soft)"><option>Literary fiction</option><option>Essays</option><option>Poetry</option></select></div></div>
+      <div class="cell"><div class="state-label">Disabled</div><div class="field"><label for="s3">Format</label><select id="s3" class="control" disabled><option>Hardback only</option></select></div></div>
+    </div>
+  </section>
 
-    <!-- CHOICE CONTROLS -->
-    <section class="component" data-brand-component="choice-controls">
-      <div class="section-head">
-        <h2>Choice controls</h2>
-        <p>Checkboxes and radios use the accent for the selected state, with adequate hit area.</p>
-      </div>
-      <div class="row" style="gap: var(--space-6)">
-        <div class="stack">
-          <label class="choice"><input type="checkbox" checked /> Index on ingest</label>
-          <label class="choice"><input type="checkbox" /> Validate schema</label>
-          <label class="choice"><input type="checkbox" disabled /> Encrypt at rest (plan)</label>
+  <!-- 6. CARD -->
+  <section class="section" data-brand-component="card">
+    <div class="head"><div class="num">06 · Card</div><h2>Book cards</h2>
+      <p class="desc">The shop's main object. Shown filled, while loading, and when a shelf is empty — the three states a reader actually meets.</p>
+    </div>
+    <div class="state-label">Filled &amp; loading</div>
+    <div class="cards" style="margin-bottom:var(--space-5)">
+      <article class="book">
+        <div class="cover" style="--cover:var(--clay-200)"><div class="ct">To the<br>Lighthouse</div></div>
+        <div class="body"><h3>To the Lighthouse</h3><div class="author">Virginia Woolf</div>
+          <div class="foot"><span class="badge badge-accent"><span class="dot"></span>Staff pick</span><span class="price">£9.99</span></div>
         </div>
-        <div class="stack">
-          <label class="choice"><input type="radio" name="mode" checked /> Incremental sync</label>
-          <label class="choice"><input type="radio" name="mode" /> Full rebuild</label>
-          <label class="choice"><input type="radio" name="mode" disabled /> Mirror (unavailable)</label>
+      </article>
+      <article class="book">
+        <div class="cover" style="--cover:var(--clay-100)"><div class="ct">The<br>Summer Book</div></div>
+        <div class="body"><h3>The Summer Book</h3><div class="author">Tove Jansson</div>
+          <div class="foot"><span class="badge badge-neutral">Essays</span><span class="price">£8.50</span></div>
         </div>
-      </div>
-    </section>
+      </article>
+      <article class="book skeleton" role="status" aria-busy="true">
+        <span class="sr-only">Loading a book…</span>
+        <div class="cover" aria-hidden="true"></div>
+        <div class="body" aria-hidden="true"><div class="ln" style="width:80%"></div><div class="ln" style="width:50%"></div><div class="foot"><div class="ln" style="width:40%"></div></div></div>
+      </article>
+    </div>
+    <div class="state-label">Empty shelf</div>
+    <div class="empty-shelf"><h3>Your shelf is waiting</h3><p>Nothing here yet. When you add a book, it will rest here until you're ready for it.</p></div>
+  </section>
 
-    <!-- BADGE -->
-    <section class="component" data-brand-component="badge">
-      <div class="section-head">
-        <h2>Badge</h2>
-        <p>Status and metadata labels. State badges always carry an icon as well as colour, so meaning never rests on colour alone.</p>
+  <!-- 7. NAVIGATION -->
+  <section class="section" data-brand-component="navigation">
+    <div class="head"><div class="num">07 · Navigation</div><h2>Navigation</h2>
+      <p class="desc">A calm top bar. The current page is marked in clay with an underline — colour is never the only cue.</p>
+    </div>
+    <nav class="nav" aria-label="Primary">
+      <div class="brand">Margin<span>alia</span></div>
+      <div class="links">
+        <a href="#" aria-current="page">Shop</a>
+        <a href="#">My shelf</a>
+        <a href="#">Reading now</a>
+        <a href="#">Events</a>
       </div>
-      <div class="row">
-        <span class="badge badge-accent">Indexed</span>
-        <span class="badge badge-success"><svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Synced</span>
-        <span class="badge badge-warning"><svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5l6 11H2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6.5v3M8 11.4v.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Stale</span>
-        <span class="badge badge-error"><svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.4"/><path d="M5.6 5.6l4.8 4.8M10.4 5.6l-4.8 4.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Failed</span>
-        <span class="badge badge-neutral">Draft</span>
-      </div>
-    </section>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost">Search</button>
+      <button class="btn btn-primary">Sign in</button>
+    </nav>
+  </section>
 
-    <!-- CARD -->
-    <section class="component" data-brand-component="card">
-      <div class="section-head">
-        <h2>Card</h2>
-        <p>A grounded surface for grouping. Standard, selected, and action-bearing variants.</p>
-      </div>
-      <div class="cards">
-        <div class="card">
-          <div class="kicker">Entity</div>
-          <h3>Customer</h3>
-          <p>12,481 nodes · 4 relationship types · last indexed 6 min ago.</p>
-        </div>
-        <div class="card is-selected">
-          <div class="kicker">Entity · selected</div>
-          <h3>Asset</h3>
-          <p>8,902 nodes · 3 relationship types · last indexed 2 min ago.</p>
-        </div>
-        <div class="card">
-          <div class="kicker">Pipeline</div>
-          <h3>Nightly sync</h3>
-          <p>Incremental · source: warehouse.public.</p>
-          <div class="actions">
-            <button class="btn btn-primary">Run now</button>
-            <button class="btn btn-ghost">Edit</button>
-          </div>
-        </div>
-      </div>
-    </section>
+  <!-- 8. BADGE -->
+  <section class="section" data-brand-component="badge">
+    <div class="head"><div class="num">08 · Badge</div><h2>Badges</h2>
+      <p class="desc">Quiet labels for shelf tags and status. Status badges pair a colour with a word, so meaning never rests on colour alone.</p>
+    </div>
+    <div class="row" style="align-items:center">
+      <span class="badge badge-accent"><span class="dot"></span>Staff pick</span>
+      <span class="badge badge-neutral">Poetry</span>
+      <span class="badge badge-neutral">Signed copy</span>
+      <span class="badge badge-success">✓ In stock</span>
+      <span class="badge badge-warning">● Low stock</span>
+      <span class="badge badge-error">✕ Out of print</span>
+    </div>
+  </section>
 
-    <!-- DATA TABLE -->
-    <section class="component" data-brand-component="data-table">
-      <div class="section-head">
-        <h2>Data table</h2>
-        <p>The workhorse for engineers. Populated, empty, loading and row-error states shown — colour never the only signal.</p>
-      </div>
-      <span class="state-label">populated</span>
-      <div class="table-wrap" style="margin-bottom: var(--space-5)">
-        <table>
-          <thead><tr><th>Entity</th><th>Node ID</th><th>Relationships</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>Customer</td><td><span class="mono">7f3a·c21</span></td><td>OWNS, MEMBER_OF</td><td><span class="badge badge-success"><svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Synced</span></td></tr>
-            <tr><td>Asset</td><td><span class="mono">a1b2·9de</span></td><td>OWNS</td><td><span class="badge badge-accent">Indexed</span></td></tr>
-            <tr class="row-error"><td>Invoice</td><td><span class="mono">c4d5·77f</span></td><td>DERIVED_FROM</td><td><span class="badge badge-error"><svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.4"/><path d="M5.6 5.6l4.8 4.8M10.4 5.6l-4.8 4.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Failed</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="row">
-        <div style="flex:1; min-width:260px">
-          <span class="state-label">empty</span>
-          <div class="table-wrap"><div class="table-empty">No entities yet. Add a source to begin building the graph.<div style="margin-top:var(--space-4)"><button class="btn btn-primary">Add source</button></div></div></div>
-        </div>
-        <div style="flex:1; min-width:260px">
-          <span class="state-label">loading</span>
-          <div class="table-wrap"><div class="table-loading"><div class="stack"><div class="skeleton" style="width:80%"></div><div class="skeleton" style="width:60%"></div><div class="skeleton" style="width:70%"></div></div></div></div>
-        </div>
-      </div>
-    </section>
+  <!-- 9. TABLE ROW -->
+  <section class="section" data-brand-component="table-row">
+    <div class="head"><div class="num">09 · Table row</div><h2>Table rows</h2>
+      <p class="desc">For an order history or reading list. Rows respond on hover; a selected row is washed in clay-soft and flagged with <code>aria-selected</code>.</p>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Title</th><th>Author</th><th>Added</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr aria-selected="true"><td class="title">To the Lighthouse</td><td class="muted">Virginia Woolf</td><td class="muted">12 Jun</td><td><span class="badge badge-success">✓ Reading</span></td></tr>
+        <tr><td class="title">The Summer Book</td><td class="muted">Tove Jansson</td><td class="muted">9 Jun</td><td><span class="badge badge-neutral">On shelf</span></td></tr>
+        <tr><td class="title">Gilead</td><td class="muted">Marilynne Robinson</td><td class="muted">2 Jun</td><td><span class="badge badge-warning">● Reserved</span></td></tr>
+      </tbody>
+    </table>
+  </section>
 
-    <!-- NAVIGATION -->
-    <section class="component" data-brand-component="navigation">
-      <div class="section-head">
-        <h2>Navigation</h2>
-        <p>Top bar and sidebar. The current location is marked by colour and weight, with an accent rule on the sidebar.</p>
-      </div>
-      <nav class="topnav" style="margin-bottom: var(--space-4)" aria-label="Primary">
-        <span class="brand">Tessera</span>
-        <div class="links">
-          <a class="navlink" href="#" aria-current="page">Graph</a>
-          <a class="navlink" href="#">Schema</a>
-          <a class="navlink" href="#">Pipelines</a>
-          <a class="navlink" href="#">Settings</a>
-        </div>
-      </nav>
-      <nav class="sidebar" aria-label="Sections">
-        <a href="#" aria-current="page">Overview</a>
-        <a href="#">Entities</a>
-        <a href="#">Relationships</a>
-        <a href="#">Sources</a>
-        <a href="#">Queries</a>
-      </nav>
-    </section>
-
-    <!-- MODAL -->
-    <section class="component" data-brand-component="modal">
-      <div class="section-head">
-        <h2>Modal</h2>
-        <p>A focused dialog over a dimmed scrim. Title, body, and a single primary action paired with a secondary.</p>
-      </div>
-      <div class="modal-demo">
-        <div class="modal-scrim">
-          <div class="modal" role="dialog" aria-labelledby="mt" aria-modal="true">
-            <h3 id="mt">Delete “Invoice” entity?</h3>
-            <p>This removes 3,204 nodes and 1 relationship type. The graph will re-index. This cannot be undone.</p>
-            <div class="actions">
-              <button class="btn btn-ghost">Cancel</button>
-              <button class="btn btn-danger">Delete entity</button>
-            </div>
-          </div>
+  <!-- 10. MODAL -->
+  <section class="section" data-brand-component="modal">
+    <div class="head"><div class="num">10 · Modal</div><h2>Modal</h2>
+      <p class="desc">A focused dialogue over a soft scrim. One clear primary action, a quiet way out.</p>
+    </div>
+    <div class="modal-demo">
+      <div class="scrim"></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+        <h3 id="mt">Add to your shelf?</h3>
+        <p>“To the Lighthouse” will be saved to your shelf and kept until you start reading. You can remove it any time.</p>
+        <div class="actions">
+          <button class="btn btn-secondary">Not now</button>
+          <button class="btn btn-primary">Add to shelf</button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
+  <footer class="footer">Marginalia brand system · 10 components · light theme · OKLCH 4-layer tokens · Newsreader &amp; Cabin</footer>
 
-  <footer class="wrap">Tessera brand library · seeded, light theme · every value reads a token — edit a token and the whole gallery repaints.</footer>
+</div>
 </body>
 </html>
