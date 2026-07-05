@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "parentArtifactId": "brief.json",
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "web/src/moatproof/MoatProof.jsx",
+      "until": "live"
+    },
+    {
+      "id": "web/src/moatproof/moatproof.css",
+      "until": "live"
+    },
+    {
+      "id": "web/src/moatproof/main.jsx",
+      "until": "live"
+    },
+    {
+      "id": "web/moatproof.html",
+      "until": "live"
+    },
+    {
+      "id": "web/vite.moatproof.config.js",
+      "until": "live"
+    },
+    {
+      "id": "--accent",
+      "until": "live"
+    },
+    {
+      "id": "--color-accent-strong",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "approval:ab3f213a-858c-473b-b1f9-d6840aa16d56",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    }
+  ]
+}

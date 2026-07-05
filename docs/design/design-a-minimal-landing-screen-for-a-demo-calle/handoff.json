@@ -1,0 +1,25 @@
+{
+  "handoffId": "design-a-minimal-landing-screen-for-a-demo-calle-ab3f213a",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "ab3f213a-858c-473b-b1f9-d6840aa16d56",
+  "sessionId": "ab3f213a-858c-473b-b1f9-d6840aa16d56",
+  "slug": "design-a-minimal-landing-screen-for-a-demo-calle",
+  "title": "Design a minimal landing screen for a demo called MoatProof. One centered hero …",
+  "approvedAt": "2026-07-05T15:36:57.242Z",
+  "summary": "MoatProof landing approved & handed off as `.preview/approved.patch`; folds into deliverable ab3f213a-858c-473b-b1f9-d6840aa16d56; worker restores `main.jsx` to `<App/>` and ships MoatProof at its own entry `/moatproof/`",
+  "carriedContext": "MoatProof landing approved & handed off as `.preview/approved.patch`; folds into deliverable ab3f213a-858c-473b-b1f9-d6840aa16d56; worker restores `main.jsx` to `<App/>` and ships MoatProof at its own entry `/moatproof/`",
+  "checksum": "8352cdc32122d01dce090189754696e8dcd0ab34481586ba8388d715edf246b4",
+  "files": [
+    "versions/1/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "approved.md",
+    "approved.patch",
+    "snapshot.png",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}
