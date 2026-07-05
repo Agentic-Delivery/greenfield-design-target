@@ -1,0 +1,281 @@
+diff --git a/web/src/main.jsx b/web/src/main.jsx
+index 473f9c5..35a58fd 100644
+--- a/web/src/main.jsx
++++ b/web/src/main.jsx
+@@ -1,10 +1,14 @@
+ import React from 'react'
+ import { createRoot } from 'react-dom/client'
+-import { App } from './App.jsx'
+-import './styles/app.css'
++// DESIGN-PREVIEW SWAP — NOT FOR SHIP. This points tide-now's mount at the MoatProof
++// landing so the design canvas can preview it. The worker MUST restore this file to
++// render <App /> before shipping (guarded by src/saltmarsh/entry.test.jsx). MoatProof
++// ships behind its own entry: web/moatproof.html -> web/src/moatproof/main.jsx.
++import { MoatProof } from './moatproof/MoatProof.jsx'
++import './moatproof/moatproof.css'
+ 
+ createRoot(document.getElementById('root')).render(
+   <React.StrictMode>
+-    <App />
++    <MoatProof />
+   </React.StrictMode>
+ )
+diff --git a/web/src/moatproof/MoatProof.jsx b/web/src/moatproof/MoatProof.jsx
+new file mode 100644
+index 0000000..83e7060
+--- /dev/null
++++ b/web/src/moatproof/MoatProof.jsx
+@@ -0,0 +1,22 @@
++import React from 'react'
++
++// MoatProof — minimal one-screen landing. Inherits the committed
++// Marginalia brand (clay accent, Newsreader display, Cabin body).
++export function MoatProof() {
++  return (
++    <main className="mp-screen">
++      <section className="mp-hero" data-od-source-path="MoatProof.jsx:10">
++        <p className="mp-mark" data-od-source-path="MoatProof.jsx:11">MoatProof</p>
++        <h1 className="mp-headline" data-od-source-path="MoatProof.jsx:12">
++          MoatProof versioning-test 2026-07-05
++        </h1>
++        <p className="mp-subtitle" data-od-source-path="MoatProof.jsx:15">
++          A minimal demo screen, stamped with today's build so you can see the version at a glance.
++        </p>
++        <button type="button" className="mp-cta" data-od-source-path="MoatProof.jsx:18">
++          Get started
++        </button>
++      </section>
++    </main>
++  )
++}
+diff --git a/web/src/moatproof/moatproof.css b/web/src/moatproof/moatproof.css
+new file mode 100644
+index 0000000..96004b5
+--- /dev/null
++++ b/web/src/moatproof/moatproof.css
+@@ -0,0 +1,162 @@
++@import url("https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Cabin:wght@400;500;600&display=swap");
++
++/* ── MoatProof landing — inherits the committed Marginalia brand ──
++   Clay terracotta accent (OKLCH, ~56% sat), warm-paper neutrals,
++   Newsreader display serif + Cabin humanist sans. Every value reads a
++   custom property so the live tweaks panel (--accent/--scale/--density/
++   --motion-mult/data-mode) repaints in place. */
++
++:root {
++  --accent: oklch(0.55 0.106 41); /* Marginalia clay */
++  --scale: 1;
++  --density: 1;
++  --motion-mult: 1;
++
++  --clay-100: oklch(0.922 0.024 45);
++  --clay-700: oklch(0.470 0.094 40);
++  --clay-800: oklch(0.390 0.075 39);
++
++  --color-bg: oklch(0.987 0.006 60);       /* warm paper, not #fff */
++  --color-surface: oklch(0.968 0.008 58);
++  --text-heading: oklch(0.240 0.014 42);   /* soft warm near-black */
++  --text-body: oklch(0.400 0.014 46);
++  --text-muted: oklch(0.500 0.013 48);
++  --text-on-accent: oklch(0.987 0.006 60);
++  --border: oklch(0.884 0.010 54);
++  --focus-ring: oklch(0.550 0.106 41);
++
++  --color-accent-strong: var(--clay-700);
++  --color-accent-hover: var(--clay-800);
++  --color-accent-soft: var(--clay-100);
++
++  --font-display: "Newsreader", Georgia, serif;
++  --font-body: "Cabin", system-ui, sans-serif;
++  --step-0: calc(1rem * var(--scale));
++  --step-1: calc(1.25rem * var(--scale));
++  --step-5: calc(3.052rem * var(--scale));
++
++  --space-3: calc(1rem * var(--density));
++  --space-4: calc(1.5rem * var(--density));
++  --space-6: calc(3.5rem * var(--density));
++  --radius-md: 9px;
++}
++
++[data-mode="dark"] {
++  --accent: oklch(0.700 0.098 44);
++  --color-bg: oklch(0.205 0.012 44);
++  --color-surface: oklch(0.248 0.013 44);
++  --text-heading: oklch(0.948 0.010 60);
++  --text-body: oklch(0.880 0.011 56);
++  --text-muted: oklch(0.720 0.012 52);
++  --text-on-accent: oklch(0.210 0.014 44);
++  --border: oklch(0.360 0.013 46);
++  --focus-ring: oklch(0.740 0.098 44);
++  --color-accent-strong: oklch(0.760 0.092 46);
++  --color-accent-hover: oklch(0.700 0.098 44);
++  --color-accent-soft: oklch(0.330 0.040 42);
++}
++
++* { box-sizing: border-box; margin: 0; padding: 0; }
++
++body {
++  background: var(--color-bg);
++  color: var(--text-body);
++  font-family: var(--font-body);
++  font-size: var(--step-0);
++  line-height: 1.6;
++  -webkit-font-smoothing: antialiased;
++  text-rendering: optimizeLegibility;
++}
++
++/* ── Centered hero — the whole screen ── */
++.mp-screen {
++  min-height: 100vh;
++  min-height: 100dvh;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  padding: var(--space-6) var(--space-4);
++}
++
++.mp-hero {
++  width: 100%;
++  max-width: 34rem;
++  text-align: center;
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  gap: var(--space-4);
++}
++
++/* small brand mark above the headline */
++.mp-mark {
++  font-family: var(--font-body);
++  font-weight: 600;
++  font-size: calc(0.78rem * var(--scale));
++  letter-spacing: 0.16em;
++  text-transform: uppercase;
++  color: var(--text-muted);
++}
++.mp-mark::before {
++  content: "";
++  display: inline-block;
++  width: 7px;
++  height: 7px;
++  margin-right: 0.55em;
++  border-radius: 50%;
++  background: var(--accent);
++  vertical-align: middle;
++}
++
++.mp-headline {
++  font-family: var(--font-display);
++  font-weight: 500;
++  font-size: clamp(2rem, 8vw, var(--step-5));
++  line-height: 1.12;
++  letter-spacing: -0.01em;
++  color: var(--text-heading);
++  text-wrap: balance;
++}
++
++.mp-subtitle {
++  font-family: var(--font-body);
++  font-weight: 400;
++  font-size: var(--step-1);
++  line-height: 1.5;
++  color: var(--text-muted);
++  max-width: 32ch;
++  text-wrap: balance;
++}
++
++/* ── Primary button — the one action ── */
++.mp-cta {
++  appearance: none;
++  border: 0;
++  cursor: pointer;
++  font-family: var(--font-body);
++  font-weight: 600;
++  font-size: calc(1.02rem * var(--scale));
++  color: var(--text-on-accent);
++  background: var(--color-accent-strong);
++  border-radius: var(--radius-md);
++  padding: 0.85rem 1.9rem;
++  min-height: 48px;
++  margin-top: var(--space-3);
++  transition: background calc(160ms * var(--motion-mult)) ease,
++    transform calc(120ms * var(--motion-mult)) ease;
++}
++.mp-cta:hover { background: var(--color-accent-hover); }
++.mp-cta:active { transform: translateY(1px); }
++.mp-cta:focus-visible {
++  outline: 3px solid var(--focus-ring);
++  outline-offset: 3px;
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .mp-cta { transition: none; }
++  .mp-cta:active { transform: none; }
++}
++
++@media (min-width: 768px) {
++  .mp-hero { gap: calc(var(--space-4) * 1.15); }
++}
+diff --git a/web/src/moatproof/main.jsx b/web/src/moatproof/main.jsx
+new file mode 100644
+index 0000000..b3b64fa
+--- /dev/null
++++ b/web/src/moatproof/main.jsx
+@@ -0,0 +1,14 @@
++import React from 'react'
++import { createRoot } from 'react-dom/client'
++import { MoatProof } from './MoatProof.jsx'
++import './moatproof.css'
++
++// MoatProof's OWN entry. This is a SEPARATE build from tide-now (web/src/main.jsx,
++// which still mounts <App />) and is published at its own subpath /moatproof/.
++// The design session's preview swap of tide-now's mount is intentionally NOT
++// shipped — each product owns its entry (mirrors src/saltmarsh/main.jsx).
++createRoot(document.getElementById('root')).render(
++  <React.StrictMode>
++    <MoatProof />
++  </React.StrictMode>
++)
+diff --git a/web/moatproof.html b/web/moatproof.html
+new file mode 100644
+index 0000000..3bc456c
+--- /dev/null
++++ b/web/moatproof.html
+@@ -0,0 +1,12 @@
++<!DOCTYPE html>
++<html lang="en" data-mode="light">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
++    <title>MoatProof — versioning test</title>
++  </head>
++  <body>
++    <div id="root"></div>
++    <script type="module" src="/src/moatproof/main.jsx"></script>
++  </body>
++</html>
+diff --git a/web/vite.moatproof.config.js b/web/vite.moatproof.config.js
+new file mode 100644
+index 0000000..c4c81f5
+--- /dev/null
++++ b/web/vite.moatproof.config.js
+@@ -0,0 +1,19 @@
++import { defineConfig } from 'vite'
++import react from '@vitejs/plugin-react'
++import { fileURLToPath } from 'node:url'
++
++// Dedicated build for the MoatProof landing — a SEPARATE product from tide-now,
++// published at its own subpath (/moatproof/). It needs its own --base and entry,
++// so it MUST be a separate Vite build (Vite's base is per-build). This mirrors how
++// tide-now, Foxglove, and Saltmarsh are each staged into their own subpath.
++// Entry: web/moatproof.html -> web/src/moatproof/main.jsx (mounts MoatProof).
++export default defineConfig({
++  plugins: [react()],
++  build: {
++    outDir: 'dist-moatproof',
++    emptyOutDir: true,
++    rollupOptions: {
++      input: fileURLToPath(new URL('./moatproof.html', import.meta.url)),
++    },
++  },
++})

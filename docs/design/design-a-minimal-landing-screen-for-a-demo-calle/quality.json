@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "verdict": "PASSED",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [],
+  "recommendation": "A restrained, on-brand minimal landing that reads as considered rather than generated — warm paper background, one muted clay accent, an editorial serif headline, and a single plain-spoken CTA, with contrast, visible focus, 48px target, and reduced-motion all handled. It holds at mobile, tablet, and desktop. The five async states are not applicable to a static navigational CTA that triggers no request. Two optional fidelity notes: the button uses a plain ease curve rather than the brand's custom ease-out, and the styles re-declare a subset of brand tokens locally instead of consuming the shared contract (values match today, but a future token edit would not repaint this screen). Wire the CTA's destination before this ships as a real entry point.",
+  "assessed": "MoatProof.jsx + moatproof.css + main.jsx, inherited Marginalia brand spec + tokens.json, and a rendered snapshot read directly."
+}
