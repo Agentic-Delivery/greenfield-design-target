@@ -1,15 +1,14 @@
 {
   "components": [
-    { "name": "color-system", "status": "approved" },
+    { "name": "color-palette", "status": "approved" },
     { "name": "typography", "status": "approved" },
     { "name": "button", "status": "approved" },
-    { "name": "text-input", "status": "approved" },
+    { "name": "input", "status": "approved" },
     { "name": "select", "status": "approved" },
-    { "name": "choice-controls", "status": "approved" },
-    { "name": "badge", "status": "approved" },
     { "name": "card", "status": "approved" },
-    { "name": "data-table", "status": "approved" },
     { "name": "navigation", "status": "approved" },
+    { "name": "badge", "status": "approved" },
+    { "name": "table-row", "status": "approved" },
     { "name": "modal", "status": "approved" }
   ]
 }
