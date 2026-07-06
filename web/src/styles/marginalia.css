@@ -1,0 +1,202 @@
+/* Marginalia brand — applied to the tide·now landing hero.
+   Token contract mirrors docs/design/brand/tokens.json so the canvas
+   tweaks panel (--accent, --scale, --density, --motion-mult, data-mode) is live. */
+:root {
+  /* live-tunable hooks */
+  --accent: oklch(0.55 0.106 41);
+  --scale: 1;
+  --density: 1;
+  --motion-mult: 1;
+
+  /* identity — clay ramp */
+  --clay-100: oklch(0.922 0.024 45);
+  --clay-600: oklch(0.550 0.106 41);
+  --clay-700: oklch(0.470 0.094 40);
+  --clay-800: oklch(0.390 0.075 39);
+
+  /* identity — paper / ink neutrals (warm-tinted to the clay hue) */
+  --paper-50: oklch(0.987 0.006 60);
+  --paper-100: oklch(0.968 0.008 58);
+  --paper-300: oklch(0.884 0.010 54);
+  --ink-600: oklch(0.500 0.013 48);
+  --ink-700: oklch(0.400 0.014 46);
+  --ink-900: oklch(0.240 0.014 42);
+
+  /* type */
+  --font-display: "Newsreader", Georgia, serif;
+  --font-body: "Cabin", system-ui, sans-serif;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-5: 3.052rem;
+
+  /* space / radius */
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.25rem;
+  --space-6: 3.5rem;
+  --radius-md: 9px;
+
+  /* structure — semantic roles referencing identity */
+  --color-bg: var(--paper-50);
+  --color-surface: var(--paper-100);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--clay-700);
+  --color-accent-soft: var(--clay-100);
+  --text-heading: var(--ink-900);
+  --text-body: var(--ink-700);
+  --text-muted: var(--ink-600);
+  --text-on-accent: var(--paper-50);
+  --border: var(--paper-300);
+  --focus-ring: var(--clay-600);
+
+  /* with-fallback — component tokens */
+  --btn-bg: var(--color-accent-strong, oklch(0.47 0.094 40));
+  --btn-fg: var(--text-on-accent, oklch(0.987 0.006 60));
+  --btn-bg-hover: var(--clay-800, oklch(0.39 0.075 39));
+}
+
+/* slot-alias — dark re-points the structure layer, surface AND text together */
+html[data-mode="dark"] {
+  --accent: oklch(0.700 0.098 44);
+  --color-bg: oklch(0.205 0.012 44);
+  --color-surface: oklch(0.248 0.013 44);
+  --color-accent-strong: oklch(0.760 0.092 46);
+  --color-accent-soft: oklch(0.330 0.040 42);
+  --text-heading: oklch(0.948 0.010 60);
+  --text-body: oklch(0.880 0.011 56);
+  --text-muted: oklch(0.720 0.012 52);
+  --text-on-accent: oklch(0.210 0.014 44);
+  --border: oklch(0.360 0.013 46);
+  --focus-ring: oklch(0.740 0.098 44);
+}
+
+.mg-hero,
+.mg-hero * { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* One screen: a calm, centred landing that breathes. */
+.mg-hero {
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: calc(17px * var(--scale));
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: calc(var(--space-5) * var(--density)) clamp(1.25rem, 6vw, 3rem)
+           calc(var(--space-5) * var(--density));
+}
+
+/* Quiet masthead */
+.mg-hero__mast {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-heading);
+}
+.mg-hero__mast b { color: var(--color-accent); font-weight: 500; }
+
+/* Centre stage */
+.mg-hero__stage {
+  align-self: center;
+  justify-self: center;
+  max-width: 34rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--space-4) * var(--density));
+  padding-block: var(--space-6);
+}
+
+.mg-hero__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+}
+.mg-hero__eyebrow::before {
+  content: "";
+  inline-size: 1.75rem;
+  block-size: 1px;
+  background: var(--color-accent);
+}
+
+.mg-hero__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 7.5vw, calc(var(--step-5) * var(--scale)));
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--text-heading);
+  text-wrap: balance;
+}
+.mg-hero__headline em {
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+.mg-hero__support {
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--text-body);
+  max-width: 40ch;
+  text-wrap: pretty;
+}
+
+/* Single primary call-to-action */
+.mg-hero__cta {
+  --_lift: 0;
+  margin-block-start: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding-inline: 1.6rem;
+  padding-block: 0.85rem;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transform: translateY(var(--_lift));
+  transition: background calc(180ms * var(--motion-mult)) cubic-bezier(0.22, 1, 0.36, 1),
+              transform calc(180ms * var(--motion-mult)) cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mg-hero__cta svg { transition: transform calc(180ms * var(--motion-mult)) cubic-bezier(0.22, 1, 0.36, 1); }
+.mg-hero__cta:hover { background: var(--btn-bg-hover); --_lift: -2px; }
+.mg-hero__cta:hover svg { transform: translateX(3px); }
+.mg-hero__cta:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* Grounding footnote — quiet, single line */
+.mg-hero__foot {
+  justify-self: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.mg-hero__foot svg { color: var(--color-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mg-hero__cta,
+  .mg-hero__cta svg { transition: none; }
+  .mg-hero__cta:hover { --_lift: 0; }
+  .mg-hero__cta:hover svg { transform: none; }
+}

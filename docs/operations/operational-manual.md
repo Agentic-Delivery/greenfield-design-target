@@ -100,8 +100,14 @@ the deployed CSS.
 - Built by Vite with `--base=/greenfield-design-target/tide-now/`. Published as static
   files on GitHub Pages.
 - No API keys or secrets in the bundle.
+- **Landing hero front door (issue #35).** Opening `/tide-now/` first renders the approved
+  Marginalia landing hero (`web/src/components/LandingHero.jsx`); its single primary CTA
+  ("Check today's crossing") enters the existing tide app (`<App/>`) in place. The tide app
+  is unchanged and reachable via the CTA — the hero mounts ahead of it, nothing is removed.
+  The static shell title stays `tide·now`, so the Health Check below is unaffected.
 - Without a `/api/tide` backend the app renders its interim feed-unavailable fallback,
-  pending the approved O3a design-station state (see Live data).
+  pending the approved O3a design-station state (see Live data). This fallback is now shown
+  after entering the tide app via the hero CTA.
 
 ### Tidal-data backend (`api/server.js`) — NOT deployed on Pages
 

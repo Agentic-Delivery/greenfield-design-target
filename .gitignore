@@ -17,3 +17,5 @@ web/dist-saltmarsh/
 
 # Logs
 *.log
+web/dist-local/
+web/dist-localverify/
