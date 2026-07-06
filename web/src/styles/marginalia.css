@@ -1,7 +1,15 @@
 /* Marginalia brand — applied to the tide·now landing hero.
    Token contract mirrors docs/design/brand/tokens.json so the canvas
-   tweaks panel (--accent, --scale, --density, --motion-mult, data-mode) is live. */
-:root {
+   tweaks panel (--accent, --scale, --density, --motion-mult, data-mode) is live.
+
+   Scoped to .mg-hero (NOT :root): --accent/--scale/--density/--motion-mult are
+   token names the tide app also owns in tokens.css. Both stylesheets stay loaded
+   in <head> for the page lifetime, so a global :root here would let Marginalia's
+   clay --accent permanently override the tide app's own amber once <App/> mounts
+   (e.g. TideHero's .trend badge). Scoping to the hero root keeps these tokens on
+   the landing screen only — every .mg-hero__* descendant still inherits them, so
+   the hero renders identically. */
+.mg-hero {
   /* live-tunable hooks */
   --accent: oklch(0.55 0.106 41);
   --scale: 1;
@@ -55,8 +63,10 @@
   --btn-bg-hover: var(--clay-800, oklch(0.39 0.075 39));
 }
 
-/* slot-alias — dark re-points the structure layer, surface AND text together */
-html[data-mode="dark"] {
+/* slot-alias — dark re-points the structure layer, surface AND text together.
+   Scoped under .mg-hero (not bare html[data-mode="dark"]) so the dark overrides
+   apply to the hero only and never leak onto the tide app's own tokens. */
+html[data-mode="dark"] .mg-hero {
   --accent: oklch(0.700 0.098 44);
   --color-bg: oklch(0.205 0.012 44);
   --color-surface: oklch(0.248 0.013 44);
