@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "parentArtifactId": "brief.json",
+  "parentNote": "First design — derived from the captured turn-1 brief; inherits the committed Marginalia brand library.",
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "LandingHero.jsx",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "marginalia.css",
+      "kind": "stylesheet",
+      "until": "live"
+    },
+    {
+      "id": "--color-accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--font-display",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--font-body",
+      "kind": "token",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "approval:904df6b7-eeb3-41fc-8ca1-a6719f58fee4",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    }
+  ]
+}

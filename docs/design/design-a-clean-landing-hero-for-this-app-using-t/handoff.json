@@ -1,0 +1,25 @@
+{
+  "handoffId": "design-a-clean-landing-hero-for-this-app-using-t-904df6b7",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "904df6b7-eeb3-41fc-8ca1-a6719f58fee4",
+  "sessionId": "904df6b7-eeb3-41fc-8ca1-a6719f58fee4",
+  "slug": "design-a-clean-landing-hero-for-this-app-using-t",
+  "title": "Design a clean landing hero for this app using the Marginalia brand: a strong h…",
+  "approvedAt": "2026-07-06T00:05:54.907Z",
+  "summary": "the Marginalia landing hero is locked in and handed off; it becomes the work the factory builds, and a new screen can inherit this brand any time",
+  "carriedContext": "the Marginalia landing hero is locked in and handed off; it becomes the work the factory builds, and a new screen can inherit this brand any time",
+  "checksum": "ee14e7046b96d6fd7984e3e1d06dd09a066c1a02c96c493c3df96c9b021765e7",
+  "files": [
+    "versions/1/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "approved.md",
+    "approved.patch",
+    "snapshot.png",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}
