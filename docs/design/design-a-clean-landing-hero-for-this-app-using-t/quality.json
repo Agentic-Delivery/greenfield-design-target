@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 4 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [],
+  "recommendation": "A strong, on-brand landing hero that clears the bar and the floor. One muted clay accent used once for emphasis, a warm-paper ground, a considered Newsreader/Cabin pairing, and concrete human copy. Only low-severity polish remains: bring the eyebrow/footnote/headline sizes onto the type scale, drop the unused Saira/Barlow fonts still loaded on this screen, and remove a ~40px background sliver below the hero. Proceed as-is; the cleanups are recommended, not required.",
+  "assessed": "Rendered snapshot (desktop, light) plus LandingHero.jsx, marginalia.css, main.jsx, index.html and the reference Marginalia brand. Light mode rendered; dark slot-alias read from tokens; mobile/tablet reconstructed from the fluid clamp/flex rules."
+}

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "versions": [
+    {
+      "n": 1,
+      "view": "versions/1",
+      "timestamp": "2026-07-05T23:49:01.304Z",
+      "changeNote": "Design a clean landing hero for this app using the Marginalia brand: a…",
+      "tokensSnapshot": {},
+      "status": "built",
+      "framework": "vite"
+    }
+  ]
+}
