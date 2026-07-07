@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "kind": "design",
+  "mode": "brownfield",
+  "deliverableId": "84b188f5-6e3c-430f-842a-bd952751e4fa",
+  "sessionId": "84b188f5-6e3c-430f-842a-bd952751e4fa",
+  "parentDesignSha": "d8106575e7285194bafd77cc2e7466a05e940e81434b109ee5fc39de566c9ea3",
+  "parentArtifactId": "tide-now-landing-hero",
+  "targetFramework": "vite",
+  "primaryArtifact": "approved.patch",
+  "inheritedBrandTokensSha": "81f49008e7da2f95f9321bbe8339507822906db48ee177a725e50a314c34b9d9"
+}

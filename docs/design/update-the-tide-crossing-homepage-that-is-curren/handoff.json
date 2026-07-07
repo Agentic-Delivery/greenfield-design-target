@@ -1,0 +1,25 @@
+{
+  "handoffId": "update-the-tide-crossing-homepage-that-is-curren-84b188f5",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "84b188f5-6e3c-430f-842a-bd952751e4fa",
+  "sessionId": "84b188f5-6e3c-430f-842a-bd952751e4fa",
+  "slug": "update-the-tide-crossing-homepage-that-is-curren",
+  "title": "Update the tide-crossing homepage that is currently showing (the \"Cross when th…",
+  "approvedAt": "2026-07-07T18:25:13.911Z",
+  "summary": "homepage update approved and finalized in .preview/ (edited source + approved.patch + design system + quality read + lineage); folds into the existing deliverable for this page, which the factory builds and ships next",
+  "carriedContext": "homepage update approved and finalized in .preview/ (edited source + approved.patch + design system + quality read + lineage); folds into the existing deliverable for this page, which the factory builds and ships next",
+  "checksum": "d8106575e7285194bafd77cc2e7466a05e940e81434b109ee5fc39de566c9ea3",
+  "files": [
+    "versions/1/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "approved.md",
+    "approved.patch",
+    "snapshot.png",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}

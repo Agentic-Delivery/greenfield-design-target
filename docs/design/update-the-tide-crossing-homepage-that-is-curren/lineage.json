@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "parentArtifactId": "tide-now-landing-hero",
+  "parentNote": "The previously-approved Marginalia landing hero (shipped in #35). This design is an in-place extension of that approved screen — the hero is kept unchanged and two below-the-fold sections were added.",
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "web/src/components/LandingHero.jsx",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": ".mg-hero",
+      "kind": "section",
+      "note": "existing hero, unchanged",
+      "until": "live"
+    },
+    {
+      "id": ".mg-steps",
+      "kind": "section",
+      "note": "new 'How it works' three-step row",
+      "until": "live"
+    },
+    {
+      "id": ".mg-quote",
+      "kind": "section",
+      "note": "new ferry-captain testimonial",
+      "until": "live"
+    },
+    {
+      "id": ".mg-landing",
+      "kind": "token-scope",
+      "note": "new landing wrapper carrying the Marginalia token contract for the below-fold sections",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "approval:84b188f5-6e3c-430f-842a-bd952751e4fa",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    }
+  ]
+}

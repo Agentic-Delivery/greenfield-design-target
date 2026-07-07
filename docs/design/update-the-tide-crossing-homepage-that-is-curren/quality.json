@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "verdict": "PASSED",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [],
+  "recommendation": "Clears the bar cleanly. The new 'How it works' steps and ferry-captain testimonial read as the same warm, editorial brand as the hero — one clay accent, the same serif/body pairing, thin rules instead of boxed cards. Contrast holds in both light and dark modes, focus is visible, targets are 48px, and the layout holds at phone, tablet, and desktop. No changes needed; optionally verify the hero CTA stays above the fold on very short landscape phones.",
+  "assessed": "LandingHero.jsx (hero + new 3-step 'How it works' + ferry-captain testimonial) and marginalia.css (scoped clay/paper/ink OKLCH tokens, Newsreader+Cabin, light + dark slot-alias); rendered hero read from .preview/snapshot.png, below-fold sections judged from the complete self-contained stylesheet. The landing screen has no async surface of its own, so the five states are not applicable to its single navigation CTA."
+}
