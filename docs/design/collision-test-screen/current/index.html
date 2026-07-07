@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>tide-now</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hue: 50;
+    --accent: oklch(0.70 0.18 50);          /* hi-vis safety orange */
+    --accent-ink: oklch(0.45 0.16 48);       /* accent text on paper, AA */
+    --ink: oklch(0.20 0.012 55);
+    --ink-soft: oklch(0.42 0.012 55);
+    --paper: oklch(0.965 0.008 80);
+    --surface: oklch(0.995 0.004 80);
+    --line: oklch(0.30 0.012 55);
+    --line-soft: oklch(0.80 0.01 60);
+    --safe: oklch(0.50 0.13 150);
+    --safe-bg: oklch(0.94 0.05 150);
+    --danger: oklch(0.50 0.19 28);
+    --danger-bg: oklch(0.94 0.07 30);
+
+    --scale: 1;
+    --density: 1;
+    --motion-mult: 1;
+
+    --pad: calc(20px * var(--density));
+    --gap: calc(16px * var(--density));
+    --radius: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Barlow", system-ui, sans-serif;
+    font-size: calc(17px * var(--scale));
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: max(env(safe-area-inset-top), 0px) 0 calc(40px * var(--density));
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--pad);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+  }
+
+  .num { font-family: "Saira", sans-serif; font-feature-settings: "tnum" 1; font-variant-numeric: tabular-nums; }
+  .label {
+    font-family: "Saira", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    font-size: calc(12px * var(--scale));
+    color: var(--ink-soft);
+  }
+
+  /* ---- header ---- */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--line);
+    padding-bottom: calc(12px * var(--density));
+  }
+  .wordmark {
+    font-family: "Saira", sans-serif;
+    font-weight: 800;
+    font-size: calc(20px * var(--scale));
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+  }
+  .wordmark b { color: var(--accent-ink); }
+  .updated { text-align: right; line-height: 1.2; }
+  .updated .num { font-weight: 700; font-size: calc(15px * var(--scale)); }
+  .live {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: calc(11px * var(--scale)); color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--safe); border: 1.5px solid var(--ink); }
+
+  /* ---- location ---- */
+  .location {
+    display: flex; align-items: center; gap: 10px;
+    font-family: "Saira", sans-serif; font-weight: 700;
+    font-size: calc(19px * var(--scale));
+  }
+  .location svg { flex: 0 0 auto; }
+
+  /* ---- hero: tide height ---- */
+  .hero {
+    background: var(--surface);
+    border: 3px solid var(--line);
+    border-radius: var(--radius);
+    padding: calc(22px * var(--density)) var(--pad);
+  }
+  .reading {
+    display: flex; align-items: baseline; gap: 10px; margin: 4px 0 2px;
+  }
+  .reading .value {
+    font-family: "Saira", sans-serif; font-weight: 800;
+    font-size: clamp(72px, 26vw, 108px);
+    line-height: 0.92; letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .reading .unit {
+    font-family: "Saira", sans-serif; font-weight: 700;
+    font-size: calc(30px * var(--scale)); color: var(--ink-soft);
+  }
+  .trend {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent);
+    color: var(--ink);
+    border: 2.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 6px 12px 6px 8px;
+    font-family: "Saira", sans-serif; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    font-size: calc(16px * var(--scale));
+    margin-top: 8px;
+  }
+  .trend svg { display: block; }
+  .hero .sub {
+    display: flex; justify-content: space-between; gap: 12px;
+    margin-top: calc(16px * var(--density));
+    padding-top: calc(14px * var(--density));
+    border-top: 2px solid var(--line-soft);
+  }
+  .hero .sub div .num { font-family:"Saira"; font-weight:700; font-size: calc(20px * var(--scale)); display:block; }
+
+  /* ---- crossing card ---- */
+  .crossing {
+    border: 3px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .badge {
+    display: flex; align-items: center; gap: 10px;
+    padding: calc(13px * var(--density)) var(--pad);
+    font-family: "Saira", sans-serif; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    font-size: calc(18px * var(--scale));
+    border-bottom: 3px solid var(--line);
+  }
+  .badge.safe { background: var(--safe-bg); color: var(--safe); }
+  .badge.safe svg, .badge.safe { stroke: var(--safe); }
+  .crossing .body { padding: var(--pad); }
+  .window-now {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 6px 12px; flex-wrap: wrap;
+  }
+  .window-now .num { font-weight: 800; font-size: calc(clamp(26px, 8.5vw, 34px) * var(--scale)); }
+  .closes { color: var(--danger); font-weight: 700; }
+  .next-window {
+    margin-top: calc(14px * var(--density));
+    padding-top: calc(14px * var(--density));
+    border-top: 2px solid var(--line-soft);
+    display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  }
+  .next-window .num { font-weight: 700; font-size: calc(20px * var(--scale)); }
+
+  /* ---- saved walks ---- */
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .walks { display: flex; flex-direction: column; gap: calc(10px * var(--density)); }
+  .walk {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+    align-items: center;
+    background: var(--surface);
+    border: 2.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: calc(13px * var(--density)) calc(15px * var(--density));
+    min-height: 56px;
+    text-align: left;
+    width: 100%;
+    font: inherit; color: inherit;
+    cursor: pointer;
+  }
+  .walk:active { transform: translateY(1px); }
+  .walk .name { font-family: "Saira", sans-serif; font-weight: 700; font-size: calc(18px * var(--scale)); }
+  .walk .when { color: var(--ink-soft); font-weight: 500; font-size: calc(15px * var(--scale)); grid-column: 1; }
+  .status {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: "Saira", sans-serif; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    font-size: calc(13px * var(--scale));
+    padding: 6px 10px; border-radius: var(--radius); border: 2px solid currentColor;
+    white-space: nowrap;
+  }
+  .status.safe { color: var(--safe); background: var(--safe-bg); }
+  .status.caution { color: var(--accent-ink); background: oklch(0.95 0.06 70); }
+  .status.closed { color: var(--danger); background: var(--danger-bg); }
+  .status .sdot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+
+  .add-walk {
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; min-height: 52px;
+    background: transparent;
+    border: 2.5px dashed var(--line-soft);
+    border-radius: var(--radius);
+    font-family: "Saira", sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    font-size: calc(14px * var(--scale)); color: var(--ink-soft);
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="wordmark" data-od-source-path="index.html:201">tide<b>·</b>now</div>
+    <div class="updated">
+      <div class="live"><span class="dot"></span> Live</div>
+      <span class="num" data-od-source-path="index.html:205">10:42</span>
+    </div>
+  </header>
+
+  <div class="location" data-od-source-path="index.html:210">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11A7 7 0 0 1 19 10c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+    Holy Island Causeway
+  </div>
+
+  <!-- HERO: current tide height -->
+  <section class="hero">
+    <div class="label">Current tide height</div>
+    <div class="reading">
+      <span class="value" data-od-source-path="index.html:220">2.4</span>
+      <span class="unit">m</span>
+    </div>
+    <div class="trend" data-od-source-path="index.html:224">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+      Rising
+    </div>
+    <div class="sub">
+      <div>
+        <div class="label">Change · last hr</div>
+        <span class="num">+0.8 m</span>
+      </div>
+      <div style="text-align:right">
+        <div class="label">High water</div>
+        <span class="num">14:32</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT SAFE CROSSING -->
+  <section class="crossing">
+    <div class="badge safe" data-od-source-path="index.html:243">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      Safe to cross now
+    </div>
+    <div class="body">
+      <div class="label">Open window</div>
+      <div class="window-now">
+        <span class="num" data-od-source-path="index.html:250">Now → 11:50</span>
+        <span class="closes">Closes 1h 08m</span>
+      </div>
+      <div class="next-window">
+        <div>
+          <div class="label">Next window</div>
+          <span class="num">22:14 → 02:38</span>
+        </div>
+        <div style="text-align:right">
+          <div class="label">Opens in</div>
+          <span class="num">11h 32m</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAVED WALKS -->
+  <div class="section-head">
+    <div class="label">Saved walks</div>
+    <div class="label" style="color:var(--ink-soft)">3</div>
+  </div>
+  <div class="walks">
+
+    <button class="walk" data-od-source-path="index.html:272">
+      <span class="name">Holy Island Causeway</span>
+      <span class="when">Open · closes 11:50</span>
+      <span class="status safe"><span class="sdot"></span>Safe</span>
+    </button>
+
+    <button class="walk" data-od-source-path="index.html:278">
+      <span class="name">Cramond Island</span>
+      <span class="when">Closes soon · 11:05</span>
+      <span class="status caution"><span class="sdot"></span>Closing</span>
+    </button>
+
+    <button class="walk" data-od-source-path="index.html:284">
+      <span class="name">St Michael's Mount</span>
+      <span class="when">Reopens 15:20</span>
+      <span class="status closed"><span class="sdot"></span>Closed</span>
+    </button>
+
+  </div>
+
+  <button class="add-walk" data-od-source-path="index.html:292">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Add a walk
+  </button>
+
+</div>
+</body>
+</html>
