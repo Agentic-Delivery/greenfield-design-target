@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "kind": "design",
+  "mode": "greenfield",
+  "deliverableId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "sessionId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "parentDesignSha": "ddff104c8cde8b05923ac2d995b2b89af4d70c8b8984ddfec1c5e0a90b98d5ac",
+  "parentArtifactId": "generation:3147f000-7021-4813-b89a-b89c47a1e123",
+  "targetFramework": null,
+  "primaryArtifact": "current/index.html"
+}

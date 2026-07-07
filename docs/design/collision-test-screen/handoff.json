@@ -1,0 +1,33 @@
+{
+  "handoffId": "collision-test-screen-aaaaaaaa",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "sessionId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "slug": "collision-test-screen",
+  "title": "Collision test screen",
+  "approvedAt": "2026-06-17T07:39:12.515Z",
+  "summary": "Collision test screen \u2014 conductor L4 guard drive",
+  "carriedContext": "Collision test screen \u2014 conductor L4 guard drive",
+  "checksum": "ddff104c8cde8b05923ac2d995b2b89af4d70c8b8984ddfec1c5e0a90b98d5ac",
+  "files": [
+    "current/index.html",
+    "current/viewports/index.html/1024.png",
+    "current/viewports/index.html/1280.png",
+    "current/viewports/index.html/1440.png",
+    "current/viewports/index.html/1920.png",
+    "current/viewports/index.html/320.png",
+    "current/viewports/index.html/375.png",
+    "current/viewports/index.html/390.png",
+    "current/viewports/index.html/768.png",
+    "design-system.md",
+    "approved.md",
+    "snapshot.png",
+    "quality.json",
+    "DESIGN-MANIFEST.json",
+    "DESIGN-HANDOFF.md",
+    "lineage.json",
+    "artifact.json"
+  ]
+}

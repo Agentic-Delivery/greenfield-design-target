@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "verdict": "PASSED",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 5, "consistency": 5 },
+  "states": { "empty": false, "loading": false, "error": false, "success": true, "disabled": false },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [],
+  "recommendation": "A purpose-built, high-contrast coastal-safety screen that reads cleanly in one glance and is well-suited to a phone held in bright sun: warm off-white background, near-black ink, signage-style type, and a single safety-orange accent. It avoids every generic-AI design tell. It is scoped as the populated 'all good' view, so the data-loading state, the failed/stale tide-feed state, and the no-saved-walks empty state aren't designed yet — fine to ship this look now, but design those before it becomes a live app so a failed fetch can't quietly show out-of-date safety info.",
+  "assessed": "design-system.md + .preview/current/index.html, with the rendered snapshot.png read directly; single-screen mobile success-state first look"
+}
