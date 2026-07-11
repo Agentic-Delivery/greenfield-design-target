@@ -1,0 +1,249 @@
+diff --git a/web/status-board/index.html b/web/status-board/index.html
+new file mode 100644
+index 0000000..a97239d
+--- /dev/null
++++ b/web/status-board/index.html
+@@ -0,0 +1,18 @@
++<!DOCTYPE html>
++<html lang="en" data-mode="light">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
++    <title>Status Board</title>
++    <link rel="preconnect" href="https://fonts.googleapis.com" />
++    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++    <link
++      href="https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap"
++      rel="stylesheet"
++    />
++  </head>
++  <body>
++    <div id="root"></div>
++    <script type="module" src="/src/status-board/main.jsx"></script>
++  </body>
++</html>
+diff --git a/web/src/status-board/main.jsx b/web/src/status-board/main.jsx
+new file mode 100644
+index 0000000..b139d33
+--- /dev/null
++++ b/web/src/status-board/main.jsx
+@@ -0,0 +1,12 @@
++import React from 'react'
++import { createRoot } from 'react-dom/client'
++import { StatusBoard } from './StatusBoard.jsx'
++
++// Status Board's OWN entry, served at /status-board/ in dev (web/status-board/index.html).
++// Mirrors the multi-entry pattern used by tide-now (web/src/main.jsx) and Saltmarsh
++// (web/src/saltmarsh/main.jsx): each route owns its HTML entry + mount.
++createRoot(document.getElementById('root')).render(
++  <React.StrictMode>
++    <StatusBoard />
++  </React.StrictMode>
++)
+diff --git a/web/src/status-board/StatusBoard.jsx b/web/src/status-board/StatusBoard.jsx
+new file mode 100644
+index 0000000..179e443
+--- /dev/null
++++ b/web/src/status-board/StatusBoard.jsx
+@@ -0,0 +1,71 @@
++import React from 'react'
++import './status-board.css'
++
++// Three demo services for the status board. `online: false` renders the offline pill.
++const SERVICES = [
++  { id: 'api-gateway', name: 'API Gateway', online: true },
++  { id: 'payments', name: 'Payments Service', online: true },
++  { id: 'object-storage', name: 'Object Storage', online: false },
++]
++
++const OnlineIcon = (
++  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
++    <path d="M20 6 9 17l-5-5" />
++  </svg>
++)
++
++const OfflineIcon = (
++  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
++    <path d="M18 6 6 18M6 6l12 12" />
++  </svg>
++)
++
++/**
++ * A status pill for one service. Status is conveyed by icon + word + colour —
++ * never colour alone (matches the app's accessibility rule for crossing status).
++ */
++function StatusPill({ online }) {
++  const state = online ? 'online' : 'offline'
++  return (
++    <span className={`sb-pill sb-pill--${state}`} role="status" aria-label={online ? 'Online' : 'Offline'}>
++      {online ? OnlineIcon : OfflineIcon}
++      {online ? 'Online' : 'Offline'}
++    </span>
++  )
++}
++
++/**
++ * Status Board — a simple, clean board of demo services, each with a name and an
++ * online/offline pill. Inherits the tide-now design system (tokens.css):
++ * Saira/Barlow, heavy ink borders, flat surfaces, functional safe/danger colours.
++ */
++export function StatusBoard() {
++  const onlineCount = SERVICES.filter((s) => s.online).length
++  const offlineCount = SERVICES.length - onlineCount
++
++  return (
++    <div className="sb">
++      <header className="sb-header">
++        <div className="sb-wordmark" aria-label="status board">
++          status<b>·</b>board
++        </div>
++        <div className="sb-summary" aria-label={`${onlineCount} online, ${offlineCount} offline`}>
++          <span className="num">{onlineCount}</span> online
++          <span className="sb-summary-sep" aria-hidden="true">·</span>
++          <span className="num">{offlineCount}</span> offline
++        </div>
++      </header>
++
++      <div className="sb-label">Services</div>
++
++      <ul className="sb-list">
++        {SERVICES.map((service) => (
++          <li key={service.id} className="sb-card">
++            <span className="sb-name">{service.name}</span>
++            <StatusPill online={service.online} />
++          </li>
++        ))}
++      </ul>
++    </div>
++  )
++}
+diff --git a/web/src/status-board/status-board.css b/web/src/status-board/status-board.css
+new file mode 100644
+index 0000000..679b85a
+--- /dev/null
++++ b/web/src/status-board/status-board.css
+@@ -0,0 +1,124 @@
++@import '../styles/tokens.css';
++
++* { box-sizing: border-box; margin: 0; padding: 0; }
++
++body {
++  background: var(--paper);
++  color: var(--ink);
++  font-family: "Barlow", system-ui, sans-serif;
++  font-size: calc(17px * var(--scale));
++  line-height: 1.45;
++  -webkit-font-smoothing: antialiased;
++  text-rendering: optimizeLegibility;
++  padding: max(env(safe-area-inset-top), 0px) 0 calc(40px * var(--density));
++}
++
++/* ── Layout (mobile-first, same column width as the tide-now app) ── */
++.sb {
++  max-width: 480px;
++  margin: 0 auto;
++  padding: var(--pad);
++  display: flex;
++  flex-direction: column;
++  gap: var(--gap);
++}
++
++/* ── Typography helpers (shared with app.css) ── */
++.sb .num {
++  font-family: "Saira", sans-serif;
++  font-weight: 700;
++  font-feature-settings: "tnum" 1;
++  font-variant-numeric: tabular-nums;
++}
++.sb-label {
++  font-family: "Saira", sans-serif;
++  text-transform: uppercase;
++  letter-spacing: 0.12em;
++  font-weight: 700;
++  font-size: calc(12px * var(--scale));
++  color: var(--ink-soft);
++  margin-top: 4px;
++}
++
++/* ── Header ── */
++.sb-header {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 12px;
++  border-bottom: 3px solid var(--line);
++  padding-bottom: calc(12px * var(--density));
++}
++.sb-wordmark {
++  font-family: "Saira", sans-serif;
++  font-weight: 800;
++  font-size: calc(20px * var(--scale));
++  letter-spacing: -0.01em;
++  text-transform: lowercase;
++}
++.sb-wordmark b { color: var(--accent-ink); }
++.sb-summary {
++  text-align: right;
++  font-family: "Saira", sans-serif;
++  font-weight: 600;
++  font-size: calc(14px * var(--scale));
++  color: var(--ink-soft);
++  text-transform: uppercase;
++  letter-spacing: 0.04em;
++  white-space: nowrap;
++}
++.sb-summary .num { font-size: calc(15px * var(--scale)); color: var(--ink); }
++.sb-summary-sep { margin: 0 6px; color: var(--line-soft); }
++
++/* ── Service cards ── */
++.sb-list {
++  list-style: none;
++  display: flex;
++  flex-direction: column;
++  gap: calc(10px * var(--density));
++}
++.sb-card {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 12px;
++  background: var(--surface);
++  border: 2.5px solid var(--line);
++  border-radius: var(--radius);
++  padding: calc(15px * var(--density)) calc(16px * var(--density));
++  min-height: 60px;
++}
++.sb-name {
++  font-family: "Saira", sans-serif;
++  font-weight: 700;
++  font-size: calc(18px * var(--scale));
++  letter-spacing: 0.005em;
++}
++
++/* ── Status pill — icon + word + colour, never colour alone ── */
++.sb-pill {
++  display: inline-flex;
++  align-items: center;
++  gap: 7px;
++  font-family: "Saira", sans-serif;
++  font-weight: 800;
++  text-transform: uppercase;
++  letter-spacing: 0.05em;
++  font-size: calc(13px * var(--scale));
++  padding: 6px 11px;
++  border-radius: var(--radius);
++  border: 2px solid currentColor;
++  white-space: nowrap;
++}
++.sb-pill--online { color: var(--safe); background: var(--safe-bg); }
++.sb-pill--offline { color: var(--danger); background: var(--danger-bg); }
++.sb-pill svg { display: block; }
++
++/* ── Responsive ── */
++@media (min-width: 768px) {
++  .sb { padding: calc(var(--pad) * 1.5); }
++}
++@media (min-width: 1024px) {
++  body { padding-top: calc(24px * var(--density)); }
++  .sb { max-width: 540px; }
++}
