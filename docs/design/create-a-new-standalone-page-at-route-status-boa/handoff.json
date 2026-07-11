@@ -1,0 +1,25 @@
+{
+  "handoffId": "create-a-new-standalone-page-at-route-status-boa-dcf6f9c6",
+  "kind": "design",
+  "sourceRole": "design",
+  "targetRole": "intake",
+  "deliverableId": "dcf6f9c6-0ed0-4dac-86e0-0f212e925a15",
+  "sessionId": "dcf6f9c6-0ed0-4dac-86e0-0f212e925a15",
+  "slug": "create-a-new-standalone-page-at-route-status-boa",
+  "title": "Create a NEW standalone page at route /status-board — a simple, clean status bo…",
+  "approvedAt": "2026-07-11T09:28:42.071Z",
+  "summary": "/status-board approved as a single screen; the approved edits (four new files, captured in approved.patch) fold into this deliverable for a worker to build",
+  "carriedContext": "/status-board approved as a single screen; the approved edits (four new files, captured in approved.patch) fold into this deliverable for a worker to build",
+  "checksum": "76e9ee1ab2d5277ac7a997b3e229f5160412b2796b23a4907001725fce12baee",
+  "files": [
+    "versions/1/index.html",
+    "versions/index.json",
+    "design-system.md",
+    "approved.md",
+    "approved.patch",
+    "snapshot.png",
+    "quality.json",
+    "lineage.json",
+    "artifact.json"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "verdict": "PASSED",
+  "scores": { "clarity": 5, "hierarchy": 4, "a11y": 5, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [],
+  "recommendation": "Ships as-is: all dimensions 4-5, every text/UI contrast passes AA (verified from the OKLCH tokens), status is icon+word+colour not colour-alone, holds at all viewports, zero anti-slop hits. Advisory only: it is a static hardcoded demo, so if it becomes data-driven it will need designed empty/loading/error states (N/A today). The two pill contrasts (4.82:1 online, 5.12:1 offline) are the tightest margins - re-check them if the safe/danger background tokens are ever lightened.",
+  "assessed": "StatusBoard.jsx + status-board.css + status-board/index.html + inherited tokens.css; render reconstructed from complete static styles, contrast computed directly from the OKLCH tokens.",
+  "renderedOk": true
+}

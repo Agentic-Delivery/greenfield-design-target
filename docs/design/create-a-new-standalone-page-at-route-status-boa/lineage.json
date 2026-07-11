@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "parentArtifactId": "brief.json",
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "web/status-board/index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "web/src/status-board/main.jsx",
+      "kind": "entry",
+      "until": "live"
+    },
+    {
+      "id": "StatusBoard",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "StatusPill",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "web/src/status-board/status-board.css",
+      "kind": "stylesheet",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "approval:dcf6f9c6-0ed0-4dac-86e0-0f212e925a15",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    }
+  ]
+}
