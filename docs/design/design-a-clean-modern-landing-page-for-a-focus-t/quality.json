@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores": { "clarity": 5, "hierarchy": 5, "a11y": 4, "consistency": 5 },
+  "states": { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [
+    { "id": "MOTION-2", "what": "The nav theme toggle and the small 'Start a session' nav button are about 38px, under the 44px minimum tap size on phones.", "fix": "Give both controls a 44px minimum height and width at mobile widths. (Applied after this read — both now hit 44px on touch devices.)" },
+    { "id": "MOTION-1", "what": "The hero timer ring uses a never-ending 'breathe' loop animation.", "fix": "Acceptable as-is — it only scales/fades, is on-concept, and stops under reduced-motion; if trimming, let it settle instead of looping forever." },
+    { "id": "COPY-3", "what": "An em-dash appears three times close together (hero subheading, features intro, and card 02).", "fix": "Vary the punctuation in one of them to break the repeated dash rhythm." }
+  ],
+  "recommendation": "A strong, distinctive landing page that clears clarity, hierarchy, and consistency, renders cleanly at phone, tablet, and desktop, and correctly inherits the Marginalia brand instead of generic defaults. The only real fix was a mobile tap-target gap (theme toggle and small nav button ~38px) — applied after this read, both now hit 44px on touch devices, closing the finding. The looping ring animation and the em-dash frequency are low-severity polish, not blockers. Empty/loading/error/success/disabled states are correctly out of scope for a marketing page with no forms or async surfaces, but would be required if a sign-up or live-session preview is added later.",
+  "assessed": "/.preview/current/index.html + /.preview/design-system.md, anchored to the committed Marginalia brand library (docs/design/brand/); desktop render read from /.preview/snapshot.png (render-ok drew:true), mobile/tablet inferred from the self-contained inline CSS media queries."
+}
