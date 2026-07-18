@@ -41,6 +41,11 @@ HOME_ACCENT='oklch(0.70 0.18 50)'
 CADENCE_PAGE="$ROOT/web/cadence/index.html"
 # The approved Cadence OKLCH clay accent (source form; not minified).
 CADENCE_ACCENT='oklch(0.55 0.106 41)'
+# pricing is the approved Cadence pricing page, same self-contained static-page
+# precedent — the served artifact lives directly in the source tree.
+PRICING_PAGE="$ROOT/web/pricing/index.html"
+# The approved Cadence pricing page is token-identical to /cadence/ — same clay accent.
+PRICING_ACCENT='oklch(0.55 0.106 41)'
 
 fail=0
 check() { # $1 = exit code from the caller's test (0=pass, non-zero=fail); $2 = description
@@ -133,6 +138,30 @@ else
   check 0 "cadence carries no design-editor annotations (data-od-source-path stripped)"
 fi
 
+echo "== A5. Published-page contract (web/pricing/index.html) =="
+if [ ! -f "$PRICING_PAGE" ]; then
+  echo "FAIL: web/pricing/index.html missing — the approved Cadence pricing page is not present"
+  exit 1
+fi
+
+# One marker from each approved component — proves the approved Cadence pricing page
+# (not a placeholder) is what will be served.
+grep -qF 'Pricing that keeps time' "$PRICING_PAGE"; check $? "pricing carries the editorial hero (Pricing that keeps time with you.)"
+grep -qF 'save ~2 months' "$PRICING_PAGE";          check $? "pricing carries the monthly/annual billing toggle (save ~2 months)"
+grep -qF 'Our pick' "$PRICING_PAGE";                check $? "pricing carries the three tiers (Focus — Our pick)"
+grep -qF 'Is there a trial to run out?' "$PRICING_PAGE"; check $? "pricing carries the honest FAQ strip"
+grep -qF '© 2026 Cadence' "$PRICING_PAGE";          check $? "pricing carries the footer (© 2026 Cadence)"
+
+# Fidelity: the approved Cadence pricing clay accent token is present (token-identical to /cadence/).
+grep -qF "$PRICING_ACCENT" "$PRICING_PAGE"; check $? "pricing ships the approved clay accent token ($PRICING_ACCENT)"
+
+# Production cleanliness: no design-editor source-path annotations leak into the served page.
+if grep -qF 'data-od-source-path' "$PRICING_PAGE"; then
+  check 1 "pricing carries no design-editor annotations (data-od-source-path stripped)"
+else
+  check 0 "pricing carries no design-editor annotations (data-od-source-path stripped)"
+fi
+
 echo "== B. Workflow-topology invariants (.github/workflows) =="
 
 # Exactly one Pages deploy across all workflows — two would clobber each other.
@@ -158,6 +187,7 @@ if [ -n "$DEPLOY_WF" ]; then
   grep -qF '_pages/saltmarsh' "$DEPLOY_WF"; check $? "the Pages deploy stages Saltmarsh (_pages/saltmarsh) — $(basename "$DEPLOY_WF")"
   grep -qF '_pages/tide-now-home' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now-home (_pages/tide-now-home) — $(basename "$DEPLOY_WF")"
   grep -qF '_pages/cadence' "$DEPLOY_WF"; check $? "the Pages deploy stages cadence (_pages/cadence) — $(basename "$DEPLOY_WF")"
+  grep -qF '_pages/pricing' "$DEPLOY_WF"; check $? "the Pages deploy stages pricing (_pages/pricing) — $(basename "$DEPLOY_WF")"
 else
   check 1 "a Pages deploy workflow exists"
 fi

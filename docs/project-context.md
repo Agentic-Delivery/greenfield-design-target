@@ -58,6 +58,18 @@ minimal footer). It is anchored to the committed Marginalia brand library (OKLCH
 accent, warm paper/ink neutrals, Newsreader + Cabin type). See
 `docs/operations/cadence-landing-manual.md`.
 
+The approved **Cadence pricing page** is published at
+https://agentic-delivery.github.io/greenfield-design-target/pricing/ from the same single
+Pages deploy (served verbatim from the approved greenfield bundle
+`docs/design/design-a-clean-pricing-page-for-cadence-the-focu/current/index.html` as a
+self-contained static page — the same nav/footer/fonts/warm-paper look as the landing page,
+an editorial pricing hero, a working monthly/annual billing toggle, three tiers
+(Free/Focus/Team), and an honest FAQ strip). It is token-identical to `/cadence/` and
+anchored to the committed Marginalia brand library. The prices are the approved design's
+demo numbers, shipped unchanged (operator decision on the source issue — this is a throwaway
+greenfield demo with no separate "real" prices). See
+`docs/operations/cadence-pricing-manual.md`.
+
 ## Test Environment
 
 - **Platform**: GitHub Pages (static hosting), deployed via GitHub Actions (OIDC — no
@@ -69,6 +81,7 @@ accent, warm paper/ink neutrals, Newsreader + Cabin type). See
   - Saltmarsh: `https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/`
   - tide-now-home: `https://agentic-delivery.github.io/greenfield-design-target/tide-now-home/`
   - cadence: `https://agentic-delivery.github.io/greenfield-design-target/cadence/`
+  - pricing: `https://agentic-delivery.github.io/greenfield-design-target/pricing/`
 - **Safety zone**: the GitHub Pages site above is the only valid verification target.
   `localhost:<port>` and container-internal addresses are NOT valid post-deploy targets.
 
