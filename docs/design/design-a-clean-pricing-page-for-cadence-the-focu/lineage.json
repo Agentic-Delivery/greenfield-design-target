@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "artifactId": "cadence-pricing-page",
+  "parentArtifactId": "brief.json",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "billing-toggle",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "tier-card",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "--color-accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--font-display",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--font-body",
+      "kind": "token",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "generation:37a5e6c8-3562-41a6-83c9-a5b03eddd7cd",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:37a5e6c8-3562-41a6-83c9-a5b03eddd7cd",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:37a5e6c8-3562-41a6-83c9-a5b03eddd7cd",
+      "orphan": false
+    }
+  ]
+}
