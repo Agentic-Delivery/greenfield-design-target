@@ -48,6 +48,16 @@ design-publish, distinct from the productionised app at `/tide-now/` (refined am
 states, live data). See `docs/operations/tide-now-home-manual.md`. The
 loading/error-stale/empty-saved-walks states are a separate design-first fast-follow.
 
+The approved **Cadence** focus-timer landing page is published at
+https://agentic-delivery.github.io/greenfield-design-target/cadence/ from the same single
+Pages deploy (served verbatim from the approved greenfield bundle
+`docs/design/design-a-clean-modern-landing-page-for-a-focus-t/current/index.html` as a
+self-contained static page — a sticky blurred nav with a light/dark toggle, an editorial
+hero with a calm focus-ring timer motif, three anti-gamification feature cards, and a
+minimal footer). It is anchored to the committed Marginalia brand library (OKLCH clay
+accent, warm paper/ink neutrals, Newsreader + Cabin type). See
+`docs/operations/cadence-landing-manual.md`.
+
 ## Test Environment
 
 - **Platform**: GitHub Pages (static hosting), deployed via GitHub Actions (OIDC — no
@@ -58,6 +68,7 @@ loading/error-stale/empty-saved-walks states are a separate design-first fast-fo
   - Foxglove: `https://agentic-delivery.github.io/greenfield-design-target/foxglove/`
   - Saltmarsh: `https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/`
   - tide-now-home: `https://agentic-delivery.github.io/greenfield-design-target/tide-now-home/`
+  - cadence: `https://agentic-delivery.github.io/greenfield-design-target/cadence/`
 - **Safety zone**: the GitHub Pages site above is the only valid verification target.
   `localhost:<port>` and container-internal addresses are NOT valid post-deploy targets.
 

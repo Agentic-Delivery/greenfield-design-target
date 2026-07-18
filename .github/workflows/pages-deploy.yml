@@ -101,6 +101,8 @@ jobs:
           # tide-now-home is the approved base design published as a self-contained
           # static page (no build step — the Foxglove static-page precedent).
           test -f web/tide-now-home/index.html
+          # cadence is the approved Cadence landing page, same static-page precedent.
+          test -f web/cadence/index.html
 
       - name: Regression guard (build base + refined accent + topology invariants)
         run: bash scripts/verify-pages-deploy.sh
@@ -172,7 +174,7 @@ jobs:
 
       - name: Stage all apps
         run: |
-          mkdir -p _pages/foxglove/js _pages/tide-now _pages/saltmarsh _pages/tide-now-home
+          mkdir -p _pages/foxglove/js _pages/tide-now _pages/saltmarsh _pages/tide-now-home _pages/cadence
           # Foxglove storefront (static)
           cp web/foxglove/index.html _pages/foxglove/
           cp web/foxglove/js/main.js _pages/foxglove/js/
@@ -180,6 +182,9 @@ jobs:
           # (inline CSS + Google Fonts, no build). Served at the /tide-now-home/
           # subpath. Distinct from the productionised /tide-now/ Vite app.
           cp web/tide-now-home/index.html _pages/tide-now-home/index.html
+          # cadence: the approved Cadence focus-timer landing page, a self-contained
+          # static page (inline CSS + Google Fonts, no build). Served at /cadence/.
+          cp web/cadence/index.html _pages/cadence/index.html
           # tide-now (built Vite app, already based at /greenfield-design-target/tide-now/)
           cp -r web/dist/. _pages/tide-now/
           # Saltmarsh (built Vite app, based at /greenfield-design-target/saltmarsh/).
@@ -220,6 +225,7 @@ jobs:
       FOX_PATH: /greenfield-design-target/foxglove/
       SALT_PATH: /greenfield-design-target/saltmarsh/
       HOME_PATH: /greenfield-design-target/tide-now-home/
+      CADENCE_PATH: /greenfield-design-target/cadence/
     steps:
       - name: Foxglove still live (content)
         run: |
@@ -319,6 +325,34 @@ jobs:
             exit 1
           fi
           echo "PASS: tide-now-home approved base screen is live at $URL"
+
+      - name: Cadence landing page live (content + approved clay accent token)
+        run: |
+          URL="${PAGES_ORIGIN}${CADENCE_PATH}"
+          echo "Probing $URL ..."
+          BODY=$(curl -sSL --retry 6 --retry-delay 10 --retry-all-errors --max-time 30 "$URL")
+
+          # 1) The approved Cadence landing content (not a redirect, not another app,
+          #    not a 404). Assert one marker from each of the four approved components.
+          for MARKER in \
+            'Find your' \
+            'Start a session' \
+            'Sessions, not stopwatches' \
+            '© 2026 Cadence'; do
+            if ! grep -qF "$MARKER" <<< "$BODY"; then
+              echo "FAIL: approved marker '$MARKER' not found at $URL — wrong app / redirect / 404?"
+              exit 1
+            fi
+          done
+
+          # 2) Fidelity: the approved Cadence design ships its OKLCH clay accent token
+          #    inline. Its presence proves the approved Cadence design shipped (and that
+          #    this slot is not serving another app).
+          if ! grep -qF 'oklch(0.55 0.106 41)' <<< "$BODY"; then
+            echo "FAIL: clay accent token oklch(0.55 0.106 41) not in served page — approved Cadence design not live"
+            exit 1
+          fi
+          echo "PASS: Cadence landing page is live at $URL"
 
   # ── 5. Aggregate observability gate.
   ci-status:

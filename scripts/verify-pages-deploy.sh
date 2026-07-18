@@ -36,6 +36,11 @@ HOME_PAGE="$ROOT/web/tide-now-home/index.html"
 # The base bundle's hi-vis safety-orange accent (source form; this page is NOT
 # minified, so no minified variant needs tolerating).
 HOME_ACCENT='oklch(0.70 0.18 50)'
+# cadence is the approved Cadence landing page, same self-contained static-page
+# precedent — the served artifact lives directly in the source tree.
+CADENCE_PAGE="$ROOT/web/cadence/index.html"
+# The approved Cadence OKLCH clay accent (source form; not minified).
+CADENCE_ACCENT='oklch(0.55 0.106 41)'
 
 fail=0
 check() { # $1 = exit code from the caller's test (0=pass, non-zero=fail); $2 = description
@@ -105,6 +110,29 @@ else
   check 0 "tide-now-home does NOT carry the refined /tide-now/ accent (base publish, not the app)"
 fi
 
+echo "== A4. Published-page contract (web/cadence/index.html) =="
+if [ ! -f "$CADENCE_PAGE" ]; then
+  echo "FAIL: web/cadence/index.html missing — the approved Cadence landing page is not present"
+  exit 1
+fi
+
+# One marker from each of the four approved components — proves the approved Cadence
+# landing page (not a placeholder) is what will be served.
+grep -qF 'Find your' "$CADENCE_PAGE";              check $? "cadence carries the editorial hero (Find your cadence.)"
+grep -qF 'Start a session' "$CADENCE_PAGE";        check $? "cadence carries the nav CTA (Start a session)"
+grep -qF 'Sessions, not stopwatches' "$CADENCE_PAGE"; check $? "cadence carries the feature cards (Sessions, not stopwatches)"
+grep -qF '© 2026 Cadence' "$CADENCE_PAGE";         check $? "cadence carries the footer (© 2026 Cadence)"
+
+# Fidelity: the approved Cadence clay accent token is present.
+grep -qF "$CADENCE_ACCENT" "$CADENCE_PAGE"; check $? "cadence ships the approved clay accent token ($CADENCE_ACCENT)"
+
+# Production cleanliness: no design-editor source-path annotations leak into the served page.
+if grep -qF 'data-od-source-path' "$CADENCE_PAGE"; then
+  check 1 "cadence carries no design-editor annotations (data-od-source-path stripped)"
+else
+  check 0 "cadence carries no design-editor annotations (data-od-source-path stripped)"
+fi
+
 echo "== B. Workflow-topology invariants (.github/workflows) =="
 
 # Exactly one Pages deploy across all workflows — two would clobber each other.
@@ -129,6 +157,7 @@ if [ -n "$DEPLOY_WF" ]; then
   grep -qE '_pages/tide-now[[:space:]/]' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now (_pages/tide-now) — $(basename "$DEPLOY_WF")"
   grep -qF '_pages/saltmarsh' "$DEPLOY_WF"; check $? "the Pages deploy stages Saltmarsh (_pages/saltmarsh) — $(basename "$DEPLOY_WF")"
   grep -qF '_pages/tide-now-home' "$DEPLOY_WF"; check $? "the Pages deploy stages tide-now-home (_pages/tide-now-home) — $(basename "$DEPLOY_WF")"
+  grep -qF '_pages/cadence' "$DEPLOY_WF"; check $? "the Pages deploy stages cadence (_pages/cadence) — $(basename "$DEPLOY_WF")"
 else
   check 1 "a Pages deploy workflow exists"
 fi
