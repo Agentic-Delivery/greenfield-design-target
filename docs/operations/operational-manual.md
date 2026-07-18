@@ -23,16 +23,18 @@ so its hashed assets resolve under the `/tide-now/` subpath. The build artifact 
 produced once in the `Test & Build` job and promoted to the `deploy` job.
 
 **Single shared Pages deploy:** GitHub Pages keeps only the most recent deployment, so
-tide-now, Foxglove, Saltmarsh, tide-now-home, and cadence are staged together and
+tide-now, Foxglove, Saltmarsh, tide-now-home, cadence, and pricing are staged together and
 published by ONE `deploy` job (`_pages/tide-now/` + `_pages/foxglove/` +
-`_pages/saltmarsh/` + `_pages/tide-now-home/` + `_pages/cadence/`, root redirect →
-`/foxglove/`). Two separate Pages-deploy workflows would clobber each other. See
+`_pages/saltmarsh/` + `_pages/tide-now-home/` + `_pages/cadence/` + `_pages/pricing/`, root
+redirect → `/foxglove/`). Two separate Pages-deploy workflows would clobber each other. See
 `docs/operations/foxglove-storefront-manual.md` (Foxglove),
 `docs/operations/saltmarsh-hero-manual.md` (Saltmarsh),
 `docs/operations/tide-now-home-manual.md` (tide-now-home — the approved base design
 published at `/tide-now-home/`, distinct from the productionised app at `/tide-now/`),
-and `docs/operations/cadence-landing-manual.md` (cadence — the approved Cadence
-focus-timer landing page published at `/cadence/`).
+`docs/operations/cadence-landing-manual.md` (cadence — the approved Cadence
+focus-timer landing page published at `/cadence/`), and
+`docs/operations/cadence-pricing-manual.md` (pricing — the approved Cadence pricing page
+published at `/pricing/`, sibling of the landing page).
 
 ## Test Deployment Source
 
