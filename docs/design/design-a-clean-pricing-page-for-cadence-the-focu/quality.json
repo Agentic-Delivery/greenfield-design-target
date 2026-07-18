@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores":  { "clarity": 5, "hierarchy": 5, "a11y": 4, "consistency": 5 },
+  "states":  { "empty": true, "loading": true, "error": true, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [
+    { "id": "COPY-3", "what": "The middle 'Focus' tier carries an 'Our pick' badge — the common badge-on-the-middle-tier pricing pattern. Kept deliberately: it is an honest maker's recommendation, not false social proof, and is part of the approved design.", "fix": "Optional: attach a concrete reason to the recommendation, or leave as-is since it reads honestly." }
+  ],
+  "recommendation": "On-brand, distinctive work that is token-identical to the existing Cadence landing page and reads as the same product. The one hard flag (the billing-toggle buttons under the 44px mobile touch target) was fixed before handoff. Remaining note is optional/honest. The small clay eyebrow sits at the AA line but is left identical to the landing page's eyebrow, matching the brand exactly as requested.",
+  "assessed": "current/index.html (pricing page) + web/cadence/index.html (brand reference) + snapshot render; dark mode read from token source. RESPONSIVE-3 (billing-toggle tap target) resolved post-jury by adding the toggle to the coarse-pointer 44px rule.",
+  "renderedOk": true
+}

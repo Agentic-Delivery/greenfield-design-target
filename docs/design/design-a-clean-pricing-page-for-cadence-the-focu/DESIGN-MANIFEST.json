@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "capturedAt": "2026-07-18T15:25:12.931Z",
+  "screens": [
+    {
+      "path": "index.html",
+      "name": "Index",
+      "refs": {
+        "320": "viewports/index.html/320.png",
+        "375": "viewports/index.html/375.png",
+        "390": "viewports/index.html/390.png",
+        "768": "viewports/index.html/768.png",
+        "1024": "viewports/index.html/1024.png",
+        "1280": "viewports/index.html/1280.png",
+        "1440": "viewports/index.html/1440.png",
+        "1920": "viewports/index.html/1920.png"
+      },
+      "missing": []
+    }
+  ],
+  "tokenContract": null,
+  "viewports": [
+    320,
+    375,
+    390,
+    768,
+    1024,
+    1280,
+    1440,
+    1920
+  ],
+  "singleFormFactor": false
+}

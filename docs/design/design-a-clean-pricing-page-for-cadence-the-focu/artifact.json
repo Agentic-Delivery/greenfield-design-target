@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "kind": "design",
+  "mode": "greenfield",
+  "deliverableId": "37a5e6c8-3562-41a6-83c9-a5b03eddd7cd",
+  "sessionId": "37a5e6c8-3562-41a6-83c9-a5b03eddd7cd",
+  "parentDesignSha": "b30ac92d7dd2a0315649ab36cdb988cc6ac7fb140c452955dc67e9381b64e024",
+  "parentArtifactId": "brief.json",
+  "targetFramework": null,
+  "primaryArtifact": "current/index.html",
+  "inheritedBrandTokensSha": "81f49008e7da2f95f9321bbe8339507822906db48ee177a725e50a314c34b9d9"
+}
