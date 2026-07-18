@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "versions": [
+    {
+      "n": 1,
+      "view": "versions/1",
+      "timestamp": "2026-07-18T10:37:50.368Z",
+      "changeNote": "Design a clean, modern landing page for a focus-timer app called…",
+      "tokensSnapshot": {}
+    }
+  ]
+}

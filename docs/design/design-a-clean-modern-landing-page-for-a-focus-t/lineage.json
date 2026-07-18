@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "artifactId": "",
+  "parentArtifactId": "brief.json",
+  "parentNote": "First design of the Cadence landing page; origin is the captured discovery brief. Consumes (does not fork) the committed Marginalia brand library.",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "--accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--color-accent-strong",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--font-display",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--font-body",
+      "kind": "token",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "generation:f23730fc-dba3-4670-9125-32799fc80cf6",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:f23730fc-dba3-4670-9125-32799fc80cf6",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:f23730fc-dba3-4670-9125-32799fc80cf6",
+      "orphan": false
+    }
+  ]
+}
