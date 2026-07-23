@@ -3,7 +3,8 @@
 User stories for this repository's products. The `US-01-xx` block serves
 **tide-now** (REQ-web-tide-home); the `US-02-xx` block serves **Foxglove Books**
 (REQ-web-foxglove-storefront); the `US-03-xx` block serves **Saltmarsh**
-(REQ-web-saltmarsh-hero).
+(REQ-web-saltmarsh-hero); the `US-04-xx` block serves the **Expense tracker**
+(REQ-web-expense-tracker).
 
 ## tide-now
 
@@ -33,3 +34,12 @@ User stories for this repository's products. The `US-01-xx` block serves
 | US-03-02 | As a visitor, I see and can act on the one clear "Buy now" call-to-action — and if a real order destination isn't wired yet, it's an honestly-surfaced gap, not a silent dead link. | REQ-web-saltmarsh-hero (O3a, O3b) |
 | US-03-03 | As a visitor on a phone or keyboard, the hero holds up at my screen size and the "Buy now" control has a clear focus indicator, a big-enough tap target, and readable text — so the page is comfortable to use, not just to look at. | REQ-web-saltmarsh-hero (O1, R2, R4) |
 | US-03-04 | As the customer, I can open the Saltmarsh hero at its own public URL — and opening tide-now and Foxglove still shows their own screens, unchanged. | REQ-web-saltmarsh-hero (O2) |
+
+## Expense tracker
+
+| ID | Story | Traces to |
+|---|---|---|
+| US-04-01 | As a person tracking personal spending, I open the expense tracker at a public URL and see the approved main screen — my running monthly total, the add-expense form, and my Recent list — in the Marginalia look, exactly as approved. | REQ-web-expense-tracker (O1, O2) |
+| US-04-02 | As a person tracking spending, I enter an amount, pick a category, and tap "Add expense," and the new expense appears in Recent under Today with my running total and budget bar updated immediately — all in the page, no login or server. | REQ-web-expense-tracker (O3) |
+| US-04-03 | As a person tracking spending, the "Add expense" button stays disabled until I've entered a valid amount, and the empty, dark-mode, and reduced-motion states all behave as the approved screen shows. | REQ-web-expense-tracker (O4) |
+| US-04-04 | As the customer, I can open the expense tracker at its own public URL on a page that reliably stays live — every merge re-publishes it through a deploy that verifies the real page content and fails loudly if it's broken. | REQ-web-expense-tracker (O5) |
