@@ -1,6 +1,6 @@
 # Feature tree
 
-The product feature map for this repository. It currently holds three distinct
+The product feature map for this repository. It currently holds four distinct
 products, each rooted at its own home/landing screen; later screens and
 capabilities hang off each product's node.
 
@@ -33,3 +33,12 @@ capabilities hang off each product's node.
     - states: success only — static marketing hero, no runtime data fetch (loading/empty/error N/A); CTA focus/hover states
     - delivery: own `/saltmarsh/` entry on the existing shared Pages deploy, alongside tide-now + Foxglove (both preserved live — see REQ R3)
   - _Future leaves (not yet requested): real "Buy now" order destination, product/shop pages, a real bag photo._
+
+- **Expense tracker** — mobile-first personal expense tracker (a simple, client-side spending log)
+  - **Main screen** (first feature) → REQ-web-expense-tracker · design `docs/design/design-the-main-screen-of-a-simple-expense-track/`
+    - running monthly-total hero (spent this month + budget line + "of $X left")
+    - add-an-expense form (currency amount field + single-select category chips + one primary "Add expense" button; submit disabled until a valid amount)
+    - Recent list grouped by day (category monogram + name + category·time + amount)
+    - states: populated (default), add→success, empty ("Nothing logged yet"), add-button-disabled, dark mode, reduced-motion; loading/error deferred (no live data layer in this build)
+    - delivery: the first runnable frontend on the reset greenfield tree — stands up the frontend + a reconciled Pages deploy → own `/expenses/` customer-viewable URL (path to running software)
+  - _Future leaves (not yet requested): persistence across reloads, a live data layer with loading/error states, the deferred contrast nudge, edit/delete an expense, categories & budget settings._
