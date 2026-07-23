@@ -1,74 +1,49 @@
-# Project context — tide-now
+# Project context — greenfield-design-target
 
-A mobile-first web app for outdoor coastal walkers. The customer-facing UI is
-being built from an approved design (see `docs/design/`), one screen at a time.
-The repository currently holds a small Express service (`api/`) and no frontend
-yet — this is a greenfield design target.
+A greenfield tree that ships approved customer designs (see `docs/design/`) as
+running web pages, one screen at a time, published to GitHub Pages. The tree was
+reset to greenfield (commit `4afba05`), which removed the prior `web/**` frontend
+and the older-demo publish sources; earlier demo routes (tide-now / foxglove /
+saltmarsh / cadence / pricing) are therefore no longer built or served here.
 
-> Note: the repository was scaffolded under the name "Stilla Notes — service".
-> The approved customer-facing product being built here is **tide-now**, a tide
-> and safe-crossing app for coastal walkers, per the operator's direction on
-> 2026-06-17. The existing `api/` service is unrelated backend scaffolding; the
-> worker decides at build time whether any of it is reused.
+The **first runnable frontend** on this reset tree is the approved **expense
+tracker** main screen, published at `/expenses/` (see `## Customer-Viewable URL`).
+Subsequent screens follow the same route-per-app, single-Pages-deploy pattern.
+
+> Note: the repository was originally scaffolded under other product names; those
+> are historical. The live surface is whatever `## Customer-Viewable URL` and
+> `## Test Environment` below list — kept current with each build.
 
 ## Customer-Viewable URL
 
-The approved tide-now home screen is published to GitHub Pages.
+The approved expense-tracker main screen is published to GitHub Pages.
 
-- **URL**: https://agentic-delivery.github.io/greenfield-design-target/tide-now/
-- **What the customer will see there**: the approved tide-now home screen with the
-  **#13 hero refinement** live — the calmer amber accent (`oklch(0.71 0.135 62)`),
-  the more generous hero rhythm, and the location stepped a tier below the big tide
-  reading. The trend badge, next-safe-crossing card, and saved-walks list render in
-  the refined design language.
-- **Live tidal data**: GitHub Pages is static hosting — it serves the built frontend
-  only, with no `/api/tide` backend. Without that backend the tide reading shows the
-  app's designed error state ("Tide data unavailable — check your connection") in the
-  refined styling; the refined design itself is fully live and viewable. Standing up a
-  data source for the public deployment (a hosted backend, or a public tidal API
-  called client-side) is a separate product decision — see the intake-request filed
-  from issue #16.
+- **URL**: https://agentic-delivery.github.io/greenfield-design-target/expenses/
+- **What the customer will see there**: the approved expense-tracker main screen in the
+  **Marginalia** look (OKLCH clay accent `oklch(0.55 0.106 41)`, warm paper/ink neutrals,
+  Newsreader + Cabin type) — a running monthly-total hero ("Spent this month" with a budget
+  line and budget bar), an add-expense form (currency amount field, five category chips,
+  one "Add expense" button that stays disabled until a valid positive amount is entered),
+  and a Recent list grouped by day. Entering a valid amount, picking a category, and tapping
+  "Add expense" adds a row to Recent and updates the running total + budget bar immediately,
+  entirely in the browser. A designed empty state ("Nothing logged yet"), dark mode, and
+  reduced-motion behaviour are all present.
+- **Client-side only**: GitHub Pages is static hosting — the screen is a self-contained
+  static page (inline CSS + inline JS + Google Fonts, no build step, no backend). It runs
+  entirely in the visitor's browser tab against seeded demo data; nothing is persisted, so
+  refreshing the page returns it to its seeded starting state. This is a demo-quality
+  tracker (a small-caption contrast nudge and async loading/error states for a future live
+  data layer are captured as a separate, explicitly-deferred follow-up).
+- Served verbatim (byte-identical) from the approved greenfield bundle
+  `docs/design/design-the-main-screen-of-a-simple-expense-track/current/index.html`, staged
+  as `web/expenses/index.html`. This is the **first runnable frontend** on the reset tree.
+  See `docs/operations/expense-tracker-manual.md`.
 
-The Foxglove Books storefront is published at
-https://agentic-delivery.github.io/greenfield-design-target/foxglove/ from the same
-single Pages deploy (see `docs/operations/foxglove-storefront-manual.md`).
-
-The Saltmarsh coffee-roaster hero is published at
-https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/ from the same
-single Pages deploy (built to the approved design in `docs/design/saltmarsh-hero/`;
-its "Buy now" CTA ships a documented `#shop` placeholder until the customer supplies
-a real order URL).
-
-The approved tide-now home **base design** is published at
-https://agentic-delivery.github.io/greenfield-design-target/tide-now-home/ from the same
-single Pages deploy (served verbatim from the approved greenfield bundle
-`docs/design/tide-now-home/current/index.html` as a self-contained static page). This is
-the approved "all-good" success view with the original hi-vis safety-orange accent — a
-design-publish, distinct from the productionised app at `/tide-now/` (refined amber, all
-states, live data). See `docs/operations/tide-now-home-manual.md`. The
-loading/error-stale/empty-saved-walks states are a separate design-first fast-follow.
-
-The approved **Cadence** focus-timer landing page is published at
-https://agentic-delivery.github.io/greenfield-design-target/cadence/ from the same single
-Pages deploy (served verbatim from the approved greenfield bundle
-`docs/design/design-a-clean-modern-landing-page-for-a-focus-t/current/index.html` as a
-self-contained static page — a sticky blurred nav with a light/dark toggle, an editorial
-hero with a calm focus-ring timer motif, three anti-gamification feature cards, and a
-minimal footer). It is anchored to the committed Marginalia brand library (OKLCH clay
-accent, warm paper/ink neutrals, Newsreader + Cabin type). See
-`docs/operations/cadence-landing-manual.md`.
-
-The approved **Cadence pricing page** is published at
-https://agentic-delivery.github.io/greenfield-design-target/pricing/ from the same single
-Pages deploy (served verbatim from the approved greenfield bundle
-`docs/design/design-a-clean-pricing-page-for-cadence-the-focu/current/index.html` as a
-self-contained static page — the same nav/footer/fonts/warm-paper look as the landing page,
-an editorial pricing hero, a working monthly/annual billing toggle, three tiers
-(Free/Focus/Team), and an honest FAQ strip). It is token-identical to `/cadence/` and
-anchored to the committed Marginalia brand library. The prices are the approved design's
-demo numbers, shipped unchanged (operator decision on the source issue — this is a throwaway
-greenfield demo with no separate "real" prices). See
-`docs/operations/cadence-pricing-manual.md`.
+This is currently the ONLY route served from Pages on this reset tree. The older-demo routes
+(tide-now / foxglove / saltmarsh / cadence / pricing) had their sources removed by the
+greenfield reset (commit `4afba05`) and are no longer built or served; their operational
+manuals under `docs/operations/` describe those removed routes and are stale pending a
+separate cleanup.
 
 ## Test Environment
 
@@ -76,18 +51,13 @@ greenfield demo with no separate "real" prices). See
   stored credential) by `.github/workflows/pages-deploy.yml`.
 - **Deploy trigger**: merge to `main` (Topology B — trunk-based deploy-on-merge).
 - **Verification targets (the ONLY valid post-deploy targets — anything else is PROD)**:
-  - tide-now: `https://agentic-delivery.github.io/greenfield-design-target/tide-now/`
-  - Foxglove: `https://agentic-delivery.github.io/greenfield-design-target/foxglove/`
-  - Saltmarsh: `https://agentic-delivery.github.io/greenfield-design-target/saltmarsh/`
-  - tide-now-home: `https://agentic-delivery.github.io/greenfield-design-target/tide-now-home/`
-  - cadence: `https://agentic-delivery.github.io/greenfield-design-target/cadence/`
-  - pricing: `https://agentic-delivery.github.io/greenfield-design-target/pricing/`
+  - expense tracker: `https://agentic-delivery.github.io/greenfield-design-target/expenses/`
 - **Safety zone**: the GitHub Pages site above is the only valid verification target.
   `localhost:<port>` and container-internal addresses are NOT valid post-deploy targets.
 
 ## Project Type
 
-[unknown — set manually: greenfield or brownfield]
+greenfield
 
 
 ## CI/CD Profile
