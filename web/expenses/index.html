@@ -60,6 +60,10 @@
     --text-heading: var(--ink-900);
     --text-body: var(--ink-700);
     --text-muted: var(--ink-600);
+    /* Small captions (day lines, category·time, period, meta, count, section label)
+       use the darker caption tier so fine print clears the 4.5:1 small-text floor with
+       margin; --text-muted stays for larger secondary text (cents, currency prefix). */
+    --text-caption: var(--ink-700);
     --text-on-accent: var(--paper-50);
     --border: var(--paper-300);
     --focus-ring: var(--clay-600);
@@ -74,6 +78,7 @@
     --text-heading: oklch(0.948 0.010 60);
     --text-body: oklch(0.880 0.011 56);
     --text-muted: oklch(0.720 0.012 52);
+    --text-caption: oklch(0.815 0.012 54);
     --text-on-accent: oklch(0.210 0.014 44);
     --border: oklch(0.360 0.013 46);
     --focus-ring: oklch(0.740 0.098 44);
@@ -104,7 +109,7 @@
     font-weight:500;font-size:var(--step-1);
     color:var(--text-heading);letter-spacing:-0.01em;
   }
-  .masthead .period{font-size:var(--step--1);color:var(--text-muted);letter-spacing:0.02em;text-transform:uppercase}
+  .masthead .period{font-size:var(--step--1);color:var(--text-caption);letter-spacing:0.02em;text-transform:uppercase}
 
   /* ---- Total ---- */
   .total{
@@ -115,7 +120,7 @@
     text-align:center;
   }
   .total .label{
-    font-size:var(--step--1);color:var(--text-muted);
+    font-size:var(--step--1);color:var(--text-caption);
     letter-spacing:0.06em;text-transform:uppercase;
   }
   .total .amount{
@@ -129,7 +134,7 @@
     font-variant-numeric:tabular-nums;
   }
   .total .amount .cents{font-size:var(--step-2);color:var(--text-muted)}
-  .total .meta{font-size:var(--step--1);color:var(--text-muted)}
+  .total .meta{font-size:var(--step--1);color:var(--text-caption)}
   .total .meta b{color:var(--text-body);font-weight:600}
   .budgetbar{height:4px;border-radius:99px;background:var(--color-surface-2);margin-top:var(--space-3);overflow:hidden}
   .budgetbar span{display:block;height:100%;background:var(--color-accent);border-radius:99px;transition:width calc(.5s * var(--motion-mult)) ease}
@@ -211,10 +216,10 @@
     font-family:var(--font-display);font-weight:500;
     font-size:var(--step-1);color:var(--text-heading);
   }
-  .recent-head .count{font-size:var(--step--1);color:var(--text-muted)}
+  .recent-head .count{font-size:var(--step--1);color:var(--text-caption)}
   .daygroup + .daygroup{margin-top:var(--space-3)}
   .dayline{
-    font-size:var(--step--1);color:var(--text-muted);font-weight:600;
+    font-size:var(--step--1);color:var(--text-caption);font-weight:600;
     letter-spacing:0.04em;text-transform:uppercase;
     padding:var(--space-2) var(--space-1) var(--space-1);
   }
@@ -233,7 +238,7 @@
   }
   .row .info{flex:1;min-width:0}
   .row .info .name{color:var(--text-heading);font-weight:600;font-size:var(--step-0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .row .info .cat{font-size:var(--step--1);color:var(--text-muted)}
+  .row .info .cat{font-size:var(--step--1);color:var(--text-caption)}
   .row .val{
     font-family:var(--font-display);font-weight:500;font-size:var(--step-1);
     color:var(--text-heading);font-variant-numeric:tabular-nums;white-space:nowrap;
@@ -251,7 +256,7 @@
     font-family:var(--font-display);font-size:var(--step-2);color:var(--text-muted);
   }
   .empty h3{font-family:var(--font-display);font-weight:500;font-size:var(--step-1);color:var(--text-heading);margin-bottom:var(--space-1)}
-  .empty p{font-size:var(--step--1);max-width:30ch;margin:0 auto}
+  .empty p{font-size:var(--step--1);color:var(--text-caption);max-width:30ch;margin:0 auto}
   body.is-empty .list, body.is-empty .recent-head .count, body.is-empty .daygroup{display:none}
   body.is-empty .empty{display:block}
 

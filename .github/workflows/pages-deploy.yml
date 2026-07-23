@@ -81,6 +81,15 @@ jobs:
       - name: Verify expense-tracker fidelity + pipeline topology
         run: bash scripts/verify-expense-tracker.sh
 
+      # Small-caption contrast guard (issue #54): the served page's small captions must
+      # clear the 4.5:1 WCAG small-text floor in light AND dark mode, and stay darker
+      # than the preserved larger-secondary muted tier. Self-validating maths (--selftest
+      # asserts the known #767676-on-white = 4.54:1 reference before it runs the file).
+      - name: Verify small-caption contrast (WCAG 2.1 AA small-text floor)
+        run: |
+          python3 scripts/verify-caption-contrast.py --selftest
+          python3 scripts/verify-caption-contrast.py
+
   # ── 2. Single Pages deploy — stage the expense-tracker app, publish once (push to main).
   deploy:
     name: Deploy to GitHub Pages
