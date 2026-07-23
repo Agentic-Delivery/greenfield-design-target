@@ -1,14 +1,22 @@
-# ADR-XXX: [Decision Title]
-
-**Date:** YYYY-MM-DD
-
-**Status:** Proposed | Accepted | Deprecated | Superseded
-
-**Deciders:** [List of people involved in decision]
-
-**Tags:** [architecture, backend, frontend, infrastructure, security, compliance, etc.]
-
 ---
+id: ADR-XXX
+title: [Decision Title]
+status: hypothesis
+date: YYYY-MM-DD
+decided_by: [List of people involved in decision]
+tags: [architecture, backend, frontend, infrastructure, security, compliance, etc.]
+---
+
+<!--
+Living-ADR status vocabulary — the ONLY valid values (never "Accepted"):
+  hypothesis   — decided, not yet built
+  implementing — being built
+  validated    — built and confirmed against the ## Confirmation criteria below
+  revising     — under active change
+  superseded   — replaced by a newer ADR (set status: superseded here; the
+                 successor declares `supersedes: ADR-XXX` in its frontmatter)
+The architecture-quality gate rejects the legacy `accepted` term outright.
+-->
 
 ## Diagram
 
@@ -142,6 +150,22 @@ _SMS will be configurable per user and per notification type. Critical notificat
   - **Mitigation:** Monitor SMS spend, budget alerts, consider bulk SMS pricing
 - _Notification fatigue (too many channels)_
   - **Mitigation:** User controls for each escalation tier, smart delay tuning
+
+---
+
+## Confirmation
+
+_How do we detect that this decision has drifted? A living ADR carries at least
+one **drift-measurable** checkbox — a one-line claim plus an executable command
+(Loki/`gh`/`curl`/bash/test) that stays green only while the decision holds. The
+command must actually run against the real repo or a live system; prose like
+"team reviewed" or "tests pass" (no command) is rejected by the
+architecture-quality gate. Check a box (`- [x]`) once its criterion is observed._
+
+_Example:_
+
+- [ ] The escalation service applies the SMS fallback tier — verifies via: `bash -c 'grep -q "NotificationEscalationService" src/notifications/escalation.ts'`
+- [ ] SMS delivery success is monitored (no silent provider outage) — verifies via: `{service="notifications"} |= "sms_delivery_failed"`
 
 ---
 
