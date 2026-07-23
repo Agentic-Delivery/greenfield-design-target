@@ -35,11 +35,31 @@ Newsreader (display) + Cabin (body) type pairing. The tokens are carried into th
 as CSS custom properties, so serving the mockup verbatim consumes the committed brand —
 no new brand tokens are introduced.
 
-**Deferred (out of scope for this build, captured as a separate follow-up):** a
-small-caption contrast nudge and async loading/error states for a future live data layer.
-The screen ships exactly as approved (the budget-bar easing, which already renders in the
-approved mockup, ships unchanged). Acceptance is matched against the as-approved reference
-screenshots, not a corrected/idealized target.
+**Deferred follow-ups (issue #54) — now resolved:**
+1. **Small-caption contrast — APPLIED.** The small captions (the period, the "Spent this
+   month" label, the running-total meta, the "N this month" count, the uppercase day
+   lines, the "category · time" subtitles, and the empty-state helper text) now use a
+   dedicated darker caption tier
+   (`--text-caption` = `--ink-700` light / `oklch(0.815 0.012 54)` dark) instead of the
+   muted tier, so small fine-print clears the 4.5:1 WCAG small-text floor with margin
+   (≥ 8.4:1 light, ≥ 9.0:1 dark). `--text-muted` is preserved for larger secondary text
+   (the cents and the currency prefix). This is the customer-approved one-shade darkening
+   captured in the design bundle's `approved.md`; the look/brand is otherwise unchanged.
+   The served page and the approved target (`docs/design/…/current/index.html`) were
+   updated in lockstep, so the CI fidelity guard (`scripts/verify-expense-tracker.sh`
+   Check A — byte-identity) stays green. The reference screenshots under `current/viewports/`
+   were captured BEFORE this approved darkening, so a caption that renders one shade darker
+   than a reference PNG is the **expected approved change**, not a divergence — match is
+   structural + token. A CI step (`scripts/verify-caption-contrast.py`) now enforces the
+   contrast floor in both modes on every change.
+2. **Async loading/error states — DESIGNED, PENDING a live data layer.** The screen is
+   still synchronous and client-side only (no backend). The loading (Recent list) /
+   pending ("Add expense" button) / inline-error+recovery (rejected amount) states are
+   specified design-first in `docs/design/…/async-states-spec.md` and will be implemented
+   only when a live data layer is introduced (separate, separately-requested work). No
+   backend is introduced by this item.
+
+The budget-bar easing, which already renders in the approved mockup, ships unchanged.
 
 ---
 
