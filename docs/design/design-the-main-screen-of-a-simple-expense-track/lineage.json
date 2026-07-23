@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "artifactId": "design:expense-tracker-main-screen",
+  "parentArtifactId": "brief.json",
+  "parentNote": "First design — derived from the captured discovery brief (the origin node).",
+  "orphan": false,
+  "exportTargets": [
+    "intake-handoff",
+    "worker-build",
+    "export-bundle"
+  ],
+  "atoms": [
+    {
+      "id": "index.html",
+      "kind": "screen",
+      "until": "live"
+    },
+    {
+      "id": "--color-accent",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "--color-bg",
+      "kind": "token",
+      "until": "live"
+    },
+    {
+      "id": "add-expense-form",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "category-chips",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "recent-list",
+      "kind": "component",
+      "until": "live"
+    },
+    {
+      "id": "total-hero",
+      "kind": "component",
+      "until": "live"
+    }
+  ],
+  "journey": [
+    {
+      "id": "generation:6a3f9336-4acf-4611-87b1-57fff7d60695",
+      "kind": "generation",
+      "until": "live",
+      "parentArtifactId": "brief.json",
+      "orphan": false
+    },
+    {
+      "id": "approval:6a3f9336-4acf-4611-87b1-57fff7d60695",
+      "kind": "approval",
+      "until": "live",
+      "parentArtifactId": "generation:6a3f9336-4acf-4611-87b1-57fff7d60695",
+      "orphan": false
+    }
+  ]
+}
