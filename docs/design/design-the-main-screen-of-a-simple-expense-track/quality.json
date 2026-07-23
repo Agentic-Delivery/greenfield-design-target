@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "verdict": "PASSED-WITH-FINDINGS",
+  "scores":  { "clarity": 5, "hierarchy": 5, "a11y": 4, "consistency": 5 },
+  "states":  { "empty": true, "loading": false, "error": false, "success": true, "disabled": true },
+  "viewports": { "mobile": true, "tablet": true, "desktop": true },
+  "flags": [
+    { "id": "A11Y-CONTRAST", "what": "Small grey captions (daylines, category·time subtitles, period, meta) sit marginally under the 4.5:1 small-text contrast floor.", "fix": "Darken those specific captions one shade toward --ink-700, keeping the muted tier for larger secondary text." },
+    { "id": "STATE-ASYNC", "what": "No loading or error states for a live data layer; the mockup is synchronous.", "fix": "Design a loading state for the recent list, a pending affordance for the add action, and an inline error + recovery when an amount is rejected." },
+    { "id": "MOTION-1", "what": "The budget bar animates its width and transitions use default easing.", "fix": "Animate the bar with a transform-based fill and use a considered easing token." }
+  ],
+  "recommendation": "Strong, distinctive, on-brand work that clears the bar on clarity, hierarchy, and consistency and holds across mobile, tablet, and desktop. Customer approved as-is; the two UX-debt findings (small-caption contrast, async loading/error states) are captured as build follow-up.",
+  "assessed": "current/index.html + design-system.md, with the rendered snapshot read directly (render confirmed)"
+}
